@@ -1,0 +1,56 @@
+.create-game-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .create-game-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .create-game-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .create-game-container label {
+    margin-bottom: 5px;
+  }
+  
+  .create-game-container input[type="text"],
+  .create-game-container input[type="number"],
+  .create-game-container textarea,
+  .create-game-container select {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .create-game-container button[type="submit"] {
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .create-game-container button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    margin-top: 10px;
+  }
+  
+  .success-message {
+    color: #28a745;
+    margin-top: 10px;
+  }
+  
