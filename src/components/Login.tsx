@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Login.css";
-function Login() {
+
+const Login = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -19,20 +20,20 @@ function Login() {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
           <input
-            type="text"
             id="username"
+            type="text"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
           <input
-            type="password"
             id="password"
+            type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -43,6 +44,6 @@ function Login() {
       </form>
     </div>
   );
-}
+};
 
 export default Login;

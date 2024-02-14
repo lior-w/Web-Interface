@@ -6,7 +6,10 @@ import SavedGames from "./components/SavedGames";
 function App() {
   return (
     <div>
+      <Registration />
+      <Login />
       <CreateGame />
+      <SavedGames />
     </div>
   );
 }

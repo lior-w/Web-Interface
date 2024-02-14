@@ -29,88 +29,80 @@ function CreateGame() {
       <h2>Create Game</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="title">Title:</label>
+          <div>Title</div>
           <input
-            type="text"
             id="title"
+            type="text"
+            placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
           />
         </div>
         <div>
-          <label htmlFor="description">Description:</label>
+          <div>Description</div>
           <textarea
             id="description"
+            placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
         <div>
-          <label htmlFor="numGroups">Number of Groups:</label>
-          <input
-            type="number"
-            id="numGroups"
-            value={numGroups}
-            onChange={(e) => setNumGroups(parseInt(e.target.value))}
-            min={2}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="map">Map:</label>
-          {/* Dropdown for selecting map */}
-          <select
-            id="map"
-            value={map}
-            onChange={(e) => setMap(e.target.value)}
-            required
-          >
-            {/* Option list of maps */}
-            <option value="">Select Map</option>
-            <option value="map1">Map 1</option>
-            <option value="map2">Map 2</option>
-            {/* Add more options as needed */}
-          </select>
-        </div>
-        <div>
-          {/* Input fields for starting positions of each group */}
-          {Array.from({ length: numGroups }).map((_, index) => (
-            <div key={index}>
-              <label
-                htmlFor={`startingPosition${index}`}
-              >{`Starting Position for Group ${index + 1}:`}</label>
-              <input
-                type="text"
-                id={`startingPosition${index}`}
-                value={startingPositions[index] || ""}
-                onChange={(e) => {
-                  const updatedPositions = [...startingPositions];
-                  updatedPositions[index] = e.target.value;
-                  setStartingPositions(updatedPositions);
-                }}
-                required
-              />
-            </div>
-          ))}
-        </div>
-        <div>
-          <label htmlFor="questionnaire">Questionnaire:</label>
-          {/* Dropdown for selecting questionnaire */}
+          <div>Questionnaire</div>
           <select
             id="questionnaire"
             value={questionnaire}
             onChange={(e) => setQuestionnaire(e.target.value)}
             required
           >
-            {/* Option list of questionnaires */}
-            <option value="">Select Questionnaire</option>
             <option value="questionnaire1">Questionnaire 1</option>
             <option value="questionnaire2">Questionnaire 2</option>
-            {/* Add more options as needed */}
+            <option value="questionnaire3">Questionnaire 3</option>
           </select>
         </div>
+        <div>
+          <div>Map</div>
+          <select
+            id="map"
+            value={map}
+            onChange={(e) => setMap(e.target.value)}
+            required
+          >
+            <option value="map1">Map 1</option>
+            <option value="map2">Map 2</option>
+            <option value="map3">Map 3</option>
+          </select>
+        </div>
+        <div>
+          <div>Number of Groups</div>
+          <input
+            id="numGroups"
+            type="number"
+            min={2}
+            value={numGroups}
+            onChange={(e) => setNumGroups(parseInt(e.target.value))}
+            required
+          />
+        </div>
+        <div>
+          {Array.from({ length: numGroups }).map((_, index) => (
+            <div key={index}>
+              <div>{`Starting Position for Group ${index + 1}:`}</div>
+              <select
+                id="startingPosition"
+                value={startingPositions}
+                onChange={(e) => setStartingPositions(Array(e.target.value))}
+              >
+                <option value="startingPosition1">Position 1</option>
+                <option value="startingPosition2">Position 2</option>
+                <option value="startingPosition3">Position 3</option>
+              </select>
+            </div>
+          ))}
+        </div>
+
         <button type="submit">Create Game</button>
         {errorMessage && <p>{errorMessage}</p>}
         {successMessage && <p>{successMessage}</p>}
