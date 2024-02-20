@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./SavedGames.css";
 
 // Define a type for a game
