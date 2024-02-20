@@ -51,7 +51,7 @@ function SavedGames() {
   };
 
   return (
-    <div className="saved-games-container">
+    <div className="max-w-[800px] p-[20px] bg-[#f9f9f9]">
       <h2>Saved Games</h2>
       <table>
         <thead>
