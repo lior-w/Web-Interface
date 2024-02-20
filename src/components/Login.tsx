@@ -1,18 +1,31 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useHistory hook
 import "./Login.css";
 
 const Login = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate(); // Initialize useHistory
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (username === "admin" && password === "password") {
-      alert("Login successful!");
+      // Redirect to SavedGames.tsx on successful login
+      navigate("/SavedGames");
     } else {
       setErrorMessage("Invalid username or password");
     }
+  };
+
+  const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+    setErrorMessage("");
+  };
+
+  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setErrorMessage("");
   };
 
   return (
@@ -25,7 +38,7 @@ const Login = () => {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={onUsernameChange}
             required
           />
         </div>
@@ -35,12 +48,12 @@ const Login = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={onPasswordChange}
             required
           />
         </div>
         <button type="submit">Login</button>
-        {errorMessage && <p>{errorMessage}</p>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
       </form>
     </div>
   );
