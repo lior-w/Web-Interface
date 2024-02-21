@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useHistory hook
 import "./Login.css";
 
-const Login = () => {
+export interface IProps {
+  onLoginSuccess: () => void;
+}
+
+const Login = ({ onLoginSuccess }: IProps) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const navigate = useNavigate(); // Initialize useHistory
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (username === "admin" && password === "password") {
       // Redirect to SavedGames.tsx on successful login
-      navigate("/SavedGames");
+      onLoginSuccess();
     } else {
       setErrorMessage("Invalid username or password");
     }

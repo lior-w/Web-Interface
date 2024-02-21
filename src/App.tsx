@@ -1,7 +1,7 @@
-import SavedGames from "./components/SavedGames";
+import { Dashboard } from "./pages/dashboard";
 
 function App() {
-  return <SavedGames />;
+  return <Dashboard />;
 }
 
 export default App;
