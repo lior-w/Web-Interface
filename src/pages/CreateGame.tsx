@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import "./CreateGame.css";
 
-function CreateGame() {
+export interface IProps {
+  toMain: () => void;
+}
+
+function CreateGame({ toMain }: IProps) {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [numGroups, setNumGroups] = useState<number>(2);
@@ -24,34 +27,48 @@ function CreateGame() {
     setSuccessMessage("Game created successfully!");
   };
 
+  const handleBack = () => {
+    toMain();
+  };
+
   return (
-    <div className="create-game-container">
-      <h2>Create Game</h2>
+    <div className="flex flex-col items-center p-4 bg-amber-200 m-auto mt-4 border-solid border-4 border-amber-400 space-y-8 rounded-2xl w-[50%] min-w-96">
+      <button
+        className="mt-6 p-2.5 w-40 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
+        type="button"
+        onClick={handleBack}
+      >
+        Back
+      </button>
+      <div className="text-center text-4xl">Create Game</div>
       <form onSubmit={handleSubmit}>
-        <div>
-          <div>Title</div>
+        <div className="flex flex-col">
+          <label>Title</label>
           <input
+            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
             id="title"
             type="text"
-            placeholder="Title"
+            placeholder="Enter The Game's Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
           />
         </div>
-        <div>
-          <div>Description</div>
+        <div className="flex flex-col">
+          <label>Description</label>
           <textarea
+            className="p-2.5 mb-2.5 w-80 min-h-24 max-h-24 border-2 border-gray-300 rounded-md"
             id="description"
-            placeholder="Description"
+            placeholder="Enter The Game's Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
-        <div>
-          <div>Questionnaire</div>
+        <div className="flex flex-col">
+          <label>Questionnaire</label>
           <select
+            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
             id="questionnaire"
             value={questionnaire}
             onChange={(e) => setQuestionnaire(e.target.value)}
@@ -62,9 +79,10 @@ function CreateGame() {
             <option value="questionnaire3">Questionnaire 3</option>
           </select>
         </div>
-        <div>
-          <div>Map</div>
+        <div className="flex flex-col">
+          <label>Map</label>
           <select
+            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
             id="map"
             value={map}
             onChange={(e) => setMap(e.target.value)}
@@ -75,9 +93,10 @@ function CreateGame() {
             <option value="map3">Map 3</option>
           </select>
         </div>
-        <div>
-          <div>Number of Groups</div>
+        <div className="flex flex-col">
+          <label>Number Of Groups</label>
           <input
+            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
             id="numGroups"
             type="number"
             min={2}
@@ -86,11 +105,13 @@ function CreateGame() {
             required
           />
         </div>
+
         <div>
           {Array.from({ length: numGroups }).map((_, index) => (
-            <div key={index}>
-              <div>{`Starting Position for Group ${index + 1}:`}</div>
+            <div key={index} className="flex flex-col">
+              <label>{`Starting Position for Group ${index + 1}:`}</label>
               <select
+                className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
                 id="startingPosition"
                 value={startingPositions}
                 onChange={(e) => setStartingPositions(Array(e.target.value))}
@@ -103,7 +124,12 @@ function CreateGame() {
           ))}
         </div>
 
-        <button type="submit">Create Game</button>
+        <button
+          className="mt-2 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
+          type="submit"
+        >
+          Create Game
+        </button>
         {errorMessage && <p>{errorMessage}</p>}
         {successMessage && <p>{successMessage}</p>}
       </form>
