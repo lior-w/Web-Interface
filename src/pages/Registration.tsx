@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from 'axios';
+
 
 export interface IProps {
   onRegistrationSuccess: () => void;
@@ -13,12 +15,19 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else {
-      alert(`Registration successful!\nUsername: ${username}\nEmail: ${email}`);
+      await axios.post("http://localhost:8080/user/register", {
+        "name" : username,
+        "password" : password,
+        "permissions" : "topyy",
+    })
+  .then((response) => alert(response))
+  .catch((err) => alert(err));
+      // alert(`Registration successful!\nUsername: ${username}\nEmail: ${email}`);
       onRegistrationSuccess();
     }
   };
