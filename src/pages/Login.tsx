@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import Container from "../components/container";
+import BrwonButton from "../components/brownButton";
+import { TiArrowForward } from "react-icons/ti";
+import { BsArrowClockwise } from "react-icons/bs";
+import { IoArrowForwardCircle } from "react-icons/io5";
 
 export interface IProps {
   onLoginSuccess: () => void;
@@ -25,6 +30,8 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
     onSignUp();
   };
 
+  const handleForgotPassword = () => {};
+
   const handleBack = () => {
     toMain();
   };
@@ -40,67 +47,77 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-4 bg-amber-200 m-auto mt-4 border-solid border-4 border-amber-400 space-y-8 rounded-2xl w-[50%] min-w-96">
-      <button
-        className="mt-6 p-2.5 w-40 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-        type="button"
-        onClick={handleBack}
-      >
-        Back
-      </button>
-      <div className="text-center text-4xl">Login</div>
-      <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-        <div className="flex flex-col">
-          <label>Username</label>
-          <input
-            className="p-2.5 w-80 mb-2.5 border-2 border-gray-300 rounded-md"
-            id="username"
-            type="text"
-            placeholder="Enter your username"
-            value={username}
-            onChange={onUsernameChange}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label>Password</label>
-          <input
-            className="p-2.5 w-80 mb-2.5 border-2 border-gray-300 rounded-md"
-            id="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={onPasswordChange}
-            required
-          />
-        </div>
+    <Container>
+      <div className="flex flex-row">
+        <div className="p-4 w-[100%] flex flex-col">
+          <div className="text-4xl text-brown font-bold">Login</div>
+          <div className="m-3"></div>
+          <form className="flex flex-col" onSubmit={handleSubmit}>
+            <div className="w-[70%] max-w-[300px]">
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={onUsernameChange}
+                required
+              />
+              <div className="m-1"></div>
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={onPasswordChange}
+                required
+              />
+              <div className="m-2.5"></div>
+              <div className="w-[100%] flex flex-row">
+                <button
+                  className="p-2 w-[40%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                  type="submit"
+                >
+                  LOGIN
+                </button>
+                <div className="w-[30%]"></div>
+                <button
+                  className="text-right min-w-[135px] w-[30%] text-brown font-bold cursor-pointer"
+                  type="button"
+                  onClick={handleForgotPassword}
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            </div>
 
-        <button
-          className="mt-2 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-          type="submit"
-        >
-          Sign In
-        </button>
-        <div className="mt-4 flex flex-row">
-          <button
-            className="p-1.5 w-36 border border-black hover:bg-amber-500 rounded-lg cursor-pointer"
-            type="button"
-          >
-            Forgot Password?
-          </button>
-          <div className="w-8"></div>
-          <button
-            className="p-1.5 w-36 border border-black hover:bg-amber-500 rounded-lg cursor-pointer"
-            type="button"
-            onClick={handleSignUp}
-          >
-            Sign Up
-          </button>
+            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+          </form>
         </div>
-
-        {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-      </form>
-    </div>
+        <div className="w-[40%] bg-brown  rounded-r-md">
+          <div className="p-1 flex justify-end">
+            <button
+              className="text-3xl text-orange-100 font-bold cursor-pointer"
+              type="button"
+              onClick={handleBack}
+            >
+              <IoArrowForwardCircle />
+            </button>
+          </div>
+          <div className="pt-20 text-my_orange text-center min-w-[170px]">
+            Don't have account yet?
+          </div>
+          <div className="flex justify-center ">
+            <button
+              className="text-2xl text-orange-100 font-bold cursor-pointer"
+              type="button"
+              onClick={handleSignUp}
+            >
+              SIGN UP
+            </button>
+          </div>
+        </div>
+      </div>
+    </Container>
   );
 };
 

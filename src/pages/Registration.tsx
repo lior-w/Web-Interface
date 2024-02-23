@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import axios from 'axios';
-
+import axios from "axios";
+import Container from "../components/container";
+import { FaRegUserCircle } from "react-icons/fa";
+import { IoArrowForwardCircle } from "react-icons/io5";
 
 export interface IProps {
   onRegistrationSuccess: () => void;
@@ -20,13 +22,14 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else {
-      await axios.post("http://localhost:8080/user/register", {
-        "name" : username,
-        "password" : password,
-        "permissions" : "topyy",
-    })
-  .then((response) => alert(response))
-  .catch((err) => alert(err));
+      await axios
+        .post("http://localhost:8080/user/register", {
+          name: username,
+          password: password,
+          permissions: "topyy",
+        })
+        .then((response) => alert(response))
+        .catch((err) => alert(err));
       // alert(`Registration successful!\nUsername: ${username}\nEmail: ${email}`);
       onRegistrationSuccess();
     }
@@ -41,81 +44,83 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
   };
 
   return (
-    <div className="flex flex-col items-center p-4 bg-amber-200 m-auto mt-4 border-solid border-4 border-amber-400 space-y-8 rounded-2xl w-[50%] min-w-96">
-      <button
-        className="mt-6 p-2.5 w-40 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-        type="button"
-        onClick={handleBack}
-      >
-        Back
-      </button>
-      <div className="text-center text-4xl">Register</div>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-col">
-          <label>Username</label>
-          <input
-            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-            id="username"
-            type="text"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label>Email</label>
-          <input
-            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-            type="email"
-            id="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label>Password</label>
-          <input
-            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label>Confirm Password</label>
-          <input
-            className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-            type="password"
-            id="confirmPassword"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
+    <Container>
+      <div className="flex flex-row">
+        <div className="p-4 w-[100%] flex flex-col">
+          <div className="text-4xl text-brown font-bold">Register</div>
+          <div className="m-3"></div>
+          <form className="flex flex-col" onSubmit={handleSubmit}>
+            <div className="w-[70%] max-w-[300px]">
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="text"
+                placeholder={`Username`}
+                value={username}
+                required
+              />
+              <div className="m-1"></div>
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="email"
+                placeholder="Email"
+                value={email}
+                required
+              />
+              <div className="m-1"></div>
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="password"
+                placeholder="Password"
+                value={email}
+                required
+              />
+              <div className="m-1"></div>
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="password"
+                placeholder="Confirm Password"
+                value={email}
+                required
+              />
+              <div className="m-2.5"></div>
+              <div className="w-[100%] flex flex-row">
+                <button
+                  className="p-2 w-[40%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                  type="submit"
+                >
+                  REGISTER
+                </button>
+              </div>
+            </div>
 
-        <button
-          className="mt-2 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-          type="submit"
-        >
-          Sign Up
-        </button>
-        {errorMessage && <p>{errorMessage}</p>}
-        <div className="mt-3 flex flex-row text-lg justify-center">
-          <label>Have an Account?</label>
-          <div className="w-2"></div>
-          <button className="font-bold" type="button" onClick={handleSignIn}>
-            Sign In
-          </button>
+            {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+          </form>
         </div>
-      </form>
-    </div>
+        <div className="w-[40%] bg-brown  rounded-r-md">
+          <div className="p-1 flex justify-end">
+            <button
+              className="text-3xl text-orange-100 font-bold cursor-pointer"
+              type="button"
+              onClick={handleBack}
+            >
+              <IoArrowForwardCircle />
+            </button>
+          </div>
+          <div className="pt-28 text-my_orange text-center min-w-[170px]">
+            Already have an account?
+          </div>
+          <div className="flex justify-center ">
+            <button
+              className="text-2xl text-orange-100 font-bold cursor-pointer"
+              type="button"
+              onClick={handleSignIn}
+            >
+              SIGN IN
+            </button>
+          </div>
+        </div>
+      </div>
+    </Container>
   );
 }
 
