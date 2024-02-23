@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Container from "../components/container.tsx";
+import BrwonButton from "../components/brownButton.tsx";
 
 export interface IProps {
   toLogin: () => void;
@@ -29,37 +31,34 @@ const MainPage = ({
     toSavedGames();
   };
   return (
-    <div className="flex flex-col items-center p-4 bg-amber-200 m-auto mt-4 border-solid border-4 border-amber-400 space-y-8 rounded-2xl w-[50%] min-w-96">
-      <div className="text-center text-4xl">Main</div>
-      <button
-        className="mt-6 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-        type="button"
-        onClick={handleLogin}
-      >
-        Login
-      </button>
-      <button
-        className="mt-6 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-        type="button"
-        onClick={handleRegister}
-      >
-        Register
-      </button>
-      <button
-        className="mt-6 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-        type="button"
-        onClick={handleCreateGame}
-      >
-        CreateGame
-      </button>
-      <button
-        className="mt-6 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-        type="button"
-        onClick={handleSavedGames}
-      >
-        Saved Games
-      </button>
-    </div>
+    <Container>
+      <div className="text-center text-4xl text-brown font-bold">Main</div>
+      <div className="flex flex-col items-center">
+        <BrwonButton
+          label={"Login"}
+          width={320}
+          onClick={handleLogin}
+        ></BrwonButton>
+        <div className="m-3"></div>
+        <BrwonButton
+          label={"Register"}
+          width={320}
+          onClick={handleRegister}
+        ></BrwonButton>
+        <div className="m-3"></div>
+        <BrwonButton
+          label={"Create Game"}
+          width={320}
+          onClick={handleCreateGame}
+        ></BrwonButton>
+        <div className="m-3"></div>
+        <BrwonButton
+          label={"Saved Games"}
+          width={320}
+          onClick={handleSavedGames}
+        ></BrwonButton>
+      </div>
+    </Container>
   );
 };
 
