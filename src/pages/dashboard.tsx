@@ -4,6 +4,7 @@ import Login from "./Login";
 import Registration from "./Registration";
 import CreateGame from "./CreateGame";
 import MainPage from "./mainPage";
+import CreateQuestion from "./CreateQuestion";
 
 export const Dashboard = () => {
   const [page, setPage] = useState<string>("main");
@@ -22,6 +23,10 @@ export const Dashboard = () => {
 
   const toCreateGame = () => {
     setPage("createGame");
+  };
+
+  const toCreateQuestion = () => {
+    setPage("createQuestion");
   };
 
   const toMainPage = () => {
@@ -46,12 +51,20 @@ export const Dashboard = () => {
         />
       )}
       {page === "createGame" && <CreateGame toMain={toMainPage} />}
+      {page === "createQuestion" && (
+        <CreateQuestion
+          onLoginSuccess={toSavedGames}
+          onSignUp={toRegistration}
+          toMain={toMainPage}
+        />
+      )}
       {page === "main" && (
         <MainPage
           toLogin={toLogin}
           toRegisrtation={toRegistration}
           toCreateGame={toCreateGame}
           toSavedGames={toSavedGames}
+          toCreateQuestion={toCreateQuestion}
         />
       )}
     </div>
