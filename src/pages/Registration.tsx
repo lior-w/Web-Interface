@@ -43,6 +43,26 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
     toMain();
   };
 
+  const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+    setErrorMessage("");
+  };
+
+  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setErrorMessage("");
+  };
+
+  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setErrorMessage("");
+  };
+
+  const onConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value);
+    setErrorMessage("");
+  };
+
   return (
     <Container>
       <div className="flex flex-row">
@@ -56,6 +76,7 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
                 type="text"
                 placeholder={`Username`}
                 value={username}
+                onChange={onUsernameChange}
                 required
               />
               <div className="m-1"></div>
@@ -64,6 +85,7 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
                 type="email"
                 placeholder="Email"
                 value={email}
+                onChange={onEmailChange}
                 required
               />
               <div className="m-1"></div>
@@ -71,7 +93,8 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
                 className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
                 type="password"
                 placeholder="Password"
-                value={email}
+                value={password}
+                onChange={onPasswordChange}
                 required
               />
               <div className="m-1"></div>
@@ -79,7 +102,8 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
                 className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
                 type="password"
                 placeholder="Confirm Password"
-                value={email}
+                value={confirmPassword}
+                onChange={onConfirmPasswordChange}
                 required
               />
               <div className="m-2.5"></div>
