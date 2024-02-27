@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+
 
 export interface IProps {
   toMain: () => void;
@@ -14,7 +16,7 @@ function CreateGame({ toMain }: IProps) {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (numGroups < 2) {
       setErrorMessage("Number of groups must be at least 2");
@@ -24,8 +26,20 @@ function CreateGame({ toMain }: IProps) {
 
     // Here you can implement logic for submitting the game creation form
     // For simplicity, let's just display a success message
-    setSuccessMessage("Game created successfully!");
-  };
+  //   const headers = {
+  //     'Authorization': description,
+  //   };
+  //   try {
+  //     const response = await axios.post("http://3.147.60.59:8080/game/add_game_instance", {
+  //     }, { headers });
+  //     // Handle the successful response
+  //     alert('Response: ' +  response.data);
+  //   } catch (error) {
+  //     // Handle the error
+  //     alert('Error: ' + error);
+  //   }
+  //   setSuccessMessage("Game created successfully!");
+  // };
 
   const handleBack = () => {
     toMain();
