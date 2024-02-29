@@ -6,7 +6,7 @@ export interface IProps {
 
 const Container = ({ children }: IProps) => {
   return (
-    <div className="bg-my_orange m-auto mt-4 border-solid border-4 border-brown rounded-2xl w-[60%] min-w-[800px]">
+    <div className="bg-my_orange m-auto mt-4 border-solid border-4 border-brown rounded-2xl w-[60%] min-w-[800px]  hover:cursor-default">
       {children}
     </div>
   );
