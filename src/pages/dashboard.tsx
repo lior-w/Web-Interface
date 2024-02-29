@@ -50,7 +50,6 @@ export const Dashboard = () => {
           toMain={toMainPage}
         />
       )}
-      {page === "createGame" && <CreateGame toMain={toMainPage} />}
       {page === "createQuestion" && (
         <CreateQuestion
           onLoginSuccess={toSavedGames}
