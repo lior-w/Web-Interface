@@ -3,6 +3,9 @@ import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import BrwonButton from "../components/brownButton";
+import { FaRegTrashCan } from "react-icons/fa6";
+import StarRating from "../components/starRating";
+import NumbersRating from "../components/starRating";
 
 export interface IProps {
   onLoginSuccess: () => void;
@@ -21,14 +24,15 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   ]);
   const [currentTag, setCurrentTag] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
-  const [difficulty, setDifficulity] = useState<number>(0);
+  const [deletables, setDeletabels] = useState<boolean[]>([]);
+  const [difficulty, setDifficulty] = useState<number | null>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     multipleChoice && IncorrectAnswers.every((answer) => answer.length === 0)
       ? setErrorMessage(
-          "Multiple-choice question has to contain atleast 1 incorrect answer"
+          "Multiple-choice question has to contain at least 1 incorrect answer"
         )
       : setErrorMessage("");
   };
@@ -37,9 +41,30 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
     toMain();
   };
 
+  const addTag = (tag: string) => {
+    setTags(tags.concat(tag));
+    setDeletabels(deletables.concat(false));
+  };
+
   const handleAddTag = () => {
-    currentTag.length > 0 ? setTags(tags.concat(currentTag)) : setTags(tags);
+    currentTag.length > 0 ? addTag(currentTag) : setTags(tags);
     setCurrentTag("");
+  };
+
+  const handleDeleteTag = (index: number) => {
+    setTags(tags.slice(0, index).concat(tags.slice(index + 1)));
+    setDeletabels(
+      deletables.slice(0, index).concat(deletables.slice(index + 1))
+    );
+  };
+
+  const onTagClick = (index: number) => {
+    setDeletabels(
+      deletables
+        .slice(0, index)
+        .concat(!deletables[index])
+        .concat(deletables.slice(index + 1))
+    );
   };
 
   const onQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +103,7 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
     return (
       <div>
         <button
-          className={`border-2 border-brown rounded-s-lg w-[70px] text-lg font-bold ${
+          className={`border-2 border-brown rounded-s-lg w-[70px] text-lg  ${
             multipleChoice
               ? "text-brown hover:bg-orange-300"
               : "bg-brown text-orange-100"
@@ -89,7 +114,7 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
           OPEN
         </button>
         <button
-          className={`border-2 border-brown rounded-e-lg w-[70px] text-lg font-bold ${
+          className={`border-2 border-brown rounded-e-lg w-[70px] text-lg ${
             !multipleChoice
               ? "text-brown hover:bg-orange-300"
               : "bg-brown text-orange-100 "
@@ -208,35 +233,64 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
               <div className="">
                 <div className="flex">
                   <input
-                    className="p-2.5 w-[40%] h-12 border-2 border-gray-300 rounded-md"
+                    className="p-2.5 mr-1 w-[40%] h-12 border-2 border-gray-300 rounded-md"
                     type="text"
                     placeholder="#Tags"
                     value={currentTag}
                     onChange={onCurrentTagChange}
                     required
                   />
-                  <div className="bg-brown text-orange-100 text-xl flex items-center hover:bg-amber-700 rounded-lg p-2">
-                    <button className="" type="button" onClick={handleAddTag}>
-                      ADD
-                    </button>
+                  <div className="h-12 flex items-center">
+                    <div className="bg-brown h-11 text-orange-100 text-xl hover:bg-amber-700 rounded-lg p-2">
+                      <button className="" type="button" onClick={handleAddTag}>
+                        ADD
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="border-1 w-[100%] flex flex-wrap">
+                <div className="w-[100%] flex flex-wrap">
                   {tags.map((tag, index) => (
-                    <button className="bg-brown text-my_orange rounded-lg mr-1 p-1 mt-1">{`#${tag}`}</button>
+                    <div className="flex items-center mt-1">
+                      <button
+                        className="bg-brown text-my_orange rounded-md pr-1 pl-1 pt-0.5 pb-0.5 hover:bg-amber-700"
+                        type="button"
+                        onClick={(e) => onTagClick(index)}
+                      >{`#${tag}`}</button>
+                      {deletables[index] ? (
+                        <button
+                          className="text-brown text-sm flex items-center"
+                          type="button"
+                          onClick={(e) => handleDeleteTag(index)}
+                        >
+                          <FaRegTrashCan />
+                        </button>
+                      ) : (
+                        <div></div>
+                      )}
+                      <div className="m-1"></div>
+                    </div>
                   ))}
                 </div>
               </div>
             </div>
-            <div>difficulty</div>
+            <div className="">
+              <div className="text-lg text-brown font-bold mt-4">
+                Difficulty
+              </div>
+              <NumbersRating
+                onValueChange={(v) => setDifficulty(v)}
+              ></NumbersRating>
+            </div>
             <button
               className="p-2.5 bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
               type="submit"
             >
               ADD QUESTION
             </button>
-            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+            {errorMessage && (
+              <div className="text-red-500 text-center">{errorMessage}</div>
+            )}
           </form>
         </div>
       </div>
