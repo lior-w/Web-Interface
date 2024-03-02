@@ -8,16 +8,22 @@ import StarRating from "../components/starRating";
 import NumbersRating from "../components/starRating";
 
 export interface IProps {
-  onLoginSuccess: () => void;
-  onSignUp: () => void;
   toMain: () => void;
+  onSubmit: (
+    question: string,
+    multipleChoice: boolean,
+    correctAnswer: string,
+    IncorrectAnswers: string[],
+    tags: string[],
+    difficulty: number | null
+  ) => void;
 }
 
-const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
+const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
   const [question, setQuestion] = useState<string>("");
   const [multipleChoice, setMultipleChoice] = useState<boolean>(false);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
-  const [IncorrectAnswers, setIncorrectAnswers] = useState<string[]>([
+  const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([
     "",
     "",
     "",
@@ -30,11 +36,19 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    multipleChoice && IncorrectAnswers.every((answer) => answer.length === 0)
+    multipleChoice && incorrectAnswers.every((answer) => answer.length === 0)
       ? setErrorMessage(
           "Multiple-choice question has to contain at least 1 incorrect answer"
         )
       : setErrorMessage("");
+    onSubmit(
+      question,
+      multipleChoice,
+      correctAnswer,
+      incorrectAnswers,
+      tags,
+      difficulty
+    );
   };
 
   const handleBack = () => {
@@ -42,7 +56,9 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   };
 
   const addTag = (tag: string) => {
-    setTags(tags.concat(tag));
+    tag[0] === "#"
+      ? setTags(tags.concat(tag.slice(1)))
+      : setTags(tags.concat(tag));
     setDeletabels(deletables.concat(false));
   };
 
@@ -81,9 +97,10 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   ) => {
     setErrorMessage("");
     setIncorrectAnswers(
-      IncorrectAnswers.slice(0, index)
+      incorrectAnswers
+        .slice(0, index)
         .concat(e.target.value)
-        .concat(IncorrectAnswers.slice(index + 1))
+        .concat(incorrectAnswers.slice(index + 1))
     );
   };
 
@@ -169,21 +186,21 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
           className="p-2.5 w-[100%] mb-1 h-12 border-2 border-gray-300 rounded-md"
           type="text"
           placeholder="Enter An Incorrect Answer"
-          value={IncorrectAnswers[0]}
+          value={incorrectAnswers[0]}
           onChange={(e) => onIncorrectAnswerChange(e, 0)}
         />
         <input
           className="p-2.5 w-[100%] mb-1 h-12 border-2 border-gray-300 rounded-md"
           type="text"
           placeholder="Enter An Incorrect Answer"
-          value={IncorrectAnswers[1]}
+          value={incorrectAnswers[1]}
           onChange={(e) => onIncorrectAnswerChange(e, 1)}
         />
         <input
           className="p-2.5 w-[100%] mb-1 h-12 border-2 border-gray-300 rounded-md"
           type="text"
           placeholder="Enter An Incorrect Answer"
-          value={IncorrectAnswers[2]}
+          value={incorrectAnswers[2]}
           onChange={(e) => onIncorrectAnswerChange(e, 2)}
         />
         <div className="m-4"></div>
@@ -195,7 +212,7 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
     <Container>
       <div className="p-1 flex justify-end">
         <button
-          className="text-3xl text-brown font-bold cursor-pointer"
+          className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
           type="button"
           onClick={handleBack}
         >
@@ -238,7 +255,6 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
                     placeholder="#Tags"
                     value={currentTag}
                     onChange={onCurrentTagChange}
-                    required
                   />
                   <div className="h-12 flex items-center">
                     <div className="bg-brown h-11 text-orange-100 text-xl hover:bg-amber-700 rounded-lg p-2">
@@ -288,8 +304,10 @@ const CreateQuestion = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
             >
               ADD QUESTION
             </button>
-            {errorMessage && (
-              <div className="text-red-500 text-center">{errorMessage}</div>
+            {errorMessage && multipleChoice && (
+              <div className="text-red-500 mt-2 text-center text-md font-semibold">
+                {errorMessage}
+              </div>
             )}
           </form>
         </div>

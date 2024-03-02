@@ -123,7 +123,7 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
         <div className="w-[40%] bg-brown  rounded-r-md">
           <div className="p-1 flex justify-end">
             <button
-              className="text-3xl text-orange-100 font-bold cursor-pointer"
+              className="text-3xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
               type="button"
               onClick={handleBack}
             >
@@ -135,7 +135,7 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
           </div>
           <div className="flex justify-center ">
             <button
-              className="text-2xl text-orange-100 font-bold cursor-pointer"
+              className="text-2xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
               type="button"
               onClick={handleSignIn}
             >
