@@ -81,7 +81,7 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
                 </button>
                 <div className="w-[30%]"></div>
                 <button
-                  className="text-right min-w-[135px] w-[30%] text-brown font-bold cursor-pointer"
+                  className="text-right min-w-[135px] w-[30%] text-brown font-bold cursor-pointer hover:text-amber-700"
                   type="button"
                   onClick={handleForgotPassword}
                 >
@@ -96,7 +96,7 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
         <div className="w-[40%] bg-brown  rounded-r-md">
           <div className="p-1 flex justify-end">
             <button
-              className="text-3xl text-orange-100 font-bold cursor-pointer"
+              className="text-3xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
               type="button"
               onClick={handleBack}
             >
@@ -108,7 +108,7 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
           </div>
           <div className="flex justify-center ">
             <button
-              className="text-2xl text-orange-100 font-bold cursor-pointer"
+              className="text-2xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
               type="button"
               onClick={handleSignUp}
             >

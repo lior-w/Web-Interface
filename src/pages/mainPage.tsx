@@ -43,21 +43,21 @@ const MainPage = ({
       <div className="flex flex-col items-center">
         <div className="m-3"></div>
         <BrwonButton
-          label={"Login"}
+          label={"Login (done)"}
           width={320}
           onClick={handleLogin}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Register"}
+          label={"Register (done)"}
           width={320}
           onClick={handleRegister}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Create Game"}
+          label={"Create Question (done)"}
           width={320}
-          onClick={handleCreateGame}
+          onClick={handleCreateQuestion}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
@@ -67,9 +67,9 @@ const MainPage = ({
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Create Question"}
+          label={"Create Game"}
           width={320}
-          onClick={handleCreateQuestion}
+          onClick={() => {}}
         ></BrwonButton>
         <div className="m-3"></div>
       </div>
