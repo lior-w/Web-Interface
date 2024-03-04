@@ -25,49 +25,102 @@ function SavedGames({ toMain }: IProps) {
   const [games, setGames] = useState<Game[]>([
     {
       id: 1,
-      title: "Math 1.3.24",
+      title: "Exciting Adventure",
       description:
-        "Math questions for 1st grade students, including addition and subtraction up to 10",
-      questionaire: "Math",
-      map: "Asia",
-      numGroups: 3,
+        "Embark on a thrilling journey through uncharted territories.",
+      questionaire: "Adventure Questions",
+      map: "Mystery Island",
+      numGroups: 4,
       status: "created",
     },
     {
       id: 2,
-      title: "Economy",
-      description: "11th grade economy",
-      questionaire: "11th grade economy",
-      map: "Africa",
-      numGroups: 2,
-      status: "ended",
-    },
-    {
-      id: 3,
-      title: "Geography - Nitzan's class",
-      description: "Geography question for 5th grade students",
-      questionaire: "Geography",
-      map: "Europe",
-      numGroups: 2,
-      status: "created",
-    },
-
-    {
-      id: 4,
-      title: "History class 31.12.23",
-      description: "History questions",
-      questionaire: "History",
-      map: "America",
+      title: "Space Odyssey",
+      description:
+        "Explore the vast expanse of space and encounter alien civilizations.",
+      questionaire: "Space Trivia",
+      map: "Galaxy Alpha",
       numGroups: 5,
       status: "ended",
     },
     {
-      id: 5,
-      title: "Random Qustions",
-      description: "Random questions",
-      questionaire: "random 3",
-      map: "Middle east",
+      id: 3,
+      title: "Medieval Quest",
+      description:
+        "Step back in time and experience the wonders and perils of the medieval era.",
+      questionaire: "Medieval History",
+      map: "Kingdom of Camelot",
       numGroups: 3,
+      status: "created",
+    },
+    {
+      id: 4,
+      title: "Underwater Expedition",
+      description:
+        "Dive into the depths of the ocean and discover hidden treasures.",
+      questionaire: "Marine Biology",
+      map: "Coral Reef",
+      numGroups: 6,
+      status: "ended",
+    },
+    {
+      id: 5,
+      title: "Jungle Safari",
+      description:
+        "Embark on an adventure through dense jungles and encounter exotic wildlife.",
+      questionaire: "Jungle Trivia",
+      map: "Amazon Rainforest",
+      numGroups: 2,
+      status: "created",
+    },
+    {
+      id: 6,
+      title: "Arctic Expedition",
+      description:
+        "Brave the icy wilderness of the Arctic and witness breathtaking landscapes.",
+      questionaire: "Arctic Wildlife",
+      map: "Frozen Tundra",
+      numGroups: 4,
+      status: "ended",
+    },
+    {
+      id: 7,
+      title: "Fantasy Quest",
+      description:
+        "Enter a world of magic and mythical creatures on an epic quest.",
+      questionaire: "Fantasy Lore",
+      map: "Realm of Eldoria",
+      numGroups: 3,
+      status: "created",
+    },
+    {
+      id: 8,
+      title: "Ancient Civilization",
+      description:
+        "Unravel the mysteries of ancient civilizations and their lost treasures.",
+      questionaire: "Archaeology",
+      map: "Land of the Pharaohs",
+      numGroups: 5,
+      status: "ended",
+    },
+    {
+      id: 9,
+      title: "Wild West Adventure",
+      description:
+        "Experience the lawless frontier of the Wild West and ride into the sunset.",
+      questionaire: "Western Trivia",
+      map: "Frontier Town",
+      numGroups: 2,
+      status: "created",
+    },
+    {
+      id: 10,
+      title: "Pirate Treasure Hunt",
+      description:
+        "Sail the high seas in search of buried pirate treasure and fend off rival crews.",
+      questionaire: "Pirate Lore",
+      map: "Caribbean Islands",
+      numGroups: 6,
       status: "ended",
     },
   ]);
@@ -80,84 +133,40 @@ function SavedGames({ toMain }: IProps) {
     toMain();
   };
 
-  const shortAndLong = (text: string, maxChars: number) => {
-    let short =
-      text.length > maxChars
-        ? text.slice(0, maxChars).trim().concat("...")
-        : text;
-
-    const showLong = (
-      <div className="">
-        <div className="flex p-1 justify-between items-end">
-          <div
-            style={{ fontSize: "14px", lineHeight: "14px" }}
-            className="mr-1"
-          >{`${text}`}</div>
-          <button
-            style={{ fontSize: "9px", lineHeight: "14px" }}
-            className="text-blue-600 font-semibold min-w-[55px]"
-            type="button"
-            onClick={() => setShow(showShort)}
-          >{`(show less)`}</button>
-        </div>
-      </div>
-    );
-
-    const showShort = (
-      <div className="">
-        <div className="flex p-1 items-end justify-between">
-          <div
-            style={{ fontSize: "14px", lineHeight: "14px" }}
-            className="mr-1"
-          >{`${short}`}</div>
-          <button
-            style={{ fontSize: "9px", lineHeight: "14px" }}
-            className="text-blue-600 font-semibold min-w-[55px]"
-            type="button"
-            onClick={() => setShow(showLong)}
-          >{`(show more)`}</button>
-        </div>
-      </div>
-    );
-
-    const [show, setShow] = useState<ReactNode>(showShort);
-
-    return show;
-  };
-
   const showGame = (game: Game, index: number) => {
     let bgColor = index % 2 === 0 ? "#fafafa" : "#e5e5e5";
     return (
       <div
         style={{ backgroundColor: bgColor }}
-        className="border-2 border-neutral-400 rounded-md w-[95%] m-3"
+        className="border-2 border-neutral-400 rounded-md w-[97%] m-3"
       >
         <div className="flex">
-          <div className="w-[35%]">
-            <div className="p-1 text-md font-bold">{`${game.title}`}</div>{" "}
-            <div>
-              {game.description.length > 29 ? (
-                shortAndLong(game.description, 29)
-              ) : (
-                <div
-                  style={{ fontSize: "14px", lineHeight: "14px" }}
-                  className="p-1 mr-1"
-                >
-                  {`${game.description}`}
-                </div>
-              )}
+          <div className="w-[30%] p-1 flex flex-col justify-evenly">
+            <div className="text-md font-bold">{`${game.title}`}</div>{" "}
+            <div className="text-sm">{`${game.description}`}</div>
+          </div>
+          <div className="p-1 w-[35%] flex flex-col justify-between ml-8 mr-8">
+            <div className="flex ">
+              <div className="mr-4">Questionaire:</div>
+              <div className="font-bold">{`${game.questionaire}`}</div>
+            </div>
+            <div className="flex">
+              <div className="mr-4">Map:</div>
+              <div className="font-bold">{`${game.map}`}</div>
             </div>
           </div>
-          <div className=""></div>
-          <div className="w-[30%]">
-            <div>{`Questionaire: ${game.questionaire}`}</div>
-            <div>{`Number of Players: ${game.numGroups}`}</div>
+          <div className="p-1 w-[35%] flex flex-col justify-between">
+            <div className="flex">
+              <div className="mr-4">Groups:</div>
+              <div className="font-bold">{`${game.numGroups}`}</div>
+            </div>
+            <div className="flex">
+              <div className="mr-4">Status:</div>
+              <div className="font-bold">{`${game.status}`}</div>
+            </div>
           </div>
-          <div className="w-[20%]">
-            <div>{`Map: ${game.map}`}</div>
-            <div>{`Status: ${game.status}`}</div>
-          </div>
-          <div className="w-[15%] flex items-center justify-center">
+
+          <div className="w-[10%] flex items-center justify-center">
             <div className="">
               {game.status !== "ended" && (
                 <button
@@ -175,8 +184,15 @@ function SavedGames({ toMain }: IProps) {
     );
   };
 
+  const gamesComp: (a: Game, b: Game) => number = (a: Game, b: Game) =>
+    a.status === b.status
+      ? a.title.localeCompare(b.title)
+      : a.status === "created"
+      ? -1
+      : 1;
+
   return (
-    <Container>
+    <Container width="80%">
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
@@ -205,10 +221,10 @@ function SavedGames({ toMain }: IProps) {
         />
       </div>
       <div>
-        {games.map(
-          (game, index) =>
-            (game.status !== "ended" || showEndedGames) && showGame(game, index)
-        )}
+        {games
+          .sort(gamesComp)
+          .filter((game) => showEndedGames || game.status !== "ended")
+          .map((game, index) => showGame(game, index))}
       </div>
     </Container>
   );

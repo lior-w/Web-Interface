@@ -38,7 +38,7 @@ const MainPage = ({
   };
 
   return (
-    <Container>
+    <Container width={"60%"}>
       <div className="text-center text-4xl text-brown font-bold">Main</div>
       <div className="flex flex-col items-center">
         <div className="m-3"></div>
