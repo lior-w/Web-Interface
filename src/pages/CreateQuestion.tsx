@@ -209,7 +209,7 @@ const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
   };
 
   return (
-    <Container width="60%">
+    <Container w="60%">
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"

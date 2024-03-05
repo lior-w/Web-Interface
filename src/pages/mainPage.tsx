@@ -38,7 +38,7 @@ const MainPage = ({
   };
 
   return (
-    <Container width={"60%"}>
+    <Container w={"60%"}>
       <div className="text-center text-4xl text-brown font-bold">Main</div>
       <div className="flex flex-col items-center">
         <div className="m-3"></div>
@@ -61,7 +61,7 @@ const MainPage = ({
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Saved Games"}
+          label={"Saved Games (done)"}
           width={320}
           onClick={handleSavedGames}
         ></BrwonButton>
@@ -69,7 +69,7 @@ const MainPage = ({
         <BrwonButton
           label={"Create Game"}
           width={320}
-          onClick={() => {}}
+          onClick={handleCreateGame}
         ></BrwonButton>
         <div className="m-3"></div>
       </div>
