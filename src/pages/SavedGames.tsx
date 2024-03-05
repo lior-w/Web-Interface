@@ -192,7 +192,7 @@ function SavedGames({ toMain }: IProps) {
       : 1;
 
   return (
-    <Container width="80%">
+    <Container w="80%">
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"

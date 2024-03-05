@@ -51,11 +51,7 @@ export const Dashboard = () => {
         />
       )}
       {page === "createQuestion" && (
-        <CreateQuestion
-          onLoginSuccess={toSavedGames}
-          onSignUp={toRegistration}
-          toMain={toMainPage}
-        />
+        <CreateQuestion toMain={toMainPage} onSubmit={() => {}} />
       )}
       {page === "main" && (
         <MainPage
@@ -66,6 +62,7 @@ export const Dashboard = () => {
           toCreateQuestion={toCreateQuestion}
         />
       )}
+      {page === "createGame" && <CreateGame toMain={toMainPage}></CreateGame>}
     </div>
   );
 };

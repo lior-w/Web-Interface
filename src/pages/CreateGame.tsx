@@ -1,17 +1,26 @@
 import React, { useState } from "react";
-import axios from "axios";
+import Container from "../components/container";
+import { IoArrowForwardCircle } from "react-icons/io5";
+import { ScrollContainer } from "react-nice-scroll";
 
 export interface IProps {
   toMain: () => void;
 }
 
-function CreateGame({ toMain }: IProps) {
+export interface Questionaire {
+  title: string;
+  description: string;
+}
+
+const CreateGame = ({ toMain }: IProps) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [numGroups, setNumGroups] = useState<number>(2);
-  const [map, setMap] = useState<string>("");
-  const [startingPositions, setStartingPositions] = useState<string[]>([]);
   const [questionnaire, setQuestionnaire] = useState<string>("");
+  const [filterQuestionaire, setFilterQuestionaire] = useState<string>("");
+  const [map, setMap] = useState<string>("");
+  const [filterMap, setFilterMap] = useState<string>("");
+  const [numGroups, setNumGroups] = useState<number>(2);
+  const [startingPositions, setStartingPositions] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
 
@@ -38,117 +47,224 @@ function CreateGame({ toMain }: IProps) {
     //     alert('Error: ' + error);
     //   }
     //   setSuccessMessage("Game created successfully!");
-    // };
+  };
 
-    const handleBack = () => {
-      toMain();
-    };
+  const handleBack = () => {
+    toMain();
+  };
 
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value.substring(0, 30));
+  };
+
+  const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value.substring(0, 200));
+  };
+
+  const onFilterQuestionaireChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFilterQuestionaire(e.target.value);
+  };
+
+  const onFilterMapChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterMap(e.target.value);
+  };
+
+  const onStartingPositionsChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    setFilterMap(e.target.value);
+  };
+
+  const titleCount = () => {
+    const color = title.length === 30 ? "#dc2626" : "#8B4513";
     return (
-      <div className="flex flex-col items-center p-4 bg-amber-200 m-auto mt-4 border-solid border-4 border-amber-400 space-y-8 rounded-2xl w-[50%] min-w-96">
-        <button
-          className="mt-6 p-2.5 w-40 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-          type="button"
-          onClick={handleBack}
-        >
-          Back
-        </button>
-        <div className="text-center text-4xl">Create Game</div>
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <label>Title</label>
-            <input
-              className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-              id="title"
-              type="text"
-              placeholder="Enter The Game's Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col">
-            <label>Description</label>
-            <textarea
-              className="p-2.5 mb-2.5 w-80 min-h-24 max-h-24 border-2 border-gray-300 rounded-md"
-              id="description"
-              placeholder="Enter The Game's Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col">
-            <label>Questionnaire</label>
-            <select
-              className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-              id="questionnaire"
-              value={questionnaire}
-              onChange={(e) => setQuestionnaire(e.target.value)}
-              required
-            >
-              <option value="questionnaire1">Questionnaire 1</option>
-              <option value="questionnaire2">Questionnaire 2</option>
-              <option value="questionnaire3">Questionnaire 3</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label>Map</label>
-            <select
-              className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-              id="map"
-              value={map}
-              onChange={(e) => setMap(e.target.value)}
-              required
-            >
-              <option value="map1">Map 1</option>
-              <option value="map2">Map 2</option>
-              <option value="map3">Map 3</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label>Number Of Groups</label>
-            <input
-              className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-              id="numGroups"
-              type="number"
-              min={2}
-              value={numGroups}
-              onChange={(e) => setNumGroups(parseInt(e.target.value))}
-              required
-            />
-          </div>
-
-          <div>
-            {Array.from({ length: numGroups }).map((_, index) => (
-              <div key={index} className="flex flex-col">
-                <label>{`Starting Position for Group ${index + 1}:`}</label>
-                <select
-                  className="p-2.5 mb-2.5 w-80 border-2 border-gray-300 rounded-md"
-                  id="startingPosition"
-                  value={startingPositions}
-                  onChange={(e) => setStartingPositions(Array(e.target.value))}
-                >
-                  <option value="startingPosition1">Position 1</option>
-                  <option value="startingPosition2">Position 2</option>
-                  <option value="startingPosition3">Position 3</option>
-                </select>
-              </div>
-            ))}
-          </div>
-
-          <button
-            className="mt-2 p-2.5 w-80 text-xl bg-amber-400 hover:bg-amber-500 rounded-lg cursor-pointer"
-            type="submit"
-          >
-            Create Game
-          </button>
-          {errorMessage && <p>{errorMessage}</p>}
-          {successMessage && <p>{successMessage}</p>}
-        </form>
+      <div style={{ color: color, fontSize: "12px", fontWeight: 600 }}>
+        {title.length}/30
       </div>
     );
   };
-}
+
+  const descriptionCount = () => {
+    const color = description.length === 200 ? "#dc2626" : "#8B4513";
+    return (
+      <div style={{ color: color, fontSize: "12px", fontWeight: 600 }}>
+        {description.length}/200
+      </div>
+    );
+  };
+
+  const showQuestionaires = (list: string[]) => {
+    return (
+      <select
+        className="rounded-md h-10"
+        value={questionnaire}
+        onChange={(e) => setQuestionnaire(e.target.value)}
+      >
+        <option value="">Select Questionaire</option>
+        {list
+          .filter(
+            (q) =>
+              filterQuestionaire === "" ||
+              q.toLowerCase().includes(filterQuestionaire.toLowerCase())
+          )
+          .map((q) => (
+            <option value={q}>{q}</option>
+          ))}
+      </select>
+    );
+  };
+
+  const showMaps = (list: string[]) => {
+    return (
+      <select
+        className="rounded-md h-10"
+        value={map}
+        onChange={(e) => setMap(e.target.value)}
+      >
+        <option value="">Select Map</option>
+        {list
+          .filter(
+            (m) =>
+              filterMap === "" ||
+              m.toLowerCase().includes(filterMap.toLowerCase())
+          )
+          .map((m) => (
+            <option value={m}>{m}</option>
+          ))}
+      </select>
+    );
+  };
+
+  const questionaires = [
+    "Adventure Questions",
+    "Fantasy Lore",
+    "Jungle Trivia",
+    "Medieval History",
+    "Western Trivia",
+  ];
+  const maps = [
+    "Mystery Island",
+    "Realm of Eldoria",
+    "Amazon Rainforest",
+    "Kingdom of Camelot",
+    "Frontier Town",
+  ];
+
+  return (
+    <Container w="60%">
+      <div className="p-1 flex justify-end">
+        <button
+          className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
+          type="button"
+          onClick={handleBack}
+        >
+          <IoArrowForwardCircle />
+        </button>
+      </div>
+      <div className="flex flex-row">
+        <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
+          <div className="text-4xl text-brown font-bold">New Game</div>
+          <div className="mb-3"></div>
+          <form className="flex flex-col" onSubmit={handleSubmit}>
+            <div className="mb-2">
+              <div className="text-lg text-brown font-bold">Title</div>
+              <input
+                className="p-2.5 w-[100%] h-12 border-2 border-gray-300 rounded-md"
+                type="text"
+                placeholder="Enter The Title"
+                value={title}
+                onChange={onTitleChange}
+                required
+              />
+              {titleCount()}
+            </div>
+            <div className="mb-2">
+              <div className="text-lg text-brown font-bold">Description</div>
+              <textarea
+                className="p-2.5 w-[100%] min-h-[100px] max-h-[100px] border-2 border-gray-300 rounded-md cursor-text"
+                placeholder="Enter The Description"
+                value={description}
+                onChange={onDescriptionChange}
+                required
+              />
+              {descriptionCount()}
+              <div className="mb-2"></div>
+              <div className="m-2"></div>
+            </div>
+            <div>
+              <div className="mb-2 w-[60%]">
+                <div className="text-lg text-brown font-bold mb-1">
+                  Questionaire
+                </div>
+                <div className="flex">
+                  <input
+                    className="p-2.5 mr-2 w-[100%] h-10 border-2 border-gray-300 rounded-md"
+                    type="text"
+                    placeholder="Filter questionaires"
+                    value={filterQuestionaire}
+                    onChange={onFilterQuestionaireChange}
+                  />
+                  {showQuestionaires(questionaires)}
+                </div>
+              </div>
+              <div className="mb-2 w-[60%]">
+                <div className="text-lg text-brown font-bold mb-1">Map</div>
+                <div className="flex">
+                  <input
+                    className="p-2.5 mr-2 w-[100%] h-10 border-2 border-gray-300 rounded-md"
+                    type="text"
+                    placeholder="Filter Maps"
+                    value={filterMap}
+                    onChange={onFilterMapChange}
+                  />
+                  {showMaps(maps)}
+                </div>
+              </div>
+              <div className="mb-2 w-[60%]">
+                <div className="text-lg text-brown font-bold mb-1">Groups</div>
+                <select
+                  className="rounded-md h-10"
+                  value={numGroups}
+                  onChange={(e) => setNumGroups(parseInt(e.target.value))}
+                >
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+              <div className="mb-2 w-[60%]">
+                <div className="text-lg text-brown font-bold mb-1">
+                  Starting Positions
+                </div>
+                <select
+                  className="rounded-md h-10"
+                  value={startingPositions}
+                  onChange={() => {}}
+                >
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                  <option value={6}>6</option>
+                </select>
+              </div>
+            </div>
+            <button
+              className="p-2.5 bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+              type="submit"
+            >
+              ADD QUESTION
+            </button>
+          </form>
+        </div>
+      </div>
+    </Container>
+  );
+};
 
 export default CreateGame;
