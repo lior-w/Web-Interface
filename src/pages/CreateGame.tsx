@@ -26,10 +26,7 @@ const CreateGame = ({ toMain }: IProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (numGroups < 2) {
-      setErrorMessage("Number of groups must be at least 2");
-      return;
-    }
+    setStartingPositions(startingPositions.slice(0, numGroups));
     // Additional validation can be added for other fields
 
     // Here you can implement logic for submitting the game creation form
@@ -72,10 +69,15 @@ const CreateGame = ({ toMain }: IProps) => {
   };
 
   const onStartingPositionsChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLSelectElement>,
     index: number
   ) => {
-    setFilterMap(e.target.value);
+    setStartingPositions(
+      startingPositions
+        .slice(0, index)
+        .concat(e.target.value)
+        .concat(startingPositions.slice(index + 1))
+    );
   };
 
   const titleCount = () => {
@@ -138,6 +140,25 @@ const CreateGame = ({ toMain }: IProps) => {
     );
   };
 
+  const startingPosition = (positions: string[], index: number) => {
+    return (
+      <div className="flex mb-2 items-center">
+        <div className="mr-2 text-brown font-bold">{`Group ${index + 1}:`}</div>
+
+        <select
+          className="rounded-md h-10"
+          value={startingPositions[index]}
+          onChange={(e) => onStartingPositionsChange(e, index)}
+        >
+          <option value="">Select Starting Position</option>
+          {positions.map((p) => (
+            <option value={p}>{p}</option>
+          ))}
+        </select>
+      </div>
+    );
+  };
+
   const questionaires = [
     "Adventure Questions",
     "Fantasy Lore",
@@ -151,6 +172,15 @@ const CreateGame = ({ toMain }: IProps) => {
     "Amazon Rainforest",
     "Kingdom of Camelot",
     "Frontier Town",
+  ];
+
+  const SP = [
+    "Pioneer's Junction",
+    "Dusty Trail Tavern",
+    "Prospectors' Ridge Camp",
+    "Sheriff's Office Square",
+    "Saloon Sunset View",
+    "Outlaw's Hollow Hideaway",
   ];
 
   return (
@@ -223,7 +253,7 @@ const CreateGame = ({ toMain }: IProps) => {
                   {showMaps(maps)}
                 </div>
               </div>
-              <div className="mb-2 w-[60%]">
+              <div className="mb-3 w-[60%]">
                 <div className="text-lg text-brown font-bold mb-1">Groups</div>
                 <select
                   className="rounded-md h-10"
@@ -237,28 +267,20 @@ const CreateGame = ({ toMain }: IProps) => {
                   <option value={6}>6</option>
                 </select>
               </div>
-              <div className="mb-2 w-[60%]">
-                <div className="text-lg text-brown font-bold mb-1">
+              <div className="mb-4 w-[60%]">
+                <div className="text-lg text-brown font-bold mb-2">
                   Starting Positions
                 </div>
-                <select
-                  className="rounded-md h-10"
-                  value={startingPositions}
-                  onChange={() => {}}
-                >
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
-                  <option value={6}>6</option>
-                </select>
+                {Array.from({ length: numGroups }).map((group, index) =>
+                  startingPosition(SP, index)
+                )}
               </div>
             </div>
             <button
               className="p-2.5 bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
               type="submit"
             >
-              ADD QUESTION
+              Create Game
             </button>
           </form>
         </div>

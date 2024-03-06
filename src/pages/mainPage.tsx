@@ -67,7 +67,7 @@ const MainPage = ({
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Create Game"}
+          label={"Create Game (done)"}
           width={320}
           onClick={handleCreateGame}
         ></BrwonButton>
