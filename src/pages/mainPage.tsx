@@ -8,6 +8,7 @@ export interface IProps {
   toCreateGame: () => void;
   toSavedGames: () => void;
   toCreateQuestion: () => void;
+  toWaitingRoom: () => void;
 }
 
 const MainPage = ({
@@ -16,6 +17,7 @@ const MainPage = ({
   toCreateGame,
   toSavedGames,
   toCreateQuestion,
+  toWaitingRoom,
 }: IProps) => {
   const handleLogin = () => {
     toLogin();
@@ -37,39 +39,49 @@ const MainPage = ({
     toCreateQuestion();
   };
 
+  const handleWaitingRoom = () => {
+    toWaitingRoom();
+  };
+
   return (
     <Container w={"60%"}>
       <div className="text-center text-4xl text-brown font-bold">Main</div>
       <div className="flex flex-col items-center">
         <div className="m-3"></div>
         <BrwonButton
-          label={"Login (done)"}
+          label={"Login"}
           width={320}
           onClick={handleLogin}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Register (done)"}
+          label={"Register"}
           width={320}
           onClick={handleRegister}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Create Question (done)"}
+          label={"Create Question"}
           width={320}
           onClick={handleCreateQuestion}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Saved Games (done)"}
+          label={"Saved Games"}
           width={320}
           onClick={handleSavedGames}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
-          label={"Create Game (done)"}
+          label={"Create Game"}
           width={320}
           onClick={handleCreateGame}
+        ></BrwonButton>
+        <div className="m-3"></div>
+        <BrwonButton
+          label={"Waiting Room"}
+          width={320}
+          onClick={handleWaitingRoom}
         ></BrwonButton>
         <div className="m-3"></div>
       </div>

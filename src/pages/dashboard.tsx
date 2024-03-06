@@ -5,6 +5,7 @@ import Registration from "./Registration";
 import CreateGame from "./CreateGame";
 import MainPage from "./mainPage";
 import CreateQuestion from "./CreateQuestion";
+import WaitingRoom from "./WaitingRoom";
 
 export const Dashboard = () => {
   const [page, setPage] = useState<string>("main");
@@ -27,6 +28,10 @@ export const Dashboard = () => {
 
   const toCreateQuestion = () => {
     setPage("createQuestion");
+  };
+
+  const toWaitingRoom = () => {
+    setPage("waitingRoom");
   };
 
   const toMainPage = () => {
@@ -53,6 +58,22 @@ export const Dashboard = () => {
       {page === "createQuestion" && (
         <CreateQuestion toMain={toMainPage} onSubmit={() => {}} />
       )}
+      {page === "waitingRoom" && (
+        <WaitingRoom
+          toMain={toMainPage}
+          game={{
+            id: 1,
+            title: "Exciting Adventure",
+            description:
+              "Embark on a thrilling journey through uncharted territories.",
+            questionaire: "Adventure Questions",
+            map: "Mystery Island",
+            numGroups: 4,
+            status: "created",
+          }}
+        />
+      )}
+
       {page === "main" && (
         <MainPage
           toLogin={toLogin}
@@ -60,6 +81,7 @@ export const Dashboard = () => {
           toCreateGame={toCreateGame}
           toSavedGames={toSavedGames}
           toCreateQuestion={toCreateQuestion}
+          toWaitingRoom={toWaitingRoom}
         />
       )}
       {page === "createGame" && <CreateGame toMain={toMainPage}></CreateGame>}
