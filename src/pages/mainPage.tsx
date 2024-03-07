@@ -8,6 +8,7 @@ export interface IProps {
   toCreateGame: () => void;
   toSavedGames: () => void;
   toCreateQuestion: () => void;
+  toCreateQuestionaire: () => void;
   toWaitingRoom: () => void;
 }
 
@@ -17,6 +18,7 @@ const MainPage = ({
   toCreateGame,
   toSavedGames,
   toCreateQuestion,
+  toCreateQuestionaire,
   toWaitingRoom,
 }: IProps) => {
   const handleLogin = () => {
@@ -39,12 +41,16 @@ const MainPage = ({
     toCreateQuestion();
   };
 
+  const handleCreateQuestionaire = () => {
+    toCreateQuestionaire();
+  };
+
   const handleWaitingRoom = () => {
     toWaitingRoom();
   };
 
   return (
-    <Container w={"60%"}>
+    <Container w="60%" h="auto">
       <div className="text-center text-4xl text-brown font-bold">Main</div>
       <div className="flex flex-col items-center">
         <div className="m-3"></div>
@@ -64,6 +70,12 @@ const MainPage = ({
           label={"Create Question"}
           width={320}
           onClick={handleCreateQuestion}
+        ></BrwonButton>
+        <div className="m-3"></div>
+        <BrwonButton
+          label={"Create Questionaire"}
+          width={320}
+          onClick={handleCreateQuestionaire}
         ></BrwonButton>
         <div className="m-3"></div>
         <BrwonButton
