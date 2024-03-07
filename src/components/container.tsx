@@ -3,12 +3,13 @@ import React, { ReactNode } from "react";
 export interface IProps {
   children: ReactNode;
   w: string;
+  h: string;
 }
 
-const Container = ({ children, w }: IProps) => {
+const Container = ({ children, w, h }: IProps) => {
   return (
     <div
-      style={{ width: w }}
+      style={{ width: w, height: h }}
       className="bg-my_orange m-auto  border-solid border-4 border-brown rounded-2xl hover:cursor-default"
     >
       {children}

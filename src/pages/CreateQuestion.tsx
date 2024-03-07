@@ -7,19 +7,22 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import StarRating from "../components/starRating";
 import NumbersRating from "../components/starRating";
 
-export interface IProps {
-  toMain: () => void;
-  onSubmit: (
-    question: string,
-    multipleChoice: boolean,
-    correctAnswer: string,
-    IncorrectAnswers: string[],
-    tags: string[],
-    difficulty: number | null
-  ) => void;
+export interface Question {
+  id: number | null;
+  question: string;
+  multipleChoice: boolean;
+  correctAnswer: string;
+  incorrectAnswers: string[];
+  tags: string[];
+  difficulty: number | null;
 }
 
-const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
+export interface IProps {
+  toMain: () => void;
+  onSubmit: (question: Question) => void;
+}
+
+export const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
   const [question, setQuestion] = useState<string>("");
   const [multipleChoice, setMultipleChoice] = useState<boolean>(false);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
@@ -41,14 +44,16 @@ const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
           "Multiple-choice question has to contain at least 1 incorrect answer"
         )
       : setErrorMessage("");
-    onSubmit(
-      question,
-      multipleChoice,
-      correctAnswer,
-      incorrectAnswers,
-      tags,
-      difficulty
-    );
+    const q: Question = {
+      id: null,
+      question: question,
+      multipleChoice: multipleChoice,
+      correctAnswer: correctAnswer,
+      incorrectAnswers: incorrectAnswers,
+      tags: tags,
+      difficulty: difficulty,
+    };
+    onSubmit(q);
   };
 
   const handleBack = () => {
@@ -209,7 +214,7 @@ const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
   };
 
   return (
-    <Container w="60%">
+    <Container w="80%" h="auto">
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
@@ -315,5 +320,3 @@ const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
     </Container>
   );
 };
-
-export default CreateQuestion;

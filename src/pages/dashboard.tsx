@@ -4,7 +4,8 @@ import Login from "./Login";
 import Registration from "./Registration";
 import CreateGame from "./CreateGame";
 import MainPage from "./mainPage";
-import CreateQuestion from "./CreateQuestion";
+import { CreateQuestion } from "./CreateQuestion";
+import { CreateQuestionaire } from "./CreateQuestionaire";
 import WaitingRoom from "./WaitingRoom";
 
 export const Dashboard = () => {
@@ -28,6 +29,10 @@ export const Dashboard = () => {
 
   const toCreateQuestion = () => {
     setPage("createQuestion");
+  };
+
+  const toCreateQuestionaire = () => {
+    setPage("createQuestionaire");
   };
 
   const toWaitingRoom = () => {
@@ -58,6 +63,9 @@ export const Dashboard = () => {
       {page === "createQuestion" && (
         <CreateQuestion toMain={toMainPage} onSubmit={() => {}} />
       )}
+      {page === "createQuestionaire" && (
+        <CreateQuestionaire toMain={toMainPage} onSubmit={() => {}} />
+      )}
       {page === "waitingRoom" && (
         <WaitingRoom
           toMain={toMainPage}
@@ -81,6 +89,7 @@ export const Dashboard = () => {
           toCreateGame={toCreateGame}
           toSavedGames={toSavedGames}
           toCreateQuestion={toCreateQuestion}
+          toCreateQuestionaire={toCreateQuestionaire}
           toWaitingRoom={toWaitingRoom}
         />
       )}

@@ -64,7 +64,7 @@ function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
   };
 
   return (
-    <Container w="60%">
+    <Container w="60%" h="auto">
       <div className="flex flex-row">
         <div className="p-4 w-[100%] flex flex-col">
           <div className="text-4xl text-brown font-bold">Register</div>

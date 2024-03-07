@@ -45,7 +45,7 @@ const WaitingRoom = ({ toMain, game }: IProps) => {
   const startGame = () => {};
 
   return (
-    <Container w="80%">
+    <Container w="80%" h="auto">
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
