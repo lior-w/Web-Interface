@@ -5,6 +5,7 @@ import { Question } from "./CreateQuestion";
 import Grid from "@mui/material/Grid";
 
 export interface IProps {
+  token: string;
   toMain: () => void;
   onSubmit: (
     question: string,
@@ -16,7 +17,7 @@ export interface IProps {
   ) => void;
 }
 
-export const CreateQuestionaire = ({ toMain, onSubmit }: IProps) => {
+export const CreateQuestionaire = ({ token, toMain, onSubmit }: IProps) => {
   const [questions, setQuestions] = useState<Question[]>([]);
 
   const handleBack = () => {

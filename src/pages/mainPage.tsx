@@ -3,6 +3,7 @@ import Container from "../components/container.tsx";
 import BrwonButton from "../components/brownButton.tsx";
 
 export interface IProps {
+  token: string;
   toLogin: () => void;
   toRegisrtation: () => void;
   toCreateGame: () => void;
@@ -13,6 +14,7 @@ export interface IProps {
 }
 
 const MainPage = ({
+  token,
   toLogin,
   toRegisrtation,
   toCreateGame,

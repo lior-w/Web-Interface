@@ -10,6 +10,7 @@ import WaitingRoom from "./WaitingRoom";
 
 export const Dashboard = () => {
   const [page, setPage] = useState<string>("main");
+  const [token, setToken] = useState<string>("");
 
   const toSavedGames = () => {
     setPage("savedGames");
@@ -45,26 +46,36 @@ export const Dashboard = () => {
 
   return (
     <div>
-      {page === "savedGames" && <SavedGames toMain={toMainPage} />}
+      {page === "savedGames" && (
+        <SavedGames token={token} toMain={toMainPage} />
+      )}
       {page === "login" && (
         <Login
-          onLoginSuccess={toSavedGames}
+          onLoginSuccess={(token) => {
+            setToken(token);
+            toSavedGames;
+          }}
           onSignUp={toRegistration}
           toMain={toMainPage}
         />
       )}
       {page === "registration" && (
         <Registration
+          token={token}
           onRegistrationSuccess={toLogin}
           onSignIn={toLogin}
           toMain={toMainPage}
         />
       )}
       {page === "createQuestion" && (
-        <CreateQuestion toMain={toMainPage} onSubmit={() => {}} />
+        <CreateQuestion token={token} toMain={toMainPage} onSubmit={() => {}} />
       )}
       {page === "createQuestionaire" && (
-        <CreateQuestionaire toMain={toMainPage} onSubmit={() => {}} />
+        <CreateQuestionaire
+          token={token}
+          toMain={toMainPage}
+          onSubmit={() => {}}
+        />
       )}
       {page === "waitingRoom" && (
         <WaitingRoom
@@ -84,6 +95,7 @@ export const Dashboard = () => {
 
       {page === "main" && (
         <MainPage
+          token={token}
           toLogin={toLogin}
           toRegisrtation={toRegistration}
           toCreateGame={toCreateGame}
@@ -93,7 +105,9 @@ export const Dashboard = () => {
           toWaitingRoom={toWaitingRoom}
         />
       )}
-      {page === "createGame" && <CreateGame toMain={toMainPage}></CreateGame>}
+      {page === "createGame" && (
+        <CreateGame token={token} toMain={toMainPage}></CreateGame>
+      )}
     </div>
   );
 };

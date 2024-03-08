@@ -16,10 +16,11 @@ interface Game {
 }
 
 export interface IProps {
+  token: string;
   toMain: () => void;
 }
 
-function SavedGames({ toMain }: IProps) {
+function SavedGames({ token, toMain }: IProps) {
   // Mock data for saved games
   const [showEndedGames, setShowEndedGames] = useState<boolean>(false);
   const [games, setGames] = useState<Game[]>([
@@ -192,7 +193,7 @@ function SavedGames({ toMain }: IProps) {
       : 1;
 
   return (
-    <Container w="80%">
+    <Container w="80%" h="auto">
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
