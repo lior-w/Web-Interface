@@ -1,27 +1,19 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { ThemeContext } from "@emotion/react";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
-
-// Define a type for a game
-interface Game {
-  id: number;
-  title: string;
-  description: string;
-  questionaire: string;
-  map: string;
-  numGroups: number;
-  status: "created" | "ended";
-}
+import { IGame } from "./SavedGames";
 
 export interface IProps {
   toMain: () => void;
-  game: Game;
+  toGame: () => void;
+  game: IGame;
 }
 
-const WaitingRoom = ({ toMain, game }: IProps) => {
+const WaitingRoom = ({ toMain, toGame, game }: IProps) => {
+  const [gameCode, setGameCode] = useState<string>("");
   const [players, setPlayers] = useState<string[]>([
     "Emily Johnson",
     "Michael Smith",
@@ -40,7 +32,17 @@ const WaitingRoom = ({ toMain, game }: IProps) => {
     "Mia Rodriguez",
   ]);
 
-  const url = "url";
+  const getCode = async () => {
+    const url = "url";
+    /*
+    await axios
+    .get(url)
+    .then((response) => setGameCode(response.data))
+    .catch((error) => alert(error));
+    */
+    console.log("code1");
+  };
+  getCode();
 
   // Response.data = {
   //   "players": [
@@ -56,13 +58,23 @@ const WaitingRoom = ({ toMain, game }: IProps) => {
   // }
 
   const getPlayers = async () => {
+    const url = "url";
+    /*
     await axios
       .get(url)
       .then((response) => setPlayers(response.data.players))
       .catch((error) => alert(error));
+      */
   };
 
-  const startGame = () => {};
+  useEffect(() => {
+    const interval = setInterval(() => getPlayers(), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const startGame = () => {
+    toGame();
+  };
 
   return (
     <Container w="80%" h="auto">
