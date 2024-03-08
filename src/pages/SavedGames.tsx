@@ -5,7 +5,7 @@ import { ThemeContext } from "@emotion/react";
 import Switch from "@mui/material/Switch";
 
 // Define a type for a game
-interface Game {
+export interface IGame {
   id: number;
   title: string;
   description: string;
@@ -18,12 +18,13 @@ interface Game {
 export interface IProps {
   token: string;
   toMain: () => void;
+  toWaitingRoom: (game: IGame) => void;
 }
 
-function SavedGames({ token, toMain }: IProps) {
+export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
   // Mock data for saved games
   const [showEndedGames, setShowEndedGames] = useState<boolean>(false);
-  const [games, setGames] = useState<Game[]>([
+  const [games, setGames] = useState<IGame[]>([
     {
       id: 1,
       title: "Exciting Adventure",
@@ -126,15 +127,15 @@ function SavedGames({ token, toMain }: IProps) {
     },
   ]);
 
-  const handleStartGame = (game: Game) => {
-    game.status === "created" && alert(`Game ${game.id} started!`);
+  const handleStartGame = (game: IGame) => {
+    toWaitingRoom(game);
   };
 
   const handleBack = () => {
     toMain();
   };
 
-  const showGame = (game: Game, index: number) => {
+  const showGame = (game: IGame, index: number) => {
     let bgColor = index % 2 === 0 ? "#fafafa" : "#e5e5e5";
     return (
       <div
@@ -185,7 +186,7 @@ function SavedGames({ token, toMain }: IProps) {
     );
   };
 
-  const gamesComp: (a: Game, b: Game) => number = (a: Game, b: Game) =>
+  const gamesComp: (a: IGame, b: IGame) => number = (a: IGame, b: IGame) =>
     a.status === b.status
       ? a.title.localeCompare(b.title)
       : a.status === "created"
@@ -229,6 +230,4 @@ function SavedGames({ token, toMain }: IProps) {
       </div>
     </Container>
   );
-}
-
-export default SavedGames;
+};

@@ -50,7 +50,6 @@ const MainPage = ({
   const handleWaitingRoom = () => {
     toWaitingRoom();
   };
-
   return (
     <Container w="60%" h="auto">
       <div className="text-center text-4xl text-brown font-bold">Main</div>

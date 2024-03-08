@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SavedGames from "./SavedGames";
+import { SavedGames, IGame } from "./SavedGames";
 import Login from "./Login";
 import Registration from "./Registration";
 import CreateGame from "./CreateGame";
@@ -7,10 +7,20 @@ import MainPage from "./mainPage";
 import { CreateQuestion } from "./CreateQuestion";
 import { CreateQuestionaire } from "./CreateQuestionaire";
 import WaitingRoom from "./WaitingRoom";
+import { Game } from "./Game";
 
 export const Dashboard = () => {
   const [page, setPage] = useState<string>("main");
   const [token, setToken] = useState<string>("");
+  const [game, setGame] = useState<IGame>({
+    id: 1,
+    title: "Exciting Adventure",
+    description: "Embark on a thrilling journey through uncharted territories.",
+    questionaire: "Adventure Questions",
+    map: "Mystery Island",
+    numGroups: 4,
+    status: "created",
+  });
 
   const toSavedGames = () => {
     setPage("savedGames");
@@ -40,6 +50,10 @@ export const Dashboard = () => {
     setPage("waitingRoom");
   };
 
+  const toGame = () => {
+    setPage("game");
+  };
+
   const toMainPage = () => {
     setPage("main");
   };
@@ -47,7 +61,14 @@ export const Dashboard = () => {
   return (
     <div>
       {page === "savedGames" && (
-        <SavedGames token={token} toMain={toMainPage} />
+        <SavedGames
+          token={token}
+          toMain={toMainPage}
+          toWaitingRoom={(game: IGame) => {
+            setGame(game);
+            setPage("waitingRoom");
+          }}
+        />
       )}
       {page === "login" && (
         <Login
@@ -78,19 +99,7 @@ export const Dashboard = () => {
         />
       )}
       {page === "waitingRoom" && (
-        <WaitingRoom
-          toMain={toMainPage}
-          game={{
-            id: 1,
-            title: "Exciting Adventure",
-            description:
-              "Embark on a thrilling journey through uncharted territories.",
-            questionaire: "Adventure Questions",
-            map: "Mystery Island",
-            numGroups: 4,
-            status: "created",
-          }}
-        />
+        <WaitingRoom toMain={toMainPage} toGame={toGame} game={game} />
       )}
 
       {page === "main" && (
@@ -108,6 +117,18 @@ export const Dashboard = () => {
       {page === "createGame" && (
         <CreateGame token={token} toMain={toMainPage}></CreateGame>
       )}
+      {page === "game" && <Game></Game>}
     </div>
   );
 };
+
+// {
+//   id: 1,
+//   title: "Exciting Adventure",
+//   description:
+//     "Embark on a thrilling journey through uncharted territories.",
+//   questionaire: "Adventure Questions",
+//   map: "Mystery Island",
+//   numGroups: 4,
+//   status: "created",
+// }
