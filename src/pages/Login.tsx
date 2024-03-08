@@ -4,9 +4,10 @@ import BrwonButton from "../components/brownButton";
 import { TiArrowForward } from "react-icons/ti";
 import { BsArrowClockwise } from "react-icons/bs";
 import { IoArrowForwardCircle } from "react-icons/io5";
+import axios from "axios";
 
 export interface IProps {
-  onLoginSuccess: () => void;
+  onLoginSuccess: (token: string) => void;
   onSignUp: () => void;
   toMain: () => void;
 }
@@ -16,14 +17,18 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const url = "url";
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === "admin" && password === "password") {
-      // Redirect to SavedGames.tsx on successful login
-      onLoginSuccess();
-    } else {
-      setErrorMessage("Invalid username or password");
-    }
+    async () => {
+      await axios
+        .post(url, { username: username, password: password })
+        .then((response) => {
+          alert(`Welcome ${username}!`);
+          onLoginSuccess(response.data.token);
+        })
+        .catch((error) => alert(error));
+    };
   };
 
   const handleSignUp = () => {

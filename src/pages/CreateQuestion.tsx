@@ -18,11 +18,12 @@ export interface Question {
 }
 
 export interface IProps {
+  token: string;
   toMain: () => void;
   onSubmit: (question: Question) => void;
 }
 
-export const CreateQuestion = ({ toMain, onSubmit }: IProps) => {
+export const CreateQuestion = ({ token, toMain, onSubmit }: IProps) => {
   const [question, setQuestion] = useState<string>("");
   const [multipleChoice, setMultipleChoice] = useState<boolean>(false);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");

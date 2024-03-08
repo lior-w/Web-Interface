@@ -4,6 +4,7 @@ import { IoArrowForwardCircle } from "react-icons/io5";
 import { ScrollContainer } from "react-nice-scroll";
 
 export interface IProps {
+  token: string;
   toMain: () => void;
 }
 
@@ -12,7 +13,7 @@ export interface Questionaire {
   description: string;
 }
 
-const CreateGame = ({ toMain }: IProps) => {
+const CreateGame = ({ token, toMain }: IProps) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [questionnaire, setQuestionnaire] = useState<string>("");

@@ -5,12 +5,18 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { IoArrowForwardCircle } from "react-icons/io5";
 
 export interface IProps {
+  token: string;
   onRegistrationSuccess: () => void;
   onSignIn: () => void;
   toMain: () => void;
 }
 
-function Registration({ onRegistrationSuccess, onSignIn, toMain }: IProps) {
+function Registration({
+  token,
+  onRegistrationSuccess,
+  onSignIn,
+  toMain,
+}: IProps) {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

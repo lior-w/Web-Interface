@@ -40,7 +40,27 @@ const WaitingRoom = ({ toMain, game }: IProps) => {
     "Mia Rodriguez",
   ]);
 
-  const getPlayers = async () => {};
+  const url = "url";
+
+  // Response.data = {
+  //   "players": [
+  //     {"name": player1 name, ...},
+  //     {"name": player2 name, ...},
+  //     .
+  //     .
+  //     .
+  //   ],
+  //   .
+  //   .
+  //   .
+  // }
+
+  const getPlayers = async () => {
+    await axios
+      .get(url)
+      .then((response) => setPlayers(response.data.players))
+      .catch((error) => alert(error));
+  };
 
   const startGame = () => {};
 
