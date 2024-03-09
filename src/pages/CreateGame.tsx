@@ -1,50 +1,87 @@
 import React, { useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
-import { ScrollContainer } from "react-nice-scroll";
+import { Questionaire, Token, Map } from "../types";
+import axios from "axios";
 
 export interface IProps {
-  token: string;
+  token: Token;
   toMain: () => void;
-}
-
-export interface Questionaire {
-  title: string;
-  description: string;
 }
 
 const CreateGame = ({ token, toMain }: IProps) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [questionnaire, setQuestionnaire] = useState<string>("");
+  const [questionnaire, setQuestionnaire] = useState<Questionaire>({
+    id: "",
+    name: "",
+    questions: [],
+  });
+  const [questionnaires, setQuestionnaires] = useState<Questionaire[]>([]);
   const [filterQuestionaire, setFilterQuestionaire] = useState<string>("");
-  const [map, setMap] = useState<string>("");
+  const [map, setMap] = useState<Map>({
+    id: "",
+    name: "",
+    statringPositions: [],
+  });
+  const [maps, setMaps] = useState<Map[]>([]);
   const [filterMap, setFilterMap] = useState<string>("");
-  const [numGroups, setNumGroups] = useState<number>(2);
+  const [numberOfGroups, setNumGroups] = useState<number>(2);
   const [startingPositions, setStartingPositions] = useState<string[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [successMessage, setSuccessMessage] = useState<string>("");
+
+  const loadAllQuestionnaires = async () => {
+    const url = "http://localhost:8080/game/get_all_questionnaires";
+    await axios
+      .get(url)
+      .then((response) => setQuestionnaires(response.data))
+      .catch((error) => alert(error));
+  };
+
+  const loadAllMaps = async () => {
+    const url = "http://localhost:8080/game/get_all_maps";
+    await axios
+      .get(url)
+      .then((response) => setMaps(response.data))
+      .catch((error) => alert(error));
+  };
+
+  loadAllQuestionnaires();
+  loadAllMaps();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStartingPositions(startingPositions.slice(0, numGroups));
+    setStartingPositions(startingPositions.slice(0, numberOfGroups));
     // Additional validation can be added for other fields
 
     // Here you can implement logic for submitting the game creation form
     // For simplicity, let's just display a success message
-    //   const headers = {
-    //     'Authorization': description,
-    //   };
-    //   try {
-    //     const response = await axios.post("http://3.147.60.59:8080/game/add_game_instance", {
-    //     }, { headers });
-    //     // Handle the successful response
-    //     alert('Response: ' +  response.data);
-    //   } catch (error) {
-    //     // Handle the error
-    //     alert('Error: ' + error);
-    //   }
-    //   setSuccessMessage("Game created successfully!");
+    const headers = {
+      Authorization: token.AUTHORIZATION,
+    };
+    try {
+      const response = await axios.post(
+        "http://3.147.60.59:8080/game/add_game_instance",
+        {
+          host: token.AUTHORIZATION,
+          questionnaire: questionnaire,
+          map: map,
+          status: "ACTIVE",
+          numberOfGroups: 3,
+          name: "Sample Game",
+          description: "This is a sample game instance.",
+          groupAssignmentProtocol: "RANDOM",
+          gameTime: 60,
+          shared: true,
+          questionTimeLimit: 30,
+        },
+        { headers }
+      );
+      // Handle the successful response
+      alert("Response: " + response.data);
+    } catch (error) {
+      // Handle the error
+      alert("Error: " + error);
+    }
   };
 
   const handleBack = () => {
@@ -99,43 +136,49 @@ const CreateGame = ({ token, toMain }: IProps) => {
     );
   };
 
-  const showQuestionaires = (list: string[]) => {
+  const showQuestionnaires = (qs: Questionaire[]) => {
     return (
       <select
         className="rounded-md h-10"
-        value={questionnaire}
-        onChange={(e) => setQuestionnaire(e.target.value)}
+        value={questionnaire.id}
+        onChange={(e) => {
+          const Q = qs.find((q) => q.id === e.target.value);
+          Q !== undefined && setQuestionnaire(Q);
+        }}
       >
         <option value="">Select Questionaire</option>
-        {list
+        {qs
           .filter(
             (q) =>
               filterQuestionaire === "" ||
-              q.toLowerCase().includes(filterQuestionaire.toLowerCase())
+              q.name.toLowerCase().includes(filterQuestionaire.toLowerCase())
           )
           .map((q) => (
-            <option value={q}>{q}</option>
+            <option value={q.id}>{q.name}</option>
           ))}
       </select>
     );
   };
 
-  const showMaps = (list: string[]) => {
+  const showMaps = (ms: Map[]) => {
     return (
       <select
         className="rounded-md h-10"
-        value={map}
-        onChange={(e) => setMap(e.target.value)}
+        value={map.id}
+        onChange={(e) => {
+          const M = ms.find((m) => m.id === e.target.value);
+          M !== undefined && setMap(M);
+        }}
       >
         <option value="">Select Map</option>
-        {list
+        {ms
           .filter(
             (m) =>
               filterMap === "" ||
-              m.toLowerCase().includes(filterMap.toLowerCase())
+              m.name.toLowerCase().includes(filterMap.toLowerCase())
           )
           .map((m) => (
-            <option value={m}>{m}</option>
+            <option value={m.id}>{m.name}</option>
           ))}
       </select>
     );
@@ -160,14 +203,14 @@ const CreateGame = ({ token, toMain }: IProps) => {
     );
   };
 
-  const questionaires = [
+  const questionnairesList = [
     "Adventure Questions",
     "Fantasy Lore",
     "Jungle Trivia",
     "Medieval History",
     "Western Trivia",
   ];
-  const maps = [
+  const mapsList = [
     "Mystery Island",
     "Realm of Eldoria",
     "Amazon Rainforest",
@@ -238,7 +281,7 @@ const CreateGame = ({ token, toMain }: IProps) => {
                     value={filterQuestionaire}
                     onChange={onFilterQuestionaireChange}
                   />
-                  {showQuestionaires(questionaires)}
+                  {showQuestionnaires(questionnaires)}
                 </div>
               </div>
               <div className="mb-2 w-[60%]">
@@ -258,7 +301,7 @@ const CreateGame = ({ token, toMain }: IProps) => {
                 <div className="text-lg text-brown font-bold mb-1">Groups</div>
                 <select
                   className="rounded-md h-10"
-                  value={numGroups}
+                  value={numberOfGroups}
                   onChange={(e) => setNumGroups(parseInt(e.target.value))}
                 >
                   <option value={2}>2</option>
@@ -272,8 +315,8 @@ const CreateGame = ({ token, toMain }: IProps) => {
                 <div className="text-lg text-brown font-bold mb-2">
                   Starting Positions
                 </div>
-                {Array.from({ length: numGroups }).map((group, index) =>
-                  startingPosition(SP, index)
+                {Array.from({ length: numberOfGroups }).map((group, index) =>
+                  startingPosition(map.statringPositions, index)
                 )}
               </div>
             </div>

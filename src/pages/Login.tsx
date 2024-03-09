@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import Container from "../components/container";
-import BrwonButton from "../components/brownButton";
-import { TiArrowForward } from "react-icons/ti";
-import { BsArrowClockwise } from "react-icons/bs";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import axios from "axios";
+import { Token } from "../types";
 
 export interface IProps {
-  onLoginSuccess: (token: string) => void;
+  onLoginSuccess: (token: Token) => void;
   onSignUp: () => void;
   toMain: () => void;
 }
@@ -17,18 +15,20 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const url = "url";
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("try to login");
+    const url = `http://localhost:8080/user/login/username=${username}&password=${password}`;
     e.preventDefault();
-    async () => {
-      await axios
-        .post(url, { username: username, password: password })
-        .then((response) => {
-          alert(`Welcome ${username}!`);
-          onLoginSuccess(response.data.token);
-        })
-        .catch((error) => alert(error));
-    };
+    await axios
+      .get(url)
+      .then((response) => {
+        alert(`Welcome ${username}!`);
+        const token: Token = { AUTHORIZATION: response.data.value.id };
+        console.log(token.AUTHORIZATION);
+        onLoginSuccess(token);
+      })
+      .catch((error) => alert(error));
+    console.log("finish");
   };
 
   const handleSignUp = () => {

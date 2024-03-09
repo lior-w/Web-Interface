@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Container from "../components/container.tsx";
 import BrwonButton from "../components/brownButton.tsx";
+import { Token } from "../types";
 
 export interface IProps {
-  token: string;
+  token: Token;
   toLogin: () => void;
   toRegisrtation: () => void;
   toCreateGame: () => void;
