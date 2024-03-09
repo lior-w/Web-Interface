@@ -4,15 +4,16 @@ import { IoArrowForwardCircle } from "react-icons/io5";
 import { ThemeContext } from "@emotion/react";
 import Switch from "@mui/material/Switch";
 import axios from "axios";
-import { IGame } from "./SavedGames";
+import { Game, Token } from "../types";
 
 export interface IProps {
+  token: Token;
   toMain: () => void;
   toGame: () => void;
-  game: IGame;
+  game: Game;
 }
 
-const WaitingRoom = ({ toMain, toGame, game }: IProps) => {
+const WaitingRoom = ({ token, toMain, toGame, game }: IProps) => {
   const [gameCode, setGameCode] = useState<string>("");
   const [players, setPlayers] = useState<string[]>([
     "Emily Johnson",
@@ -37,7 +38,7 @@ const WaitingRoom = ({ toMain, toGame, game }: IProps) => {
     /*
     await axios
     .get(url)
-    .then((response) => setGameCode(response.data))
+    .then((response) => setGameCode(response.data.gameCode))
     .catch((error) => alert(error));
     */
     console.log("code1");
@@ -89,7 +90,7 @@ const WaitingRoom = ({ toMain, toGame, game }: IProps) => {
       </div>
       <div className="flex flex-row">
         <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-          <div className="text-4xl text-brown font-bold">{`${game.title} - Waiting Room`}</div>
+          <div className="text-4xl text-brown font-bold">{`${game.name} - Waiting Room`}</div>
           <div className="mb-3"></div>
         </div>
       </div>

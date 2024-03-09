@@ -28,6 +28,7 @@
     "react-search-box": "^3.0.0",
     "react-show-more-text": "^1.7.1",
     "react-simple-star-rating": "^5.1.7",
+    "react-svg": "^16.1.33",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {

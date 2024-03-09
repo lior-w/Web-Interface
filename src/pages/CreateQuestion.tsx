@@ -6,19 +6,10 @@ import BrwonButton from "../components/brownButton";
 import { FaRegTrashCan } from "react-icons/fa6";
 import StarRating from "../components/starRating";
 import NumbersRating from "../components/starRating";
-
-export interface Question {
-  id: number | null;
-  question: string;
-  multipleChoice: boolean;
-  correctAnswer: string;
-  incorrectAnswers: string[];
-  tags: string[];
-  difficulty: number | null;
-}
+import { Token, Question } from "../types";
 
 export interface IProps {
-  token: string;
+  token: Token;
   toMain: () => void;
   onSubmit: (question: Question) => void;
 }
@@ -46,13 +37,13 @@ export const CreateQuestion = ({ token, toMain, onSubmit }: IProps) => {
         )
       : setErrorMessage("");
     const q: Question = {
-      id: null,
-      question: question,
+      id: "",
       multipleChoice: multipleChoice,
-      correctAnswer: correctAnswer,
+      question: question,
+      answer: correctAnswer,
       incorrectAnswers: incorrectAnswers,
+      difficulty: difficulty === null ? 0 : difficulty,
       tags: tags,
-      difficulty: difficulty,
     };
     onSubmit(q);
   };

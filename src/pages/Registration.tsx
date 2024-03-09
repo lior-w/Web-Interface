@@ -3,9 +3,10 @@ import axios from "axios";
 import Container from "../components/container";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoArrowForwardCircle } from "react-icons/io5";
+import { Token } from "../types";
 
 export interface IProps {
-  token: string;
+  token: Token;
   onRegistrationSuccess: () => void;
   onSignIn: () => void;
   toMain: () => void;
