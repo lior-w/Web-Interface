@@ -1,23 +1,29 @@
-import { Country } from "../types";
+import { Tile } from "../types";
 
 export interface IProps {
   onClick: () => void;
-  country: Country;
+  tile: Tile;
 }
 
-export const CountryComp = ({ onClick, country }: IProps) => {
+export const CountryComp = ({ onClick, tile }: IProps) => {
   return (
     <path
-      id={country.id}
       onClick={onClick}
-      data-name={country.name}
-      d={country.d}
+      id={tile.id}
+      // data-name={country.name}
+      d={tile.dimensions}
       strokeWidth={1.6}
       fill={
-        country.status === "Normal"
+        tile.controllingGroup === 0
           ? "white"
-          : country.status === "Selected"
+          : tile.controllingGroup === 1
           ? "#1D24CA"
+          : tile.controllingGroup === 2
+          ? "#e63946"
+          : tile.controllingGroup === 3
+          ? "#f6bd60"
+          : tile.controllingGroup === 4
+          ? "#ccd5ae"
           : "black"
       }
     />

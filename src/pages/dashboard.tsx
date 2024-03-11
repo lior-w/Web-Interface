@@ -13,7 +13,7 @@ import { westUsaMap } from "../maps/westUsaMap";
 import { Token, Game, Questionaire } from "../types";
 
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("main");
+  const [page, setPage] = useState<string>("maps");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [game, setGame] = useState<Game>({
     id: "",
@@ -28,6 +28,8 @@ export const Dashboard = () => {
     gameTime: 60,
     questionTimeLimit: 2,
     shared: true,
+    runningId: "",
+    tiles: [],
   });
 
   const toSavedGames = () => {
@@ -69,7 +71,11 @@ export const Dashboard = () => {
   return (
     <div>
       {page === "maps" && (
-        <CountriesMapComp countriesMap={westUsaMap}></CountriesMapComp>
+        <CountriesMapComp
+          gameRunningId={game.runningId}
+          countriesMap={westUsaMap}
+          token={token}
+        ></CountriesMapComp>
       )}
       {page === "savedGames" && (
         <SavedGames

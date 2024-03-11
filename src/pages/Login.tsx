@@ -24,6 +24,7 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
       .then((response) => {
         alert(`Welcome ${username}!`);
         const token: Token = { AUTHORIZATION: response.data.value.id };
+        console.log(response.data.value.id);
         console.log(token.AUTHORIZATION);
         onLoginSuccess(token);
       })

@@ -60,7 +60,7 @@ const CreateGame = ({ token, toMain }: IProps) => {
     };
     try {
       const response = await axios.post(
-        "http://3.147.60.59:8080/game/add_game_instance",
+        "http://localhost:8080/game/add_game_instance",
         {
           host: token.AUTHORIZATION,
           questionnaire: questionnaire,
