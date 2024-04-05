@@ -134,7 +134,9 @@ export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
   const loadAllGames = async () => {
     const url = "http://localhost:8080/game/get_all_games";
     await axios
-      .get(url)
+      .get(url, {
+        headers: { Authorization: token.AUTHORIZATION },
+      })
       .then((response) => setGames(response.data))
       .catch((error) => alert(error));
   };
