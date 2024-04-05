@@ -5,7 +5,7 @@ import axios from "axios";
 import { Token } from "../types";
 
 export interface IProps {
-  onLoginSuccess: (token: Token) => void;
+  onLoginSuccess: (token: Token, username: string) => void;
   onSignUp: () => void;
   toMain: () => void;
 }
@@ -26,7 +26,7 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
         const token: Token = { AUTHORIZATION: response.data.value.id };
         console.log(response.data.value.id);
         console.log(token.AUTHORIZATION);
-        onLoginSuccess(token);
+        onLoginSuccess(token, username);
       })
       .catch((error) => alert(error));
     console.log("finish");

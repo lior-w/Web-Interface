@@ -13,7 +13,7 @@ import { westUsaMap } from "../maps/westUsaMap";
 import { Token, Game, Questionaire } from "../types";
 
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("maps");
+  const [page, setPage] = useState<string>("main");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [game, setGame] = useState<Game>({
     id: "",
@@ -32,41 +32,26 @@ export const Dashboard = () => {
     tiles: [],
   });
 
-  const toSavedGames = () => {
-    setPage("savedGames");
-  };
+  const [logged, setLogged] = useState(false);
+  const [loggedUsername, setLoggedUsername] = useState("");
 
-  const toRegistration = () => {
-    setPage("registration");
-  };
+  const toSavedGames = () => setPage("savedGames");
 
-  const toLogin = () => {
-    setPage("login");
-  };
+  const toRegistration = () => setPage("registration");
 
-  const toCreateGame = () => {
-    setPage("createGame");
-  };
+  const toLogin = () => setPage("login");
 
-  const toCreateQuestion = () => {
-    setPage("createQuestion");
-  };
+  const toCreateGame = () => setPage("createGame");
 
-  const toCreateQuestionaire = () => {
-    setPage("createQuestionaire");
-  };
+  const toCreateQuestion = () => setPage("createQuestion");
 
-  const toWaitingRoom = () => {
-    setPage("waitingRoom");
-  };
+  const toCreateQuestionaire = () => setPage("createQuestionaire");
 
-  const toGame = () => {
-    setPage("game");
-  };
+  const toWaitingRoom = () => setPage("waitingRoom");
 
-  const toMainPage = () => {
-    setPage("main");
-  };
+  const toGame = () => setPage("game");
+
+  const toMainPage = () => setPage("main");
 
   return (
     <div>
@@ -89,9 +74,11 @@ export const Dashboard = () => {
       )}
       {page === "login" && (
         <Login
-          onLoginSuccess={(token) => {
+          onLoginSuccess={(token, username) => {
             setToken(token);
-            toSavedGames();
+            setLogged(true);
+            setLoggedUsername(username);
+            toMainPage();
           }}
           onSignUp={toRegistration}
           toMain={toMainPage}
@@ -123,6 +110,8 @@ export const Dashboard = () => {
       {page === "main" && (
         <MainPage
           token={token}
+          logged={logged}
+          username={loggedUsername}
           toLogin={toLogin}
           toRegisrtation={toRegistration}
           toCreateGame={toCreateGame}
