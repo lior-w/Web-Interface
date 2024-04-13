@@ -1,34 +1,66 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { CountriesMap, Country, CountryStatus, Tile, Token } from "../types";
+import {
+  CountriesMap,
+  Country,
+  CountryStatus,
+  Tile,
+  Token,
+  RunningTile,
+} from "../types";
 import { CountryComp } from "./country";
 import Container from "./container";
 import axios from "axios";
+import Loading from "./loading";
+
+const REFRESH_TIME = 10;
+const GAME_TIME = 1000 * 60 * 45;
 
 export interface IProps {
   countriesMap: CountriesMap;
-  gameRunningId: string;
+  runningGameId: string;
   token: Token;
 }
 
 export const CountriesMapComp = ({
   countriesMap,
-  gameRunningId,
+  runningGameId,
   token,
 }: IProps) => {
-  const [tiles, setTiles] = useState<Tile[]>([]);
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false);
+  const [runningTiles, setRunningTiles] = useState<RunningTile[]>([]);
+  const [myInterval, setMyInterval] = useState<any>();
+
+  const url = `http://localhost:8080/running_game/refresh_map/runningGameId=${runningGameId}&userId=${token.AUTHORIZATION}`;
 
   const getMapChanges = async () => {
     await axios
-      .get(`http://localhost:8080/running_game/refresh_map/${gameRunningId}`, {
-        headers: { Authorization: token.AUTHORIZATION },
-      })
-      .then((res) => {
-        setTiles(res.data.value.tiles);
+      .get(url)
+      .then((response) => {
+        setRunningTiles(response.data.value);
+        !mapLoaded && setMapLoaded(true);
       })
       .catch((err) => console.log(err));
   };
 
+  useEffect(() => {
+    let load = false;
+    setMyInterval(
+      setInterval(async () => {
+        if (!load) {
+          load = true;
+          await getMapChanges().finally(() => (load = false));
+        }
+      }, REFRESH_TIME)
+    );
+  }, []);
+
+  const endGame = () => {
+    clearInterval(myInterval);
+  };
+
+  setTimeout(endGame, GAME_TIME);
+  /*
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const startInterval = () => {
@@ -46,31 +78,46 @@ export const CountriesMapComp = ({
   useEffect(() => {
     startInterval();
   }, []);
-
+*/
   return (
-    <>
-      <Container w="auto" h="auto">
-        <div className="border-1 border-black flex flex-col items-center">
-          <div className="text-brown text-6xl text-center font-bold p-8">
-            {countriesMap.name}
+    <div>
+      {!mapLoaded && (
+        <Loading msg={`Loading Map: ${countriesMap.name}`}></Loading>
+      )}
+      {mapLoaded && (
+        <div className="border-1 flex flex-col">
+          <div className="p-2 flex justify-start">
+            <button
+              className="text-xl text-brown font-bold cursor-pointer hover:text-amber-700"
+              type="button"
+              onClick={endGame}
+            >
+              End Game
+            </button>
           </div>
-
-          <svg
-            className="p-8 max-w-[1000px] border-1"
-            height={"85%"}
-            viewBox={"150 30 490 520"}
-            width={"95%"}
-            id="svg"
-            strokeLinejoin="round"
-            stroke="#000"
-            fill="none"
-          >
-            {Object.entries(tiles).map(([key, tile]) => (
-              <CountryComp key={key} tile={tile} onClick={() => {}} />
-            ))}
-          </svg>
+          <div className="flex flex-col items-center">
+            <div className="text-brown text-6xl text-center font-bold p-8">
+              {countriesMap.name}
+            </div>
+            <svg
+              className="p-8 max-h-[800px]"
+              height={"75%"}
+              viewBox={"150 30 490 520"}
+              width={"85%"}
+              id="svg"
+              strokeLinejoin="round"
+              stroke="#000"
+              fill="none"
+            >
+              {Object.entries(
+                runningTiles.map((runningTile) => runningTile.tile)
+              ).map(([key, tile]) => (
+                <CountryComp key={key} tile={tile} onClick={() => {}} />
+              ))}
+            </svg>
+          </div>
         </div>
-      </Container>
-    </>
+      )}
+    </div>
   );
 };

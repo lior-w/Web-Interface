@@ -1,9 +1,22 @@
 import React, { useState } from "react";
+import Container from "../components/container.tsx";
+import { CountriesMapComp } from "../components/countriesMap";
+import { Token, Game, Questionaire } from "../types";
+import { westUsaMap } from "../maps/westUsaMap";
 
-export const RunningGame = () => {
+export interface IProps {
+  runningGameId: string;
+  token: Token;
+}
+
+export const RunningGame = ({ runningGameId, token }: IProps) => {
   return (
-    <div className="p-64 w-[100%] h-auto bg-black text-white text-6xl flex justify-center">
-      Starting Game...
-    </div>
+    <Container w="auto" h="auto">
+      <CountriesMapComp
+        runningGameId={runningGameId}
+        countriesMap={westUsaMap}
+        token={token}
+      ></CountriesMapComp>
+    </Container>
   );
 };

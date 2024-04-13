@@ -76,10 +76,17 @@ export interface Game {
   tiles: Tile[];
 }
 
+export interface RunningTile {
+  id: string;
+  tileType: string;
+  tile: Tile;
+  controllingGroup: number;
+}
+
 export interface Tile {
   id: string;
-  dimensions: string;
   tileType: string;
   controllingGroup: number;
   difficultyLevel: number;
+  dimensions: string;
 }

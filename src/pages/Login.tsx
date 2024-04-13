@@ -15,12 +15,16 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const loginJSON = () => {
+    return { username: username, password: password };
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.log("try to login");
-    const url = `http://localhost:8080/user/login/username=${username}&password=${password}`;
+    const url = `http://localhost:8080/user/login`;
     e.preventDefault();
     await axios
-      .get(url)
+      .post(url, loginJSON())
       .then((response) => {
         alert(`Welcome ${username}!`);
         const token: Token = { AUTHORIZATION: response.data.value.id };

@@ -1,10 +1,11 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { ThemeContext } from "@emotion/react";
 import Switch from "@mui/material/Switch";
 import { Token, User, Map, Question, Questionaire, Game } from "../types";
 import axios, { AxiosResponse } from "axios";
+import Loading from "../components/loading";
 
 /*
 export interface IGame {
@@ -123,35 +124,58 @@ const games: IGame[] = [
 export interface IProps {
   token: Token;
   toMain: () => void;
-  toWaitingRoom: (game: Game) => void;
+  toWaitingRoom: (gameId: string) => void;
+}
+
+export interface FlatGame {
+  description: string;
+  gameTime: string;
+  groupAssignmentProtocol: string;
+  host: string;
+  id: string;
+  mapId: string;
+  mapName: string;
+  name: string;
+  numberOfGroups: string;
+  questionTimeLimit: string;
+  questionnaireId: string;
+  questionnaireName: string;
+  shared: string;
+  status: string;
+  timeCreated: string;
+  timeLastUpdated: string;
 }
 
 export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
   // Mock data for saved games
   const [showEndedGames, setShowEndedGames] = useState<boolean>(false);
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<FlatGame[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const loadAllGames = async () => {
-    const url = "http://localhost:8080/game/get_all_games";
-    await axios
-      .get(url, {
-        headers: { Authorization: token.AUTHORIZATION },
-      })
-      .then((response) => setGames(response.data))
-      .catch((error) => alert(error));
-  };
+  useEffect(() => {
+    const loadAllGames = async () => {
+      const url = "http://localhost:8080/game/get_all_games";
+      try {
+        const response = await axios.get(url);
+        setGames(response.data.value);
+        setLoading(false);
+      } catch (error) {
+        alert(error);
+      }
+    };
 
-  loadAllGames();
+    loadAllGames();
+  }, []);
 
-  const handleStartGame = (game: Game) => {
-    toWaitingRoom(game);
+  const handleStartGame = (gameId: string) => {
+    toWaitingRoom(gameId);
   };
 
   const handleBack = () => {
     toMain();
   };
 
-  const showGame = (game: Game, index: number) => {
+  const showGame = (game: FlatGame, index: number) => {
     let bgColor = index % 2 === 0 ? "#fafafa" : "#e5e5e5";
     return (
       <div
@@ -166,11 +190,11 @@ export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
           <div className="p-1 w-[35%] flex flex-col justify-between ml-8 mr-8">
             <div className="flex ">
               <div className="mr-4">Questionaire:</div>
-              <div className="font-bold">{`${game.questionnaire.name}`}</div>
+              <div className="font-bold">{`${game.questionnaireName}`}</div>
             </div>
             <div className="flex">
               <div className="mr-4">Map:</div>
-              <div className="font-bold">{`${game.map}`}</div>
+              <div className="font-bold">{`${game.mapName}`}</div>
             </div>
           </div>
           <div className="p-1 w-[35%] flex flex-col justify-between">
@@ -190,7 +214,7 @@ export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
                 <button
                   className="w-[60px] h-[25px] bg-cyan-500 text-cyan-900 text-sm border-1 border-cyan-700 rounded-md"
                   type="button"
-                  onClick={(e) => handleStartGame(game)}
+                  onClick={(e) => handleStartGame(game.id)}
                 >
                   START
                 </button>
@@ -202,7 +226,10 @@ export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
     );
   };
 
-  const gamesComperator: (a: Game, b: Game) => number = (a: Game, b: Game) =>
+  const gamesComperator: (a: FlatGame, b: FlatGame) => number = (
+    a: FlatGame,
+    b: FlatGame
+  ) =>
     a.status === b.status
       ? a.name.localeCompare(b.name)
       : a.status === "created"
@@ -239,6 +266,7 @@ export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
         />
       </div>
       <div>
+        {loading && <Loading msg="Loading Games"></Loading>}
         {games
           .sort(gamesComperator)
           .filter((game) => showEndedGames || game.status !== "ended")

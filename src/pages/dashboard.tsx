@@ -11,27 +11,29 @@ import { RunningGame } from "./RunningGame";
 import { CountriesMapComp } from "../components/countriesMap";
 import { westUsaMap } from "../maps/westUsaMap";
 import { Token, Game, Questionaire } from "../types";
-
+/*
+{
+  id: "",
+  name: "Empty Game",
+  host: { id: "", username: "", email: "", permissions: "" },
+  description: "empty desc",
+  questionnaire: { id: "", name: "Empty Questionnaire", questions: [] },
+  map: { id: "", name: "empty map", statringPositions: [] },
+  numberOfGroups: 2,
+  status: "CREATED",
+  groupAssignmentProtocol: "RENDOM",
+  gameTime: 60,
+  questionTimeLimit: 2,
+  shared: true,
+  runningId: "",
+  tiles: [],
+}
+*/
 export const Dashboard = () => {
   const [page, setPage] = useState<string>("main");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
-  const [game, setGame] = useState<Game>({
-    id: "",
-    name: "Empty Game",
-    host: { id: "", username: "", email: "", permissions: "" },
-    description: "empty desc",
-    questionnaire: { id: "", name: "Empty Questionnaire", questions: [] },
-    map: { id: "", name: "empty map", statringPositions: [] },
-    numberOfGroups: 2,
-    status: "CREATED",
-    groupAssignmentProtocol: "RENDOM",
-    gameTime: 60,
-    questionTimeLimit: 2,
-    shared: true,
-    runningId: "",
-    tiles: [],
-  });
-
+  const [gameId, setGameId] = useState<string>("");
+  const [runningGameId, setRunningGameId] = useState<string>("");
   const [logged, setLogged] = useState(false);
   const [loggedUsername, setLoggedUsername] = useState("");
 
@@ -49,25 +51,21 @@ export const Dashboard = () => {
 
   const toWaitingRoom = () => setPage("waitingRoom");
 
-  const toGame = () => setPage("game");
+  const toRunningGame = () => setPage("runningGame");
 
   const toMainPage = () => setPage("main");
 
   return (
     <div>
-      {page === "maps" && (
-        <CountriesMapComp
-          gameRunningId={game.runningId}
-          countriesMap={westUsaMap}
-          token={token}
-        ></CountriesMapComp>
+      {page === "runningGame" && (
+        <RunningGame runningGameId={runningGameId} token={token}></RunningGame>
       )}
       {page === "savedGames" && (
         <SavedGames
           token={token}
           toMain={toMainPage}
-          toWaitingRoom={(game: Game) => {
-            setGame(game);
+          toWaitingRoom={(gameId: string) => {
+            setGameId(gameId);
             setPage("waitingRoom");
           }}
         />
@@ -102,8 +100,11 @@ export const Dashboard = () => {
         <WaitingRoom
           token={token}
           toMain={toMainPage}
-          toGame={toGame}
-          game={game}
+          toGame={(runningGameId) => {
+            setRunningGameId(runningGameId);
+            setPage("runningGame");
+          }}
+          gameId={gameId}
         />
       )}
 
@@ -124,7 +125,6 @@ export const Dashboard = () => {
       {page === "createGame" && (
         <CreateGame token={token} toMain={toMainPage}></CreateGame>
       )}
-      {page === "game" && <RunningGame></RunningGame>}
     </div>
   );
 };
