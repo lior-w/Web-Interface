@@ -33,7 +33,7 @@ function Registration({
         .post("http://localhost:8080/user/register", {
           name: username,
           password: password,
-          permissions: "topyy",
+          //permissions: "topyy",
         })
         .then((response) => alert(response))
         .catch((err) => alert(err));
