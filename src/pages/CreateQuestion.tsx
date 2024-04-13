@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa";
-import BrwonButton from "../components/brownButton";
 import { FaRegTrashCan } from "react-icons/fa6";
-import StarRating from "../components/starRating";
 import NumbersRating from "../components/starRating";
 import { Token, Question } from "../types";
 
