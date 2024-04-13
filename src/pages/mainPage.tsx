@@ -1,6 +1,4 @@
-import React, { useState } from "react";
 import Container from "../components/container.tsx";
-import BrwonButton from "../components/brownButton.tsx";
 import { Token } from "../types";
 
 export interface IProps {
@@ -57,58 +55,62 @@ const MainPage = ({
   };
   return (
     <Container w="60%" h="auto">
-      <div className="text-center text-4xl text-brown font-bold">Main</div>
+      <div className="m-3 text-center text-4xl text-brown font-bold">Main</div>
       {logged && (
         <div className="text-center text-xl text-brown font-bold">
           Hello {username}!
         </div>
       )}
-      <div className="flex flex-col items-center">
-        <div className="m-3"></div>
+      <div className="m-3 flex flex-col items-center">
         {!logged && (
           <>
-            <BrwonButton label={"Login"} width={320} onClick={handleLogin} />
-            <div className="m-3"></div>
-            <BrwonButton
-              label={"Register"}
-              width={320}
+            <button
+              className="m-3 btn border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
+              onClick={handleLogin}
+            >
+              Login
+            </button>
+
+            <button
+              className="m-3 btn border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
               onClick={handleRegister}
-            />
-            <div className="m-3"></div>
+            >
+              Register
+            </button>
           </>
         )}
         {logged && (
           <>
-            <BrwonButton
-              label={"Create Question"}
-              width={320}
+            <button
+              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
               onClick={handleCreateQuestion}
-            />
-            <div className="m-3"></div>
-            <BrwonButton
-              label={"Create Questionaire"}
-              width={320}
+            >
+              Create Question
+            </button>
+            <button
+              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
               onClick={handleCreateQuestionaire}
-            />
-            <div className="m-3"></div>
-            <BrwonButton
-              label={"Saved Games"}
-              width={320}
+            >
+              Create Questionaire
+            </button>
+            <button
+              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
               onClick={handleSavedGames}
-            />
-            <div className="m-3"></div>
-            <BrwonButton
-              label={"Create Game"}
-              width={320}
+            >
+              Saved Games
+            </button>
+            <button
+              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
               onClick={handleCreateGame}
-            />
-            <div className="m-3"></div>
-            <BrwonButton
-              label={"Waiting Room"}
-              width={320}
+            >
+              Create Game
+            </button>
+            <button
+              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
               onClick={handleWaitingRoom}
-            />
-            <div className="m-3"></div>
+            >
+              Waiting Room
+            </button>
           </>
         )}
       </div>
