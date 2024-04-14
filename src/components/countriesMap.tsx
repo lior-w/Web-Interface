@@ -85,7 +85,7 @@ export const CountriesMapComp = ({
         <Loading msg={`Loading Map: ${countriesMap.name}`}></Loading>
       )}
       {mapLoaded && (
-        <div className="border-1 flex flex-col">
+        <div className="flex flex-col">
           <div className="p-2 flex justify-start">
             <button
               className="text-xl text-brown font-bold cursor-pointer hover:text-amber-700"
