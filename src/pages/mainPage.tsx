@@ -91,7 +91,7 @@ const MainPage = ({
               className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
               onClick={handleCreateQuestionaire}
             >
-              Create Questionaire
+              Create Questionnaire
             </button>
             <button
               className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"

@@ -3,6 +3,8 @@ import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import Grid from "@mui/material/Grid";
 import { Token, Question } from "../types";
+import { CiSquareRemove } from "react-icons/ci";
+import { CiSquarePlus } from "react-icons/ci";
 
 export interface IProps {
   token: Token;
@@ -10,7 +12,8 @@ export interface IProps {
 }
 
 export const CreateQuestionaire = ({ token, toMain }: IProps) => {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questionsIds, setQuestionsIds] = useState<string[]>([]);
+  const [title, setTitle] = useState<string>("");
 
   const handleBack = () => {
     toMain();
@@ -19,8 +22,7 @@ export const CreateQuestionaire = ({ token, toMain }: IProps) => {
   const qList: Question[] = [
     {
       id: "1",
-      question:
-        "What is the capital of Italy?What is the capital of Italy?What is the capital of Italy?What is the capital of Italy?What is the capital of Italy?What is the capital of Italy?What is the capital of Italy?What is the capital of Italy?",
+      question: "What is the capital of Italy?",
       multipleChoice: false,
       answer: "Rome",
       incorrectAnswers: [],
@@ -215,11 +217,30 @@ export const CreateQuestionaire = ({ token, toMain }: IProps) => {
   };
 
   const showQuestion = (q: Question, index: number) => {
-    const bg = index % 2 === 0 ? "#e4e4e7" : "#f5f5f5";
+    const bg =
+      questionsIds.find((id) => id === q.id) !== undefined
+        ? "#54D167"
+        : index % 2 === 0
+        ? "#e4e4e7"
+        : "#f5f5f5";
+
     return (
       <div>
-        <div className="flex p-2" style={{ background: bg }}>
-          <div className="border-1 border-black min-w-[100%]">
+        <div className="flex p-2 m-4 rounded-xl" style={{ background: bg }}>
+          <div className="min-w-[200px] pl-4 pt-2 font-bold rounded-lg border-1 border-black">
+            <div>{`${
+              q.multipleChoice ? "Multiple-choice" : "Open-question"
+            }`}</div>
+            <div className="">{`Difficulty: ${q.difficulty}`}</div>
+            <div className="mb-2"></div>
+            {q.tags.length > 0 && <div className="underline">Tags</div>}
+            <div className="mb-2">
+              {q.tags.map((t) => (
+                <div className="mr-1">{`#${t}`}</div>
+              ))}
+            </div>
+          </div>
+          <div className="text-xl ml-3 w-[100%]">
             <div className="flex">
               <div className="mr-2">Q:</div>
               <div className="font-semibold">{`${q.question}`}</div>
@@ -233,32 +254,49 @@ export const CreateQuestionaire = ({ token, toMain }: IProps) => {
               </div>
             </div>
             {q.multipleChoice && (
-              <div className="underline">Incorrect Answers</div>
+              <div className="underline mt-3">Incorrect Answers</div>
             )}
             {q.incorrectAnswers.map((a, index) => (
               <div>{`${index + 1}) ${q.incorrectAnswers[index]}`}</div>
             ))}
           </div>
-          <div className="min-w-[200px] pl-4  border-1 border-black">
-            <div>{`${
-              q.multipleChoice ? "Multiple-choice" : "Open-question"
-            }`}</div>
-            <div className="">{`Difficulty: ${q.difficulty}`}</div>
-            <div className="mb-2"></div>
-            {q.tags.length > 0 && <div className="underline">Tags</div>}
-            <div className="mb-2">
-              {q.tags.map((t) => (
-                <div className="mr-1">{`#${t}`}</div>
-              ))}
-            </div>
+
+          <div className="min-w-[100px] flex items-center">
+            {questionsIds.find((id) => id === q.id) === undefined && (
+              <button
+                className="w-[80px] h-[25px] text-cyan-900 text-5xl rounded-md flex justify-center items-center"
+                type="button"
+                onClick={() => setQuestionsIds(questionsIds.concat(q.id))}
+              >
+                <CiSquarePlus />
+              </button>
+            )}
+            {questionsIds.find((id) => id === q.id) !== undefined && (
+              <div>
+                <div></div>
+                <button
+                  className="w-[80px] h-[25px] text-cyan-900 text-5xl rounded-md flex justify-center items-center"
+                  type="button"
+                  onClick={() =>
+                    setQuestionsIds(questionsIds.filter((id) => id !== q.id))
+                  }
+                >
+                  <CiSquareRemove />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
     );
   };
 
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
   return (
-    <Container w="80%" h="auto">
+    <Container w="80%" h="100%">
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
@@ -270,10 +308,46 @@ export const CreateQuestionaire = ({ token, toMain }: IProps) => {
       </div>
       <div className="flex flex-row">
         <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-          <div className="text-4xl text-brown font-bold">New Questionaire</div>
+          <div className="text-4xl text-brown font-bold ml-6">
+            New Questionnaire
+          </div>
+          <div className="mt-5 pl-6 pr-12">
+            <input
+              className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={onTitleChange}
+              required
+            />
+          </div>
+          <div className="mt-2 pl-6 pr-12">
+            <input
+              className="p-2.5 w-[30%] border-2 border-gray-300 rounded-md"
+              type="text"
+              placeholder="Filter"
+              value={""}
+              onChange={() => {}}
+              required
+            />
+            <button
+              className="p-2 ml-2 w-[100px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+              type="submit"
+            >
+              Filter
+            </button>
+          </div>
           <div className="mb-3"></div>
-          <div className="h-[400px] border-1 overflow-y-auto bg-neutral-100 rounded-md">
+          <div className="p-2 h-[700px] overflow-y-auto rounded-md">
             {qList.map((q, index) => showQuestion(q, index))}
+          </div>
+          <div className="mt-4 flex justify-center">
+            <button
+              className="p-2 w-[40%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+              type="submit"
+            >
+              Create Questionnaire
+            </button>
           </div>
         </div>
       </div>
