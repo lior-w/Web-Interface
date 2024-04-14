@@ -8,11 +8,13 @@ export interface IProps {
 
 const Container = ({ children, w, h }: IProps) => {
   return (
-    <div
-      style={{ width: w, height: h }}
-      className="bg-my_orange m-auto  border-solid border-4 border-brown rounded-2xl hover:cursor-default"
-    >
-      {children}
+    <div className="p-4">
+      <div
+        style={{ width: w, height: h }}
+        className="bg-my_orange m-auto  border-solid border-4 border-brown rounded-2xl hover:cursor-default"
+      >
+        {children}
+      </div>
     </div>
   );
 };
