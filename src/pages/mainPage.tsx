@@ -1,5 +1,6 @@
 import Container from "../components/container.tsx";
 import { Token } from "../types";
+import { server } from "../main";
 
 export interface IProps {
   token: Token;

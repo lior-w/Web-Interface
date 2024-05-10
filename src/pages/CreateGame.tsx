@@ -3,6 +3,7 @@ import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { Questionaire, Token, Map } from "../types";
 import axios from "axios";
+import { server } from "../main";
 
 export interface IProps {
   token: Token;
@@ -30,7 +31,7 @@ const CreateGame = ({ token, toMain }: IProps) => {
   const [startingPositions, setStartingPositions] = useState<string[]>([]);
 
   const loadAllQuestionnaires = async () => {
-    const url = "http://localhost:8080/game/get_all_questionnaires";
+    const url = `${server}/game/get_all_questionnaires`;
     await axios
       .get(url)
       .then((response) => setQuestionnaires(response.data))
@@ -38,7 +39,7 @@ const CreateGame = ({ token, toMain }: IProps) => {
   };
 
   const loadAllMaps = async () => {
-    const url = "http://localhost:8080/game/get_all_maps";
+    const url = `${server}/game/get_all_maps`;
     await axios
       .get(url)
       .then((response) => setMaps(response.data))
@@ -60,7 +61,7 @@ const CreateGame = ({ token, toMain }: IProps) => {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8080/game/add_game_instance",
+        `${server}/game/add_game_instance`,
         {
           host: token.AUTHORIZATION,
           questionnaire: questionnaire,
