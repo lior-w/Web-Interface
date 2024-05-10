@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import axios from "axios";
-import { Token } from "../types";
+import { Pages, Token } from "../types";
 import { server } from "../main";
 
 export interface IProps {
   onLoginSuccess: (token: Token, username: string) => void;
   onSignUp: () => void;
   toMain: () => void;
+  pages: Pages;
 }
 
-const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
+const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -58,13 +59,16 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
   };
 
   return (
-    <Container w="60%" h="auto">
-      <div className="flex flex-row">
-        <div className="p-4 w-[100%] flex flex-col">
+    <Container page="Login" pages={pages}>
+      <div className="flex flex-row justify-center">
+        <div className="p-8 flex flex-col border-3 border-brown rounded-lg items-center justify-center">
           <div className="text-4xl text-brown font-bold">Login</div>
-          <div className="m-3"></div>
-          <form className="flex flex-col" onSubmit={handleSubmit}>
-            <div className="w-[70%] max-w-[300px]">
+          <div className="mb-3"></div>
+          <form
+            className="flex flex-col justify-center items-center"
+            onSubmit={handleSubmit}
+          >
+            <div className="w-[400px]">
               <input
                 className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
                 type="text"
@@ -83,28 +87,37 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
                 required
               />
               <div className="m-2.5"></div>
-              <div className="w-[100%] flex flex-row">
+              <button
+                className="min-w-[135px] text-brown font-bold cursor-pointer hover:text-amber-700"
+                type="button"
+                onClick={handleForgotPassword}
+              >
+                Forgot Password?
+              </button>
+              <div className="m-1.5"></div>
+              <div className="w-[100%] flex flex-col justify-center items-center">
                 <button
-                  className="p-2 w-[40%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                  className="p-2 w-[100%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
                   type="submit"
                 >
                   LOGIN
                 </button>
-                <div className="w-[30%]"></div>
-                <button
-                  className="text-right min-w-[135px] w-[30%] text-brown font-bold cursor-pointer hover:text-amber-700"
-                  type="button"
-                  onClick={handleForgotPassword}
-                >
-                  Forgot Password?
-                </button>
+                <div className=""></div>
               </div>
             </div>
 
             {errorMessage && <div className="text-red-500">{errorMessage}</div>}
           </form>
         </div>
-        <div className="w-[40%] bg-brown  rounded-r-md">
+      </div>
+    </Container>
+  );
+};
+
+export default Login;
+
+/*
+<div className="w-[40%] bg-brown  rounded-r-md">
           <div className="p-1 flex justify-end">
             <button
               className="text-3xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
@@ -127,9 +140,4 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
             </button>
           </div>
         </div>
-      </div>
-    </Container>
-  );
-};
-
-export default Login;
+        */

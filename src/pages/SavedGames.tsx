@@ -3,7 +3,15 @@ import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { ThemeContext } from "@emotion/react";
 import Switch from "@mui/material/Switch";
-import { Token, User, Map, Question, Questionaire, Game } from "../types";
+import {
+  Token,
+  User,
+  Map,
+  Question,
+  Questionaire,
+  Game,
+  Pages,
+} from "../types";
 import axios, { AxiosResponse } from "axios";
 import Loading from "../components/loading";
 import { server } from "../main";
@@ -126,6 +134,7 @@ export interface IProps {
   token: Token;
   toMain: () => void;
   toWaitingRoom: (gameId: string) => void;
+  pages: Pages;
 }
 
 export interface FlatGame {
@@ -147,7 +156,7 @@ export interface FlatGame {
   timeLastUpdated: string;
 }
 
-export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
+export const SavedGames = ({ token, toMain, toWaitingRoom, pages }: IProps) => {
   // Mock data for saved games
   const [showEndedGames, setShowEndedGames] = useState<boolean>(false);
   const [games, setGames] = useState<FlatGame[]>([]);
@@ -238,7 +247,7 @@ export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
       : 1;
 
   return (
-    <Container w="80%" h="auto">
+    <Container page="My Games" pages={pages}>
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"

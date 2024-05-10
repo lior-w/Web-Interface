@@ -90,3 +90,7 @@ export interface Tile {
   difficultyLevel: number;
   dimensions: string;
 }
+
+export interface Pages {
+  [key: string]: () => void;
+}

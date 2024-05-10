@@ -1,19 +1,20 @@
 import React, { ReactNode } from "react";
+import Navigation from "../components/navigation";
+import { Pages } from "../types";
 
 export interface IProps {
   children: ReactNode;
-  w: string;
-  h: string;
+  page: string;
+  pages: Pages;
 }
-
-const Container = ({ children, w, h }: IProps) => {
+//style={{ width: w, height: h }}
+const Container = ({ children, page, pages }: IProps) => {
   return (
-    <div className="p-4">
-      <div
-        style={{ width: w, height: h }}
-        className="bg-my_orange m-auto  border-solid border-4 border-brown rounded-2xl hover:cursor-default"
-      >
-        {children}
+    <div>
+      <div className="bg-my_orange m-auto w-[100%] h-[100vh] border-solid border-4 border-brown  hover:cursor-default">
+        {page !== "" && <Navigation pages={pages} current={page}></Navigation>}
+
+        <div className="p-4">{children}</div>
       </div>
     </div>
   );

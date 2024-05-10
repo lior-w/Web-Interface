@@ -1,5 +1,5 @@
 import Container from "../components/container.tsx";
-import { Token } from "../types";
+import { Pages, Token } from "../types";
 import { server } from "../main";
 
 export interface IProps {
@@ -13,6 +13,7 @@ export interface IProps {
   toCreateQuestion: () => void;
   toCreateQuestionaire: () => void;
   toWaitingRoom: () => void;
+  pages: Pages;
 }
 
 const MainPage = ({
@@ -26,6 +27,7 @@ const MainPage = ({
   toCreateQuestion,
   toCreateQuestionaire,
   toWaitingRoom,
+  pages,
 }: IProps) => {
   const handleLogin = () => {
     toLogin();
@@ -55,7 +57,7 @@ const MainPage = ({
     toWaitingRoom();
   };
   return (
-    <Container w="60%" h="auto">
+    <Container page="a" pages={pages}>
       <div className="m-3 text-center text-4xl text-brown font-bold">Main</div>
       {logged && (
         <div className="text-center text-xl text-brown font-bold">
