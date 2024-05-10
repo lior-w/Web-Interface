@@ -11,6 +11,7 @@ import { RunningGame } from "./RunningGame";
 import { CountriesMapComp } from "../components/countriesMap";
 import { westUsaMap } from "../maps/westUsaMap";
 import { Token, Game, Questionaire } from "../types";
+import { server } from "../main";
 /*
 {
   id: "",

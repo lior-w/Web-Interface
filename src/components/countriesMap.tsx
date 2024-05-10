@@ -12,8 +12,9 @@ import { CountryComp } from "./country";
 import Container from "./container";
 import axios from "axios";
 import Loading from "./loading";
+import { server } from "../main";
 
-const REFRESH_TIME = 10;
+const REFRESH_TIME = 1000;
 const GAME_TIME = 1000 * 60 * 45;
 
 export interface IProps {
@@ -31,7 +32,7 @@ export const CountriesMapComp = ({
   const [runningTiles, setRunningTiles] = useState<RunningTile[]>([]);
   const [myInterval, setMyInterval] = useState<any>();
 
-  const url = `http://localhost:8080/running_game/refresh_map/runningGameId=${runningGameId}&userId=${token.AUTHORIZATION}`;
+  const url = `${server}/running_game/refresh_map/runningGameId=${runningGameId}&userId=${token.AUTHORIZATION}`;
 
   const getMapChanges = async () => {
     await axios
@@ -110,7 +111,11 @@ export const CountriesMapComp = ({
               fill="none"
             >
               {Object.entries(
-                runningTiles.map((runningTile) => runningTile.tile)
+                runningTiles.map((runningTile) => {
+                  const t: Tile = runningTile.tile;
+                  t.controllingGroup = runningTile.controllingGroup;
+                  return t;
+                })
               ).map(([key, tile]) => (
                 <CountryComp key={key} tile={tile} onClick={() => {}} />
               ))}

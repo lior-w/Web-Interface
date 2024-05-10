@@ -6,6 +6,7 @@ import Switch from "@mui/material/Switch";
 import { Token, User, Map, Question, Questionaire, Game } from "../types";
 import axios, { AxiosResponse } from "axios";
 import Loading from "../components/loading";
+import { server } from "../main";
 
 /*
 export interface IGame {
@@ -154,7 +155,7 @@ export const SavedGames = ({ token, toMain, toWaitingRoom }: IProps) => {
 
   useEffect(() => {
     const loadAllGames = async () => {
-      const url = "http://localhost:8080/game/get_all_games";
+      const url = `${server}/game/get_all_games`;
       try {
         const response = await axios.get(url);
         setGames(response.data.value);

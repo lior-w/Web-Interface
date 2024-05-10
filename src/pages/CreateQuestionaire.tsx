@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import { Token, Question } from "../types";
 import { CiSquareRemove } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
+import { server } from "../main";
 
 export interface IProps {
   token: Token;

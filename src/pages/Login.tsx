@@ -3,6 +3,7 @@ import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import axios from "axios";
 import { Token } from "../types";
+import { server } from "../main";
 
 export interface IProps {
   onLoginSuccess: (token: Token, username: string) => void;
@@ -21,7 +22,7 @@ const Login = ({ onLoginSuccess, onSignUp, toMain }: IProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.log("try to login");
-    const url = `http://localhost:8080/user/login`;
+    const url = `${server}/user/login`;
     e.preventDefault();
     await axios
       .post(url, loginJSON())

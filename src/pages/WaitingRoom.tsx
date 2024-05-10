@@ -6,6 +6,7 @@ import Switch from "@mui/material/Switch";
 import axios from "axios";
 import { Game, Token } from "../types";
 import Loading from "../components/loading";
+import { server } from "../main";
 
 export interface IProps {
   token: Token;
@@ -47,7 +48,7 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
         gameId: gameId,
         userId: token.AUTHORIZATION,
       };
-      const url = "http://localhost:8080/running_game/open_waiting_room";
+      const url = `${server}/running_game/open_waiting_room`;
       await axios
         .post(url, data)
         .then((response) => {
@@ -99,7 +100,7 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
     const data = {
       gameId: runningId,
     };
-    const url = "http://localhost:8080/running_game/start_game";
+    const url = `${server}/running_game/start_game`;
     await axios
       .post(url, data, { headers })
       .then((response) => console.log(response.data))
@@ -130,15 +131,7 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
                   <div className="mb-3"></div>
                 </div>
               </div>
-              <div className="p-4">
-                <div className="text-2xl text-brown font-bold">Players:</div>
-                <div className="flex flex-wrap">
-                  {players.map((player) => (
-                    <div className="text-lg text-brown font-semibold m-2">{`${player}`}</div>
-                  ))}
-                </div>
-                <div className="text-xl text-brown font-bold">{`Total Amount: ${players.length}`}</div>
-              </div>
+              <div className="p-4"></div>
               <div className="flex p-4 text-brown text-6xl font-bold justify-center">{`Game Code: ${gameCode}`}</div>
               <div className="p-4">
                 <button
@@ -159,3 +152,12 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
 };
 
 export default WaitingRoom;
+
+/*
+<div className="text-2xl text-brown font-bold">Players:</div>
+                <div className="flex flex-wrap">
+                  {players.map((player) => (
+                    <div className="text-lg text-brown font-semibold m-2">{`${player}`}</div>
+                  ))}
+                </div>
+                <div className="text-xl text-brown font-bold">{`Total Amount: ${players.length}`}</div>*/

@@ -4,6 +4,7 @@ import { IoArrowForwardCircle } from "react-icons/io5";
 import { FaRegTrashCan } from "react-icons/fa6";
 import NumbersRating from "../components/starRating";
 import { Token, Question } from "../types";
+import { server } from "../main";
 
 export interface IProps {
   token: Token;

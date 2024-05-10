@@ -4,6 +4,7 @@ import Container from "../components/container";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { Token } from "../types";
+import { server } from "../main";
 
 export interface IProps {
   token: Token;
@@ -30,7 +31,7 @@ function Registration({
       setErrorMessage("Passwords do not match");
     } else {
       await axios
-        .post("http://localhost:8080/user/register", {
+        .post(`${server}/user/register`, {
           name: username,
           password: password,
           //permissions: "topyy",

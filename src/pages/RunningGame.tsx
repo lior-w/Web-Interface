@@ -3,6 +3,7 @@ import Container from "../components/container.tsx";
 import { CountriesMapComp } from "../components/countriesMap";
 import { Token, Game, Questionaire } from "../types";
 import { westUsaMap } from "../maps/westUsaMap";
+import { server } from "../main";
 
 export interface IProps {
   runningGameId: string;
