@@ -3,16 +3,18 @@ import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { FaRegTrashCan } from "react-icons/fa6";
 import NumbersRating from "../components/starRating";
-import { Token, Question } from "../types";
+import { Token, Question, Pages } from "../types";
 import { server } from "../main";
+import Navigation from "../components/navigation";
 
 export interface IProps {
   token: Token;
   toMain: () => void;
   onSubmit: (question: Question) => void;
+  pages: Pages;
 }
 
-export const CreateQuestion = ({ token, toMain, onSubmit }: IProps) => {
+export const CreateQuestion = ({ token, toMain, onSubmit, pages }: IProps) => {
   const [question, setQuestion] = useState<string>("");
   const [multipleChoice, setMultipleChoice] = useState<boolean>(false);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
@@ -204,7 +206,7 @@ export const CreateQuestion = ({ token, toMain, onSubmit }: IProps) => {
   };
 
   return (
-    <Container w="80%" h="auto">
+    <Container page="New Question" pages={pages}>
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"

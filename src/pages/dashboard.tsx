@@ -10,7 +10,7 @@ import WaitingRoom from "./WaitingRoom";
 import { RunningGame } from "./RunningGame";
 import { CountriesMapComp } from "../components/countriesMap";
 import { westUsaMap } from "../maps/westUsaMap";
-import { Token, Game, Questionaire } from "../types";
+import { Token, Game, Questionaire, Pages } from "../types";
 import { server } from "../main";
 /*
 {
@@ -56,6 +56,15 @@ export const Dashboard = () => {
 
   const toMainPage = () => setPage("main");
 
+  const pages: Pages = {
+    Login: toLogin,
+    Register: toRegistration,
+    "New Game": toCreateGame,
+    "New Question": toCreateQuestion,
+    "New Questionnaire": toCreateQuestionaire,
+    "My Games": toSavedGames,
+  };
+
   return (
     <div>
       {page === "runningGame" && (
@@ -69,6 +78,7 @@ export const Dashboard = () => {
             setGameId(gameId);
             setPage("waitingRoom");
           }}
+          pages={pages}
         />
       )}
       {page === "login" && (
@@ -81,6 +91,7 @@ export const Dashboard = () => {
           }}
           onSignUp={toRegistration}
           toMain={toMainPage}
+          pages={pages}
         />
       )}
       {page === "registration" && (
@@ -89,13 +100,19 @@ export const Dashboard = () => {
           onRegistrationSuccess={toLogin}
           onSignIn={toLogin}
           toMain={toMainPage}
+          pages={pages}
         />
       )}
       {page === "createQuestion" && (
-        <CreateQuestion token={token} toMain={toMainPage} onSubmit={() => {}} />
+        <CreateQuestion
+          token={token}
+          toMain={toMainPage}
+          onSubmit={() => {}}
+          pages={pages}
+        />
       )}
       {page === "createQuestionaire" && (
-        <CreateQuestionaire token={token} toMain={toMainPage} />
+        <CreateQuestionaire token={token} toMain={toMainPage} pages={pages} />
       )}
       {page === "waitingRoom" && (
         <WaitingRoom
@@ -121,10 +138,15 @@ export const Dashboard = () => {
           toCreateQuestion={toCreateQuestion}
           toCreateQuestionaire={toCreateQuestionaire}
           toWaitingRoom={toWaitingRoom}
+          pages={pages}
         />
       )}
       {page === "createGame" && (
-        <CreateGame token={token} toMain={toMainPage}></CreateGame>
+        <CreateGame
+          token={token}
+          toMain={toMainPage}
+          pages={pages}
+        ></CreateGame>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import axios from "axios";
 import Container from "../components/container";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoArrowForwardCircle } from "react-icons/io5";
-import { Token } from "../types";
+import { Pages, Token } from "../types";
 import { server } from "../main";
 
 export interface IProps {
@@ -11,6 +11,7 @@ export interface IProps {
   onRegistrationSuccess: () => void;
   onSignIn: () => void;
   toMain: () => void;
+  pages: Pages;
 }
 
 function Registration({
@@ -18,6 +19,7 @@ function Registration({
   onRegistrationSuccess,
   onSignIn,
   toMain,
+  pages,
 }: IProps) {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -72,13 +74,13 @@ function Registration({
   };
 
   return (
-    <Container w="60%" h="auto">
-      <div className="flex flex-row">
-        <div className="p-4 w-[100%] flex flex-col">
+    <Container page="Register" pages={pages}>
+      <div className="flex flex-row justify-center">
+        <div className="p-8 flex flex-col border-3 border-brown rounded-lg items-center justify-center">
           <div className="text-4xl text-brown font-bold">Register</div>
           <div className="m-3"></div>
           <form className="flex flex-col" onSubmit={handleSubmit}>
-            <div className="w-[70%] max-w-[300px]">
+            <div className="w-[400px]">
               <input
                 className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
                 type="text"
@@ -114,10 +116,10 @@ function Registration({
                 onChange={onConfirmPasswordChange}
                 required
               />
-              <div className="m-2.5"></div>
+              <div className="m-3"></div>
               <div className="w-[100%] flex flex-row">
                 <button
-                  className="p-2 w-[40%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                  className="p-2 w-[100%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
                   type="submit"
                 >
                   REGISTER
@@ -128,7 +130,15 @@ function Registration({
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
           </form>
         </div>
-        <div className="w-[40%] bg-brown  rounded-r-md">
+      </div>
+    </Container>
+  );
+}
+
+export default Registration;
+
+/*
+<div className="w-[40%] bg-brown  rounded-r-md">
           <div className="p-1 flex justify-end">
             <button
               className="text-3xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
@@ -151,9 +161,4 @@ function Registration({
             </button>
           </div>
         </div>
-      </div>
-    </Container>
-  );
-}
-
-export default Registration;
+        */

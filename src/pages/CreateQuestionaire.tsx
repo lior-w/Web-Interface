@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import Grid from "@mui/material/Grid";
-import { Token, Question } from "../types";
+import { Token, Question, Pages } from "../types";
 import { CiSquareRemove } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import { server } from "../main";
@@ -10,9 +10,10 @@ import { server } from "../main";
 export interface IProps {
   token: Token;
   toMain: () => void;
+  pages: Pages;
 }
 
-export const CreateQuestionaire = ({ token, toMain }: IProps) => {
+export const CreateQuestionaire = ({ token, toMain, pages }: IProps) => {
   const [questionsIds, setQuestionsIds] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
 
@@ -297,7 +298,7 @@ export const CreateQuestionaire = ({ token, toMain }: IProps) => {
   };
 
   return (
-    <Container w="80%" h="100%">
+    <Container page="New Questionnaire" pages={pages}>
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
