@@ -36,7 +36,9 @@ export const Dashboard = () => {
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");
   const [logged, setLogged] = useState(false);
-  const [loggedUsername, setLoggedUsername] = useState("");
+  const [loggedUsername, setLoggedUsername] = useState<string | undefined>(
+    undefined
+  );
 
   const toSavedGames = () => setPage("savedGames");
 
@@ -56,6 +58,12 @@ export const Dashboard = () => {
 
   const toMainPage = () => setPage("main");
 
+  const toLogout = () => {
+    setLogged(false);
+    setLoggedUsername(undefined);
+    setPage("main");
+  };
+
   const pages: Pages = {
     Login: toLogin,
     Register: toRegistration,
@@ -63,6 +71,16 @@ export const Dashboard = () => {
     "New Question": toCreateQuestion,
     "New Questionnaire": toCreateQuestionaire,
     "My Games": toSavedGames,
+    Logout: toLogout,
+  };
+
+  const filterPages: (pageNames: string[]) => Pages = (pageNames: string[]) => {
+    const newPages: Pages = {};
+    Object.keys(pages).forEach((page) => {
+      if (pageNames.find((pageName) => pageName === page) !== undefined)
+        newPages[page] = pages[page];
+    });
+    return newPages;
   };
 
   return (
@@ -74,11 +92,18 @@ export const Dashboard = () => {
         <SavedGames
           token={token}
           toMain={toMainPage}
+          username={loggedUsername}
           toWaitingRoom={(gameId: string) => {
             setGameId(gameId);
             setPage("waitingRoom");
           }}
-          pages={pages}
+          pages={filterPages([
+            "New Game",
+            "New Question",
+            "New Questionnaire",
+            "My Games",
+            "Logout",
+          ])}
         />
       )}
       {page === "login" && (
@@ -91,7 +116,7 @@ export const Dashboard = () => {
           }}
           onSignUp={toRegistration}
           toMain={toMainPage}
-          pages={pages}
+          pages={filterPages(["Login", "Register"])}
         />
       )}
       {page === "registration" && (
@@ -100,19 +125,37 @@ export const Dashboard = () => {
           onRegistrationSuccess={toLogin}
           onSignIn={toLogin}
           toMain={toMainPage}
-          pages={pages}
+          pages={filterPages(["Login", "Register"])}
         />
       )}
       {page === "createQuestion" && (
         <CreateQuestion
           token={token}
           toMain={toMainPage}
+          username={loggedUsername}
           onSubmit={() => {}}
-          pages={pages}
+          pages={filterPages([
+            "New Game",
+            "New Question",
+            "New Questionnaire",
+            "My Games",
+            "Logout",
+          ])}
         />
       )}
       {page === "createQuestionaire" && (
-        <CreateQuestionaire token={token} toMain={toMainPage} pages={pages} />
+        <CreateQuestionaire
+          token={token}
+          toMain={toMainPage}
+          username={loggedUsername}
+          pages={filterPages([
+            "New Game",
+            "New Question",
+            "New Questionnaire",
+            "My Games",
+            "Logout",
+          ])}
+        />
       )}
       {page === "waitingRoom" && (
         <WaitingRoom
@@ -129,23 +172,32 @@ export const Dashboard = () => {
       {page === "main" && (
         <MainPage
           token={token}
-          logged={logged}
           username={loggedUsername}
-          toLogin={toLogin}
-          toRegisrtation={toRegistration}
-          toCreateGame={toCreateGame}
-          toSavedGames={toSavedGames}
-          toCreateQuestion={toCreateQuestion}
-          toCreateQuestionaire={toCreateQuestionaire}
-          toWaitingRoom={toWaitingRoom}
-          pages={pages}
+          pages={
+            logged
+              ? filterPages([
+                  "New Game",
+                  "New Question",
+                  "New Questionnaire",
+                  "My Games",
+                  "Logout",
+                ])
+              : filterPages(["Login", "Register"])
+          }
         />
       )}
       {page === "createGame" && (
         <CreateGame
           token={token}
           toMain={toMainPage}
-          pages={pages}
+          username={loggedUsername}
+          pages={filterPages([
+            "New Game",
+            "New Question",
+            "New Questionnaire",
+            "My Games",
+            "Logout",
+          ])}
         ></CreateGame>
       )}
     </div>

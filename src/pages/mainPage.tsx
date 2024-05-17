@@ -4,121 +4,77 @@ import { server } from "../main";
 
 export interface IProps {
   token: Token;
-  logged: boolean;
-  username: string;
-  toLogin: () => void;
-  toRegisrtation: () => void;
-  toCreateGame: () => void;
-  toSavedGames: () => void;
-  toCreateQuestion: () => void;
-  toCreateQuestionaire: () => void;
-  toWaitingRoom: () => void;
+  username: string | undefined;
   pages: Pages;
 }
 
-const MainPage = ({
-  token,
-  logged,
-  username,
-  toLogin,
-  toRegisrtation,
-  toCreateGame,
-  toSavedGames,
-  toCreateQuestion,
-  toCreateQuestionaire,
-  toWaitingRoom,
-  pages,
-}: IProps) => {
-  const handleLogin = () => {
-    toLogin();
-  };
-
-  const handleRegister = () => {
-    toRegisrtation();
-  };
-
-  const handleCreateGame = () => {
-    toCreateGame();
-  };
-
-  const handleSavedGames = () => {
-    toSavedGames();
-  };
-
-  const handleCreateQuestion = () => {
-    toCreateQuestion();
-  };
-
-  const handleCreateQuestionaire = () => {
-    toCreateQuestionaire();
-  };
-
-  const handleWaitingRoom = () => {
-    toWaitingRoom();
-  };
+const MainPage = ({ token, username, pages }: IProps) => {
   return (
-    <Container page="a" pages={pages}>
-      <div className="m-3 text-center text-4xl text-brown font-bold">Main</div>
-      {logged && (
-        <div className="text-center text-xl text-brown font-bold">
-          Hello {username}!
+    <Container page="main" pages={pages} username={username}>
+      {username === undefined ? (
+        <div className="flex justify-center">
+          <div className="text-brown max-w-[1600px]">
+            <div className="text-[46px] font-semibold">
+              Welcome to Conquer The Wrold Teacher Portal!
+            </div>
+            <div className="text-[36px]">
+              Empowering Education Through Engaging Gameplay
+            </div>
+            <div className="text-[24px]">
+              <div className="text-[24px] mt-2">Dear Educators,</div>
+              <div className="text-[24px]">
+                We are thrilled to have you join our community of
+                forward-thinking educators who are dedicated to enhancing the
+                learning experience for students through innovative and
+                interactive gameplay.
+              </div>
+              <div className="flex mt-3">
+                <div className="font-bold mr-2 min-w-[250px]">
+                  1. Sign Up and Login:
+                </div>
+                <div>
+                  If you’re new here, click on the "Register" button to create
+                  your account. Existing users can log in using their
+                  credentials.
+                </div>
+              </div>
+              <div className="flex">
+                <div className="font-bold mr-2 min-w-[300px]">
+                  2. Explore the Dashboard:
+                </div>
+                <div>
+                  After logging in, you'll be taken to the dashboard where you
+                  can create and start your own custom games.
+                </div>
+              </div>
+              <div className="flex">
+                <div className="font-bold mr-2 min-w-[305px]">
+                  3. Setting Up Your Classes:
+                </div>
+                <div>
+                  Add your classes and enroll students to get started. Customize
+                  your game settings to align with your teaching goals.
+                </div>
+              </div>
+              <div className="mt-3">
+                Thank you for being a part of the Conquer The World community.
+                Together, we can make learning an exciting and rewarding
+                experience for students everywhere.
+              </div>
+              <div className="mt-2">Happy Teaching!</div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex justify-center text-brown text-[60px] font-semibold mt-4">
+          {`Welcome ${username}!`}
         </div>
       )}
-      <div className="m-3 flex flex-col items-center">
-        {!logged && (
-          <>
-            <button
-              className="m-3 btn border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
-              onClick={handleLogin}
-            >
-              Login
-            </button>
-
-            <button
-              className="m-3 btn border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
-              onClick={handleRegister}
-            >
-              Register
-            </button>
-          </>
-        )}
-        {logged && (
-          <>
-            <button
-              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
-              onClick={handleCreateQuestion}
-            >
-              Create Question
-            </button>
-            <button
-              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
-              onClick={handleCreateQuestionaire}
-            >
-              Create Questionnaire
-            </button>
-            <button
-              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
-              onClick={handleSavedGames}
-            >
-              Saved Games
-            </button>
-            <button
-              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
-              onClick={handleCreateGame}
-            >
-              Create Game
-            </button>
-            <button
-              className="btn m-3 border-brown w-[320px] bg-brown text-2xl text-orange-100 hover:bg-amber-700 hover:border-brown rounded-lg cursor-pointer"
-              onClick={handleWaitingRoom}
-            >
-              Waiting Room
-            </button>
-          </>
-        )}
-      </div>
     </Container>
   );
 };
 
 export default MainPage;
+function useState<T>(username: string): [any, any] {
+  throw new Error("Function not implemented.");
+}
