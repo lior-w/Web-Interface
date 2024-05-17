@@ -8,10 +8,11 @@ import { server } from "../main";
 export interface IProps {
   token: Token;
   toMain: () => void;
+  username: string | undefined;
   pages: Pages;
 }
 
-const CreateGame = ({ token, toMain, pages }: IProps) => {
+const CreateGame = ({ token, toMain, username, pages }: IProps) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [questionnaire, setQuestionnaire] = useState<Questionaire>({
@@ -230,7 +231,7 @@ const CreateGame = ({ token, toMain, pages }: IProps) => {
   ];
 
   return (
-    <Container page="New Game" pages={pages}>
+    <Container page="New Game" pages={pages} username={username}>
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"

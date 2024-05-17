@@ -133,6 +133,7 @@ const games: IGame[] = [
 export interface IProps {
   token: Token;
   toMain: () => void;
+  username: string | undefined;
   toWaitingRoom: (gameId: string) => void;
   pages: Pages;
 }
@@ -156,7 +157,13 @@ export interface FlatGame {
   timeLastUpdated: string;
 }
 
-export const SavedGames = ({ token, toMain, toWaitingRoom, pages }: IProps) => {
+export const SavedGames = ({
+  token,
+  toMain,
+  username,
+  toWaitingRoom,
+  pages,
+}: IProps) => {
   // Mock data for saved games
   const [showEndedGames, setShowEndedGames] = useState<boolean>(false);
   const [games, setGames] = useState<FlatGame[]>([]);
@@ -247,7 +254,7 @@ export const SavedGames = ({ token, toMain, toWaitingRoom, pages }: IProps) => {
       : 1;
 
   return (
-    <Container page="My Games" pages={pages}>
+    <Container page="My Games" pages={pages} username={username}>
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"

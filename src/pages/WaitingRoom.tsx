@@ -110,7 +110,7 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
   };
 
   return (
-    <Container page="" pages={{}}>
+    <Container page="" pages={{}} username={undefined}>
       {!startingGame && (
         <div>
           <div className="p-1 flex justify-end">

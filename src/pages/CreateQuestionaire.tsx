@@ -10,10 +10,16 @@ import { server } from "../main";
 export interface IProps {
   token: Token;
   toMain: () => void;
+  username: string | undefined;
   pages: Pages;
 }
 
-export const CreateQuestionaire = ({ token, toMain, pages }: IProps) => {
+export const CreateQuestionaire = ({
+  token,
+  toMain,
+  username,
+  pages,
+}: IProps) => {
   const [questionsIds, setQuestionsIds] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
 
@@ -298,7 +304,7 @@ export const CreateQuestionaire = ({ token, toMain, pages }: IProps) => {
   };
 
   return (
-    <Container page="New Questionnaire" pages={pages}>
+    <Container page="New Questionnaire" pages={pages} username={username}>
       <div className="p-1 flex justify-end">
         <button
           className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"

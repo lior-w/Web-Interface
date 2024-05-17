@@ -59,7 +59,7 @@ const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
   };
 
   return (
-    <Container page="Login" pages={pages}>
+    <Container page="Login" pages={pages} username={undefined}>
       <div className="flex flex-row justify-center">
         <div className="p-8 flex flex-col border-3 border-brown rounded-lg items-center justify-center">
           <div className="text-4xl text-brown font-bold">Login</div>
