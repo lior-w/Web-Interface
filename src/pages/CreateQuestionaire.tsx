@@ -22,10 +22,7 @@ export const CreateQuestionaire = ({
 }: IProps) => {
   const [questionsIds, setQuestionsIds] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
-
-  const handleBack = () => {
-    toMain();
-  };
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const qList: Question[] = [
     {
@@ -299,21 +296,20 @@ export const CreateQuestionaire = ({
     );
   };
 
+  const handleNext = () => {
+    setPageNumber(pageNumber + 1);
+  };
+
+  const handleBack = () => {
+    setPageNumber(pageNumber - 1);
+  };
+
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   return (
     <Container page="New Questionnaire" pages={pages} username={username}>
-      <div className="p-1 flex justify-end">
-        <button
-          className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
-          type="button"
-          onClick={handleBack}
-        >
-          <IoArrowForwardCircle />
-        </button>
-      </div>
       <div className="flex flex-row">
         <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
           <div className="text-4xl text-brown font-bold ml-6">
@@ -346,7 +342,7 @@ export const CreateQuestionaire = ({
             </button>
           </div>
           <div className="mb-3"></div>
-          <div className="p-2 h-[700px] overflow-y-auto rounded-md">
+          <div className="p-2 max-h-[100%] overflow-y-auto rounded-md">
             {qList.map((q, index) => showQuestion(q, index))}
           </div>
           <div className="mt-4 flex justify-center">
