@@ -34,10 +34,16 @@ export interface Question {
   id: string;
   multipleChoice: boolean;
   question: string;
-  answer: string;
+  answers: Answer[];
   incorrectAnswers: string[];
   difficulty: number;
   tags: string[];
+}
+
+export interface Answer {
+  id: string;
+  answerText: string;
+  correct: boolean;
 }
 
 export interface Questionaire {

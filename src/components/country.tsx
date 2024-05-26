@@ -24,6 +24,8 @@ export const CountryComp = ({ onClick, tile }: IProps) => {
           ? "#66FF00"
           : tile.controllingGroup === 4
           ? "#FF00FF"
+          : tile.controllingGroup === 5
+          ? "#481E14"
           : "black"
       }
     />
