@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import Grid from "@mui/material/Grid";
@@ -6,6 +6,16 @@ import { Token, Question, Pages } from "../types";
 import { CiSquareRemove } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import { server } from "../main";
+import axios from "axios";
+import EnhancedTable from "../components/questionsTable";
+import Checkbox from "@mui/material/Checkbox";
+import { FaAngleRight as Next } from "react-icons/fa";
+import { FaAngleLeft as Back } from "react-icons/fa";
+import { FaAngleDoubleRight as Last } from "react-icons/fa";
+import { FaAngleDoubleLeft as First } from "react-icons/fa";
+import Tooltip from "@mui/material/Tooltip";
+
+const PAGE_SIZE = 10;
 
 export interface IProps {
   token: Token;
@@ -20,10 +30,39 @@ export const CreateQuestionaire = ({
   username,
   pages,
 }: IProps) => {
-  const [questionsIds, setQuestionsIds] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [totalElements, setTotalElements] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(PAGE_SIZE);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [isFirst, setIsFirst] = useState<boolean>(true);
+  const [isLast, setIsLast] = useState<boolean>(false);
+  const [contentFilter, setContentFilter] = useState<string>("");
+  const [difficultyFilter, setDifficultyFilter] = useState<number | "">("");
 
+  const fetchPage = async (
+    pageNum: number,
+    size: number,
+    content: string,
+    difficulty: number | ""
+  ) => {
+    const url = `${server}/question/filter_questions/page=${pageNum}&size=${size}&content=${content}&difficulty=${difficulty}`;
+    await axios
+      .get(url)
+      .then((response) => {
+        setQuestions(response.data.value.content);
+        setTotalElements(response.data.value.totalElements);
+        setTotalPages(response.data.value.totalPages);
+        setPageNumber(response.data.value.number);
+        setIsFirst(response.data.value.first);
+        setIsLast(response.data.value.last);
+      })
+      .catch((error) => alert(error));
+  };
+
+  /*
   const qList: Question[] = [
     {
       id: "1",
@@ -214,13 +253,13 @@ export const CreateQuestionaire = ({
       difficulty: 1,
     },
   ];
-
+*/
   const showInanswers = (incorrectAnswers: string[]) => {
     const s = "";
     incorrectAnswers.forEach((a) => s.concat(a));
     return s;
   };
-
+  /*
   const showQuestion = (q: Question, index: number) => {
     const bg =
       questionsIds.find((id) => id === q.id) !== undefined
@@ -295,17 +334,45 @@ export const CreateQuestionaire = ({
       </div>
     );
   };
-
+*/
   const handleNext = () => {
-    setPageNumber(pageNumber + 1);
+    if (!isLast) {
+      fetchPage(pageNumber + 1, PAGE_SIZE, contentFilter, 1);
+    }
+  };
+
+  const handleLast = () => {
+    if (!isLast) {
+      fetchPage(totalPages - 1, PAGE_SIZE, contentFilter, 1);
+    }
   };
 
   const handleBack = () => {
-    setPageNumber(pageNumber - 1);
+    if (!isFirst) {
+      fetchPage(pageNumber - 1, PAGE_SIZE, contentFilter, 1);
+    }
   };
+
+  const handleFirst = () => {
+    if (!isFirst) {
+      fetchPage(0, PAGE_SIZE, contentFilter, 1);
+    }
+  };
+
+  useEffect(() => {
+    fetchPage(0, PAGE_SIZE, "", 1);
+  }, []);
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+
+  const handleChangeCheckBox = (questionId: string) => {
+    selectedQuestions.find((qid) => qid === questionId) === undefined
+      ? setSelectedQuestions(selectedQuestions.concat(questionId))
+      : setSelectedQuestions(
+          selectedQuestions.filter((qid) => qid !== questionId)
+        );
   };
 
   return (
@@ -315,36 +382,117 @@ export const CreateQuestionaire = ({
           <div className="text-4xl text-brown font-bold ml-6">
             New Questionnaire
           </div>
-          <div className="mt-5 pl-6 pr-12">
-            <input
-              className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={onTitleChange}
-              required
-            />
-          </div>
-          <div className="mt-2 pl-6 pr-12">
-            <input
-              className="p-2.5 w-[30%] border-2 border-gray-300 rounded-md"
-              type="text"
-              placeholder="Filter"
-              value={""}
-              onChange={() => {}}
-              required
-            />
-            <button
-              className="p-2 ml-2 w-[100px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
-              type="submit"
-            >
-              Filter
-            </button>
+          <div className="w-[700px]">
+            <div className="mt-5 pl-6 pr-12">
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="text"
+                placeholder="Title"
+                value={title}
+                onChange={onTitleChange}
+                required
+              />
+            </div>
+            <div className="flex mt-2 pl-6 pr-12">
+              <input
+                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
+                type="text"
+                placeholder="Filter"
+                value={""}
+                onChange={() => {}}
+                required
+              />
+              <button
+                className="p-2 ml-2 w-[100px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                type="submit"
+              >
+                Filter
+              </button>
+            </div>
           </div>
           <div className="mb-3"></div>
-          <div className="p-2 max-h-[100%] overflow-y-auto rounded-md">
-            {qList.map((q, index) => showQuestion(q, index))}
-          </div>
+          {questions.length > 0 && (
+            <div className="max-h-[100%] rounded-md bg-white">
+              <div className="p-3">
+                <table className="w-[100%]">
+                  <tr className="text-2xl">
+                    <th className="w-[3%]"></th>
+                    <th className="w-[32%]">Question</th>
+                    <th className="w-[20%] flex ml-[50px]">Answer</th>
+                    <th className="w-[10%]">Type</th>
+                    <th className="w-[10%]">Difficulty</th>
+                    <th className="w-[20%]">Tags</th>
+                  </tr>
+                  {questions.map((q, i) => {
+                    const bg = i % 2 === 0 ? "#f1f5f9" : "#e2e8f0";
+                    return (
+                      <tr
+                        className="border-1 border-black"
+                        style={{ background: bg }}
+                      >
+                        <td className="flex items-center text-3xl">
+                          <div>
+                            <Checkbox
+                              onChange={() => handleChangeCheckBox(q.id)}
+                              checked={
+                                selectedQuestions.find(
+                                  (qid) => qid === q.id
+                                ) !== undefined
+                              }
+                            ></Checkbox>
+                          </div>
+                        </td>
+                        <td>{q.question}</td>
+                        <td className="flex">
+                          <div className="flex mr-[50px]"></div>
+                          <div>
+                            {
+                              q.answers.find(
+                                (answer) => answer.correct === true
+                              )?.answerText
+                            }
+                          </div>
+                        </td>
+                        <td>
+                          {q.multipleChoice
+                            ? "multiple choice"
+                            : "open question"}
+                        </td>
+                        <td>{q.difficulty}</td>
+                        <td>{q.tags}</td>
+                      </tr>
+                    );
+                  })}
+                </table>
+              </div>
+              <div className="mt-2 mb-2 flex justify-center items-center text-[22px] text-blue-500 font-bold">
+                <Tooltip title={<div className="text-[16px]">First</div>}>
+                  <button className="mr-[15px]" onClick={handleFirst}>
+                    <First></First>
+                  </button>
+                </Tooltip>
+                <Tooltip title={<div className="text-[16px]">Back</div>}>
+                  <button className="mr-[5px]" onClick={handleBack}>
+                    <Back></Back>
+                  </button>
+                </Tooltip>
+                <div className="ml-[20px] mr-[20px] text-3xl">
+                  {pageNumber + 1}
+                </div>
+                <Tooltip title={<div className="text-[16px]">Next</div>}>
+                  <button className="ml-[5px]" onClick={handleNext}>
+                    <Next></Next>
+                  </button>
+                </Tooltip>
+                <Tooltip title={<div className="text-[16px]">Last</div>}>
+                  <button className="ml-[15px]" onClick={handleLast}>
+                    <Last></Last>
+                  </button>
+                </Tooltip>
+              </div>
+            </div>
+          )}
+
           <div className="mt-4 flex justify-center">
             <button
               className="p-2 w-[40%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"

@@ -31,7 +31,7 @@ import { server } from "../main";
 }
 */
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("main");
+  const [page, setPage] = useState<string>("createQuestionaire");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");
