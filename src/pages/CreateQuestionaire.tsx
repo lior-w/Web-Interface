@@ -7,15 +7,21 @@ import { CiSquareRemove } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import { server } from "../main";
 import axios from "axios";
-import EnhancedTable from "../components/questionsTable";
 import Checkbox from "@mui/material/Checkbox";
 import { FaAngleRight as Next } from "react-icons/fa";
 import { FaAngleLeft as Back } from "react-icons/fa";
 import { FaAngleDoubleRight as Last } from "react-icons/fa";
 import { FaAngleDoubleLeft as First } from "react-icons/fa";
 import Tooltip from "@mui/material/Tooltip";
+import SelectTool from "../components/selectTool";
+import NativeSelectComp from "../components/selectTool";
+import BasicSelect from "../components/selectTool";
+import Loading from "../components/loading";
+import { CircularProgress } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import { GrFilter } from "react-icons/gr";
 
-const PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 5;
 
 export interface IProps {
   token: Token;
@@ -34,13 +40,24 @@ export const CreateQuestionaire = ({
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [totalElements, setTotalElements] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(PAGE_SIZE);
+  const [pageSize, setPageSize] = useState<number>(0);
+  const [pageSizeRequest, setPageSizeRequest] =
+    useState<number>(DEFAULT_PAGE_SIZE);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [isFirst, setIsFirst] = useState<boolean>(true);
   const [isLast, setIsLast] = useState<boolean>(false);
   const [contentFilter, setContentFilter] = useState<string>("");
-  const [difficultyFilter, setDifficultyFilter] = useState<number | "">("");
+  const [difficultyFilter, setDifficultyFilter] = useState<number | "">(1);
+  const [tagsFilter, setTagsFilter] = useState<string[]>([]);
+  const [loadingPage, setLoadingPage] = useState<boolean>(false);
+
+  const allChecked: boolean = questions.every(
+    (q) => selectedQuestions.find((qid) => qid === q.id) !== undefined
+  );
+  const allUnchecked: boolean = questions.every(
+    (q) => selectedQuestions.find((qid) => qid === q.id) === undefined
+  );
 
   const fetchPage = async (
     pageNum: number,
@@ -48,6 +65,7 @@ export const CreateQuestionaire = ({
     content: string,
     difficulty: number | ""
   ) => {
+    setLoadingPage(true);
     const url = `${server}/question/filter_questions/page=${pageNum}&size=${size}&content=${content}&difficulty=${difficulty}`;
     await axios
       .get(url)
@@ -56,8 +74,10 @@ export const CreateQuestionaire = ({
         setTotalElements(response.data.value.totalElements);
         setTotalPages(response.data.value.totalPages);
         setPageNumber(response.data.value.number);
+        setPageSize(response.data.value.numberOfElements);
         setIsFirst(response.data.value.first);
         setIsLast(response.data.value.last);
+        setLoadingPage(false);
       })
       .catch((error) => alert(error));
   };
@@ -317,14 +337,14 @@ export const CreateQuestionaire = ({
             )}
             {questionsIds.find((id) => id === q.id) !== undefined && (
               <div>
-                <div></div>
-                <button
-                  className="w-[80px] h-[25px] text-cyan-900 text-5xl rounded-md flex justify-center items-center"
-                  type="button"
-                  onClick={() =>
-                    setQuestionsIds(questionsIds.filter((id) => id !== q.id))
-                  }
-                >
+              <div></div>
+              <button
+              className="w-[80px] h-[25px] text-cyan-900 text-5xl rounded-md flex justify-center items-center"
+              type="button"
+              onClick={() =>
+                setQuestionsIds(questionsIds.filter((id) => id !== q.id))
+              }
+              >
                   <CiSquareRemove />
                 </button>
               </div>
@@ -337,30 +357,45 @@ export const CreateQuestionaire = ({
 */
   const handleNext = () => {
     if (!isLast) {
-      fetchPage(pageNumber + 1, PAGE_SIZE, contentFilter, 1);
+      fetchPage(
+        pageNumber + 1,
+        pageSizeRequest,
+        contentFilter,
+        difficultyFilter
+      );
     }
   };
 
   const handleLast = () => {
     if (!isLast) {
-      fetchPage(totalPages - 1, PAGE_SIZE, contentFilter, 1);
+      fetchPage(
+        totalPages - 1,
+        pageSizeRequest,
+        contentFilter,
+        difficultyFilter
+      );
     }
   };
 
   const handleBack = () => {
     if (!isFirst) {
-      fetchPage(pageNumber - 1, PAGE_SIZE, contentFilter, 1);
+      fetchPage(
+        pageNumber - 1,
+        pageSizeRequest,
+        contentFilter,
+        difficultyFilter
+      );
     }
   };
 
   const handleFirst = () => {
     if (!isFirst) {
-      fetchPage(0, PAGE_SIZE, contentFilter, 1);
+      fetchPage(0, pageSizeRequest, contentFilter, difficultyFilter);
     }
   };
 
   useEffect(() => {
-    fetchPage(0, PAGE_SIZE, "", 1);
+    fetchPage(0, pageSizeRequest, "", difficultyFilter);
   }, []);
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -375,61 +410,134 @@ export const CreateQuestionaire = ({
         );
   };
 
+  const handleChangeHeadCheckBox = () => {
+    allChecked
+      ? setSelectedQuestions(
+          selectedQuestions.filter(
+            (qid) => questions.find((q) => q.id === qid) === undefined
+          )
+        )
+      : setSelectedQuestions(
+          selectedQuestions.concat(
+            questions
+              .filter(
+                (q) =>
+                  selectedQuestions.find((qid) => qid === q.id) === undefined
+              )
+              .map((q) => q.id)
+          )
+        );
+  };
+
+  const handlePageSizeChange = (val: number) => {
+    setPageSizeRequest(val);
+    fetchPage(0, val, contentFilter, difficultyFilter);
+  };
+
+  const onContentFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContentFilter(e.target.value);
+  };
+
+  const onDifficultyFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDifficultyFilter(Number(e.target.value));
+  };
+
+  const onTagsFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagsFilter(e.target.value.split(","));
+  };
+
   return (
     <Container page="New Questionnaire" pages={pages} username={username}>
-      <div className="flex flex-row">
-        <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-          <div className="text-4xl text-brown font-bold ml-6">
-            New Questionnaire
+      <div id="page body" className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
+        <div id="page title" className="text-4xl text-brown font-bold">
+          New Questionnaire
+        </div>
+        <div id="questionnaire title and filters" className="w-[500px]">
+          <div id="questionnaire title" className="mt-5 mb-5">
+            <TextField
+              id="title input"
+              sx={{ background: "#FFFFFF" }}
+              className="w-[100%]"
+              label="Title"
+              variant="filled"
+              onChange={onTitleChange}
+              value={title}
+              required
+            />
           </div>
-          <div className="w-[700px]">
-            <div className="mt-5 pl-6 pr-12">
-              <input
-                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
-                type="text"
-                placeholder="Title"
-                value={title}
-                onChange={onTitleChange}
-                required
+          <div className="flex items-center">
+            <div className="mt-2 w-[85%]">
+              <TextField
+                id="Content filter"
+                sx={{ background: "#FFFFFF" }}
+                className="w-[100%]"
+                label="Filter by question content"
+                variant="filled"
+                onChange={onContentFilterChange}
+                value={contentFilter}
+              />
+              <TextField
+                id="Difficulty filter"
+                sx={{ background: "#FFFFFF" }}
+                className="w-[100%]"
+                label="Filter by Difficulty"
+                variant="filled"
+                onChange={onDifficultyFilterChange}
+                value={difficultyFilter}
+              />
+              <TextField
+                id="Tags filter"
+                sx={{ background: "#FFFFFF" }}
+                className="w-[100%]"
+                label="Filter by tags"
+                variant="filled"
+                onChange={onTagsFilterChange}
+                value={tagsFilter}
               />
             </div>
-            <div className="flex mt-2 pl-6 pr-12">
-              <input
-                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
-                type="text"
-                placeholder="Filter"
-                value={""}
-                onChange={() => {}}
-                required
-              />
-              <button
-                className="p-2 ml-2 w-[100px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
-                type="submit"
-              >
-                Filter
-              </button>
-            </div>
+            <button
+              className="text-[50px] ml-[20px] justify-center flex text-brown hover:text-amber-600 cursor-pointer"
+              type="button"
+              onClick={() =>
+                fetchPage(0, pageSizeRequest, contentFilter, difficultyFilter)
+              }
+            >
+              <GrFilter></GrFilter>
+            </button>
           </div>
-          <div className="mb-3"></div>
-          {questions.length > 0 && (
-            <div className="max-h-[100%] rounded-md bg-white">
-              <div className="p-3">
-                <table className="w-[100%]">
-                  <tr className="text-2xl">
-                    <th className="w-[3%]"></th>
+        </div>
+        <div className="mb-3"></div>
+        {questions.length > 0 && (
+          <div className="max-h-[100%] rounded-md bg-white">
+            <div className="">
+              <table className="w-[100%]">
+                <thead>
+                  <tr className="h-[50px] text-lg">
+                    <th className="w-[3%]">
+                      <div>
+                        <Checkbox
+                          onChange={() =>
+                            questions.map((q) => handleChangeHeadCheckBox())
+                          }
+                          checked={questions.every(
+                            (q) =>
+                              selectedQuestions.find((qid) => qid === q.id) !==
+                              undefined
+                          )}
+                        ></Checkbox>
+                      </div>
+                    </th>
                     <th className="w-[32%]">Question</th>
-                    <th className="w-[20%] flex ml-[50px]">Answer</th>
+                    <th className="w-[20%]">Answer</th>
                     <th className="w-[10%]">Type</th>
                     <th className="w-[10%]">Difficulty</th>
                     <th className="w-[20%]">Tags</th>
                   </tr>
+                </thead>
+                <tbody>
                   {questions.map((q, i) => {
-                    const bg = i % 2 === 0 ? "#f1f5f9" : "#e2e8f0";
                     return (
-                      <tr
-                        className="border-1 border-black"
-                        style={{ background: bg }}
-                      >
+                      <tr className="border-y-2">
                         <td className="flex items-center text-3xl">
                           <div>
                             <Checkbox
@@ -442,9 +550,10 @@ export const CreateQuestionaire = ({
                             ></Checkbox>
                           </div>
                         </td>
-                        <td>{q.question}</td>
+                        <td>
+                          <div className="w-[90%]">{q.question}</div>
+                        </td>
                         <td className="flex">
-                          <div className="flex mr-[50px]"></div>
                           <div>
                             {
                               q.answers.find(
@@ -463,46 +572,124 @@ export const CreateQuestionaire = ({
                       </tr>
                     );
                   })}
-                </table>
+                </tbody>
+              </table>
+            </div>
+            <div
+              id="bottom of the table"
+              className="flex justify-between h-[60px]"
+            >
+              <div
+                id="number of questions"
+                className="flex items-center ml-[20px]"
+              >
+                <div className="mr-[10px]">Number of questions selected:</div>
+                <div>{selectedQuestions.length}</div>
               </div>
-              <div className="mt-2 mb-2 flex justify-center items-center text-[22px] text-blue-500 font-bold">
-                <Tooltip title={<div className="text-[16px]">First</div>}>
-                  <button className="mr-[15px]" onClick={handleFirst}>
-                    <First></First>
-                  </button>
-                </Tooltip>
-                <Tooltip title={<div className="text-[16px]">Back</div>}>
-                  <button className="mr-[5px]" onClick={handleBack}>
-                    <Back></Back>
-                  </button>
-                </Tooltip>
-                <div className="ml-[20px] mr-[20px] text-3xl">
-                  {pageNumber + 1}
+              <div
+                id="paging"
+                className="mr-[20px] flex justify-end items-center"
+              >
+                <div
+                  id="rows per page"
+                  className="flex items-center text-[18px] mr-[20px]"
+                >
+                  <div className="mr-3">Rows per page:</div>
+                  <BasicSelect
+                    values={[5, 10, 25, 50, 100]}
+                    defaultValue={5}
+                    func={handlePageSizeChange}
+                  ></BasicSelect>
                 </div>
-                <Tooltip title={<div className="text-[16px]">Next</div>}>
-                  <button className="ml-[5px]" onClick={handleNext}>
-                    <Next></Next>
-                  </button>
-                </Tooltip>
-                <Tooltip title={<div className="text-[16px]">Last</div>}>
-                  <button className="ml-[15px]" onClick={handleLast}>
-                    <Last></Last>
-                  </button>
-                </Tooltip>
+                <div id="elements out of total and buttons" className="flex">
+                  <div
+                    id="elements out of total"
+                    className="mr-[20px] w-[180px] flex justify-center"
+                  >
+                    {!loadingPage &&
+                      `${pageNumber * pageSizeRequest + 1} - ${
+                        pageNumber * pageSize + pageSizeRequest
+                      } out of ${totalElements}`}
+                    {loadingPage && <CircularProgress color="info" size={30} />}
+                  </div>
+                  <div
+                    id="buttons"
+                    className="text-[24px] w-[140px] flex justify-between text-blue-500"
+                  >
+                    <div id="maybe first and back">
+                      {pageNumber > 0 && (
+                        <div id="first and back" className="flex">
+                          <Tooltip
+                            id="first"
+                            className="mr-[16px]"
+                            title={<div className="text-lg">First</div>}
+                          >
+                            <button className="" onClick={handleFirst}>
+                              <First></First>
+                            </button>
+                          </Tooltip>
+                          <Tooltip
+                            id="back"
+                            title={<div className="text-lg">Back</div>}
+                          >
+                            <button onClick={handleBack}>
+                              <Back></Back>
+                            </button>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </div>
+                    <div id="maybe next and last">
+                      {pageNumber < totalPages - 1 && (
+                        <div id="next and last" className="flex">
+                          <Tooltip
+                            className="mr-[16px]"
+                            title={<div className="text-lg">Next</div>}
+                          >
+                            <button onClick={handleNext}>
+                              <Next></Next>
+                            </button>
+                          </Tooltip>
+                          <Tooltip title={<div className="text-lg">Last</div>}>
+                            <button onClick={handleLast}>
+                              <Last></Last>
+                            </button>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
-
-          <div className="mt-4 flex justify-center">
-            <button
-              className="p-2 w-[40%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
-              type="submit"
-            >
-              Create Questionnaire
-            </button>
           </div>
+        )}
+        {questions.length === 0 && loadingPage && (
+          <Loading msg={"Loading Questions"} size={60}></Loading>
+        )}
+
+        <div className="mt-4 flex justify-center">
+          <button
+            className="p-2 w-[30%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+            type="submit"
+          >
+            Create Questionnaire
+          </button>
         </div>
       </div>
     </Container>
   );
 };
+
+/*
+<Tooltip title={<div className="text-[16px]">First</div>}>
+<button className="mr-[15px]" onClick={handleFirst}>
+  <First></First>
+</button>
+</Tooltip>
+                <Tooltip title={<div className="text-[16px]">Last</div>}>
+                <button className="ml-[15px]" onClick={handleLast}>
+                  <Last></Last>
+                </button>
+              </Tooltip>
+*/
