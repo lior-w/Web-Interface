@@ -283,7 +283,7 @@ export const SavedGames = ({
         />
       </div>
       <div>
-        {loading && <Loading msg="Loading Games"></Loading>}
+        {loading && <Loading msg="Loading Games" size={60}></Loading>}
         {games
           .sort(gamesComperator)
           .filter((game) => showEndedGames || game.status !== "ended")

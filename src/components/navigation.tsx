@@ -32,45 +32,52 @@ const Navigation = ({ pages, current, username }: IProps) => {
 
   const showUser = () => {
     return (
-      <div className="flex flex-col w-[350px] pr-4 text-my_orange">
-        <div className="flex items-end justify-end">
-          <div className="text-[40px]">
+      <div className="flex flex-col w-[350px] pr-4 text-my_orange" id="1">
+        <div className="flex items-end justify-end" id="2">
+          <div className="text-[40px]" id="3">
             <FaRegUserCircle />
           </div>
-          <div className="ml-4 text-[30px]">{`${username}`}</div>
+          <div className="ml-4 text-[30px]" id="4">{`${username}`}</div>
         </div>
         <button
           className="text-orange-100 flex text-[18px] items-center justify-end pt-2"
           onClick={pages["Logout"]}
         >
-          <div className="pr-1">
+          <div className="pr-1" id="5">
             <MdLogout />
           </div>
-          <div>logout</div>
+          <div id="logout">logout</div>
         </button>
       </div>
     );
   };
 
   return (
-    <div>
-      <div className="bg-brown w-[100%] h-[100px] m-auto border-solid border-4 border-brown hover:cursor-default flex justify-between">
-        <div className="flex">
-          <div className="flex items-start text-my_orange mr-[80px]">
-            <div className="text-[80px]">
+    <div id="10">
+      <div
+        id="20"
+        className="bg-brown w-[100%] h-[100px] m-auto border-solid border-4 border-brown hover:cursor-default flex justify-between"
+      >
+        <div id="30" className="flex">
+          <div id="40" className="flex items-start text-my_orange mr-[80px]">
+            <div id="50" className="text-[80px]">
               <GiPlanetConquest />
             </div>
-            <div className="text-[20px]">
-              <div>Conquer</div> <div>The</div> <div>World</div>
+            <div id="60" className="text-[20px]">
+              <div id="Conquer">Conquer</div> <div id="The">The</div>{" "}
+              <div id="World">World</div>
             </div>
           </div>
-          <div className="flex items-end">
+          <div id="70" className="flex items-end">
             {Object.keys(pages).map(
               (key) => key !== "Logout" && showButton(key)
             )}
           </div>
         </div>
-        <div className="text-[25px] w-[350px] flex items-end justify-end pr-2">
+        <div
+          id="80"
+          className="text-[25px] w-[350px] flex items-end justify-end pr-2"
+        >
           {username !== undefined && showUser()}
         </div>
       </div>
