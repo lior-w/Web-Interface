@@ -17,9 +17,16 @@ import SelectTool from "../components/selectTool";
 import NativeSelectComp from "../components/selectTool";
 import BasicSelect from "../components/selectTool";
 import Loading from "../components/loading";
-import { CircularProgress } from "@mui/material";
+import {
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { GrFilter } from "react-icons/gr";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 const DEFAULT_PAGE_SIZE = 5;
 
@@ -48,8 +55,13 @@ export const CreateQuestionaire = ({
   const [isFirst, setIsFirst] = useState<boolean>(true);
   const [isLast, setIsLast] = useState<boolean>(false);
   const [contentFilter, setContentFilter] = useState<string>("");
-  const [difficultyFilter, setDifficultyFilter] = useState<number | "">(1);
+  const [difficultyFilter, setDifficultyFilter] = useState<
+    "" | "1" | "2" | "3" | "4" | "5"
+  >("1");
   const [tagsFilter, setTagsFilter] = useState<string[]>([]);
+  const [typeFilter, setTypeFilter] = useState<
+    "" | "open question" | "multiple choice"
+  >("");
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
 
   const allChecked: boolean = questions.every(
@@ -63,7 +75,7 @@ export const CreateQuestionaire = ({
     pageNum: number,
     size: number,
     content: string,
-    difficulty: number | ""
+    difficulty: string
   ) => {
     setLoadingPage(true);
     const url = `${server}/question/filter_questions/page=${pageNum}&size=${size}&content=${content}&difficulty=${difficulty}`;
@@ -438,12 +450,31 @@ export const CreateQuestionaire = ({
     setContentFilter(e.target.value);
   };
 
-  const onDifficultyFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDifficultyFilter(Number(e.target.value));
+  const onDifficultyFilterChange = (e: SelectChangeEvent) => {
+    if (
+      e.target.value === "" ||
+      e.target.value === "1" ||
+      e.target.value === "2" ||
+      e.target.value === "3" ||
+      e.target.value === "4" ||
+      e.target.value === "5"
+    ) {
+      setDifficultyFilter(e.target.value);
+    }
   };
 
   const onTagsFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagsFilter(e.target.value.split(","));
+  };
+
+  const onTypeFilterChange = (e: SelectChangeEvent) => {
+    if (
+      e.target.value === "" ||
+      e.target.value === "open question" ||
+      e.target.value === "multiple choice"
+    ) {
+      setTypeFilter(e.target.value);
+    }
   };
 
   return (
@@ -465,36 +496,62 @@ export const CreateQuestionaire = ({
               required
             />
           </div>
+        </div>
+        <div className="flex items-center">
           <div className="flex items-center">
-            <div className="mt-2 w-[85%]">
-              <TextField
-                id="Content filter"
-                sx={{ background: "#FFFFFF" }}
-                className="w-[100%]"
-                label="Filter by question content"
-                variant="filled"
-                onChange={onContentFilterChange}
-                value={contentFilter}
-              />
-              <TextField
-                id="Difficulty filter"
-                sx={{ background: "#FFFFFF" }}
-                className="w-[100%]"
-                label="Filter by Difficulty"
-                variant="filled"
-                onChange={onDifficultyFilterChange}
+            <TextField
+              id="Content filter"
+              sx={{ width: 300, marginRight: 5 }}
+              className=""
+              label="Question content"
+              variant="standard"
+              onChange={onContentFilterChange}
+              value={contentFilter}
+            />
+            <TextField
+              id="Tags filter"
+              sx={{ width: 300, marginRight: 5 }}
+              className=""
+              label="Tags"
+              variant="standard"
+              onChange={onTagsFilterChange}
+              value={tagsFilter}
+            />
+            <FormControl variant="standard" sx={{ width: 200, marginRight: 5 }}>
+              <InputLabel id="label1">Difficulty</InputLabel>
+              <Select
+                labelId="label1"
+                label="Difficulty"
                 value={difficultyFilter}
-              />
-              <TextField
-                id="Tags filter"
-                sx={{ background: "#FFFFFF" }}
-                className="w-[100%]"
-                label="Filter by tags"
-                variant="filled"
-                onChange={onTagsFilterChange}
-                value={tagsFilter}
-              />
-            </div>
+                onChange={onDifficultyFilterChange}
+                variant="standard"
+              >
+                {["any", "1", "2", "3", "4", "5"].map((option) => (
+                  <MenuItem key={option} value={option === "any" ? "" : option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl variant="standard" sx={{ width: 200, marginRight: 1 }}>
+              <InputLabel id="label2">Type</InputLabel>
+              <Select
+                labelId="label2"
+                label="Type"
+                value={typeFilter}
+                onChange={onTypeFilterChange}
+                variant="standard"
+              >
+                {["any", "open question", "multiple choice"].map((option) => (
+                  <MenuItem key={option} value={option === "any" ? "" : option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <Tooltip title={<div className="text-lg">Filter</div>}>
             <button
               className="text-[50px] ml-[20px] justify-center flex text-brown hover:text-amber-600 cursor-pointer"
               type="button"
@@ -504,7 +561,7 @@ export const CreateQuestionaire = ({
             >
               <GrFilter></GrFilter>
             </button>
-          </div>
+          </Tooltip>
         </div>
         <div className="mb-3"></div>
         {questions.length > 0 && (
@@ -668,9 +725,9 @@ export const CreateQuestionaire = ({
           <Loading msg={"Loading Questions"} size={60}></Loading>
         )}
 
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 flex justify-start">
           <button
-            className="p-2 w-[30%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+            className="p-2 w-[300px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
             type="submit"
           >
             Create Questionnaire
@@ -680,16 +737,3 @@ export const CreateQuestionaire = ({
     </Container>
   );
 };
-
-/*
-<Tooltip title={<div className="text-[16px]">First</div>}>
-<button className="mr-[15px]" onClick={handleFirst}>
-  <First></First>
-</button>
-</Tooltip>
-                <Tooltip title={<div className="text-[16px]">Last</div>}>
-                <button className="ml-[15px]" onClick={handleLast}>
-                  <Last></Last>
-                </button>
-              </Tooltip>
-*/
