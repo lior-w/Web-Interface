@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -6,6 +6,21 @@ import NumbersRating from "../components/starRating";
 import { Token, Question, Pages } from "../types";
 import { server } from "../main";
 import Navigation from "../components/navigation";
+import AddIcon from "@mui/icons-material/Add";
+import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
+import {
+  Box,
+  Fab,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Switch,
+  TextField,
+} from "@mui/material";
+import { GiSleepingBag } from "react-icons/gi";
 
 export interface IProps {
   token: Token;
@@ -25,7 +40,10 @@ export const CreateQuestion = ({
   const [question, setQuestion] = useState<string>("");
   const [multipleChoice, setMultipleChoice] = useState<boolean>(false);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
+  const [incorrectAnswersNum, setIncorrectAnswersNum] = useState<number>(1);
   const [incorrectAnswers, setIncorrectAnswers] = useState<string[]>([
+    "",
+    "",
     "",
     "",
     "",
@@ -36,6 +54,7 @@ export const CreateQuestion = ({
   const [difficulty, setDifficulty] = useState<number | null>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  /*
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     multipleChoice && incorrectAnswers.every((answer) => answer.length === 0)
@@ -54,15 +73,10 @@ export const CreateQuestion = ({
     };
     onSubmit(q);
   };
-
-  const handleBack = () => {
-    toMain();
-  };
+*/
 
   const addTag = (tag: string) => {
-    tag[0] === "#"
-      ? setTags(tags.concat(tag.slice(1)))
-      : setTags(tags.concat(tag));
+    setTags(tags.concat(tag));
     setDeletabels(deletables.concat(false));
   };
 
@@ -96,7 +110,7 @@ export const CreateQuestion = ({
   };
 
   const onIncorrectAnswerChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number
   ) => {
     setErrorMessage("");
@@ -173,6 +187,7 @@ export const CreateQuestion = ({
         <div className="text-sm mb-1 text-brown">
           Answer order is randomised when presented
         </div>
+
         <input
           className="p-2.5 w-[100%] h-12 border-2 border-gray-300 rounded-md"
           type="text"
@@ -212,108 +227,182 @@ export const CreateQuestion = ({
     );
   };
 
+  const handleSwitchChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    setMultipleChoice(checked);
+  };
+
+  const handleIncorrectAnswersNumChange = (e: SelectChangeEvent<number>) => {
+    setIncorrectAnswersNum(Number(e.target.value));
+  };
+
   return (
     <Container page="New Question" pages={pages} username={username}>
-      <div className="p-1 flex justify-end">
-        <button
-          className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
-          type="button"
-          onClick={handleBack}
-        >
-          <IoArrowForwardCircle />
-        </button>
-      </div>
-      <div className="flex flex-row">
-        <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-          <div className="text-4xl text-brown font-bold">New Question</div>
-          <div className="mb-3"></div>
-          <form className="flex flex-col" onSubmit={handleSubmit}>
-            <div className="">
-              <div className="text-lg text-brown font-bold">Question</div>
-              <input
-                className="p-2.5 w-[100%] h-12 border-2 border-gray-300 rounded-md"
-                type="text"
-                placeholder="Enter The Question"
-                value={question}
+      <div className="flex justify-center">
+        <div className="flex flex-row w-[700px] border-1 border-brown rounded p-4">
+          <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
+            <div className="text-4xl text-brown font-bold">New Question</div>
+            <div className="mb-3"></div>
+            <form
+              className="flex flex-col"
+              onSubmit={/*handleSubmit*/ () => {}}
+            >
+              <TextField
+                id="Difficulty filter"
+                sx={{
+                  background: "#FFFFFF",
+                  width: 600,
+                  marginTop: 2,
+                }}
+                className=""
+                label="Question"
+                variant="filled"
                 onChange={onQuestionChange}
+                value={question}
                 required
               />
-              <div className="mb-2"></div>
 
-              <div className="w-[100%] h-12 flex items-center">
-                <div className="text-lg text-brown font-bold min-w-[300px]">
-                  Open-ended / Multiple-choice :
-                </div>
-                {twoOptions()}
-              </div>
-              {multipleChoice ? multipleChoiceQuestion() : openQuestion()}
-              <div className="m-2"></div>
-            </div>
-            <div>
-              <div className="text-lg text-brown font-bold">Tags</div>
-              <div className="">
-                <div className="flex">
-                  <input
-                    className="p-2.5 mr-1 w-[40%] h-12 border-2 border-gray-300 rounded-md"
-                    type="text"
-                    placeholder="#Tags"
-                    value={currentTag}
-                    onChange={onCurrentTagChange}
+              <div className="flex flex-col">
+                <TextField
+                  id="Difficulty filter"
+                  sx={{
+                    background: "#FFFFFF",
+                    width: 600,
+                    marginTop: 2,
+                  }}
+                  className=""
+                  label="Answer"
+                  variant="filled"
+                  onChange={onCorrectAnswerChange}
+                  value={correctAnswer}
+                  required
+                />
+                <div className="flex ml-[10px] mt-[20px]">
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        value={multipleChoice}
+                        onChange={handleSwitchChange}
+                      />
+                    }
+                    label={
+                      <div className="text-xl text-brown font-bold ml-[30px]">
+                        Multiple-choice
+                      </div>
+                    }
                   />
-                  <div className="h-12 flex items-center">
-                    <div className="bg-brown h-11 text-orange-100 text-xl hover:bg-amber-700 rounded-lg p-2">
-                      <button className="" type="button" onClick={handleAddTag}>
-                        ADD
-                      </button>
+                </div>
+              </div>
+              {multipleChoice && (
+                <div>
+                  <div className="flex ml-[0px]">
+                    <Select
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        marginTop: 2,
+                        background: "#f3f4f6",
+                      }}
+                      id="demo-simple-select"
+                      value={incorrectAnswersNum}
+                      onChange={handleIncorrectAnswersNumChange}
+                    >
+                      <MenuItem value={1}>1</MenuItem>
+                      <MenuItem value={2}>2</MenuItem>
+                      <MenuItem value={3}>3</MenuItem>
+                      <MenuItem value={4}>4</MenuItem>
+                      <MenuItem value={5}>5</MenuItem>
+                    </Select>
+                    <div className="text-xl bg-gray-1 text-brown font-bold mt-[30px] ml-[25px]">
+                      Incorrect answers
                     </div>
                   </div>
+                  <div className="flex flex-col">
+                    {incorrectAnswers
+                      .filter((ans, i) => incorrectAnswersNum > i)
+                      .map((ans, i) => (
+                        <TextField
+                          id={`incorrect answer ${i}`}
+                          sx={{
+                            background: "#FFFFFF",
+                            width: 600,
+                            marginTop: 2,
+                          }}
+                          className=""
+                          label={`Incorrect answer ${i + 1}`}
+                          variant="filled"
+                          onChange={(e) => onIncorrectAnswerChange(e, i)}
+                          value={incorrectAnswers[i]}
+                        />
+                      ))}
+                  </div>
                 </div>
+              )}
 
-                <div className="w-[100%] flex flex-wrap">
-                  {tags.map((tag, index) => (
-                    <div className="flex items-center mt-1">
-                      <button
-                        className="bg-brown text-my_orange rounded-md pr-1 pl-1 pt-0.5 pb-0.5 hover:bg-amber-700"
-                        type="button"
-                        onClick={(e) => onTagClick(index)}
-                      >{`#${tag}`}</button>
-                      {deletables[index] ? (
-                        <button
-                          className="text-brown text-sm flex items-center"
-                          type="button"
-                          onClick={(e) => handleDeleteTag(index)}
-                        >
-                          <FaRegTrashCan />
-                        </button>
-                      ) : (
-                        <div></div>
-                      )}
-                      <div className="m-1"></div>
-                    </div>
-                  ))}
+              <div className="m-2"></div>
+              <div>
+                <div className="mt-[30px]">
+                  <div className="flex">
+                    <TextField
+                      id="tags"
+                      sx={{
+                        background: "#FFFFFF",
+                        width: 520,
+                        marginTop: 2,
+                      }}
+                      className=""
+                      label="Tags"
+                      variant="filled"
+                      onChange={onCurrentTagChange}
+                      value={currentTag}
+                    />
+                    <Fab
+                      sx={{ marginLeft: 3, marginTop: 2 }}
+                      color="primary"
+                      aria-label="add"
+                      onClick={handleAddTag}
+                    >
+                      <AddIcon />
+                    </Fab>
+                  </div>
+
+                  <div className="w-[100%] flex flex-wrap">
+                    {tags.map((tag, index) => (
+                      <div className="flex items-center mt-[10px] mr-[10px]">
+                        <div className="flex w-auto rounded-full bg-gray-300 items-center pr-[10px] pt-[5px] pb-[5px]">
+                          <div className="text-[20px] mr-[10px] ml-[10px]">{`${tag}`}</div>
+                          <div>
+                            <button
+                              className="text-gray-400 hover:text-gray-600"
+                              onClick={() => handleDeleteTag(index)}
+                            >
+                              <CancelTwoToneIcon fontSize="medium"></CancelTwoToneIcon>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="">
-              <div className="text-lg text-brown font-bold mt-4">
-                Difficulty
+              <div className="">
+                <div className="text-lg text-brown font-bold mt-4">
+                  Difficulty
+                </div>
+                <NumbersRating
+                  onValueChange={(v) => setDifficulty(v)}
+                ></NumbersRating>
               </div>
-              <NumbersRating
-                onValueChange={(v) => setDifficulty(v)}
-              ></NumbersRating>
-            </div>
-            <button
-              className="p-2.5 bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
-              type="submit"
-            >
-              ADD QUESTION
-            </button>
-            {errorMessage && multipleChoice && (
-              <div className="text-red-500 mt-2 text-center text-md font-semibold">
-                {errorMessage}
-              </div>
-            )}
-          </form>
+              <button
+                className="p-2.5 mt-[20px] w-[300px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                type="submit"
+              >
+                ADD QUESTION
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </Container>
