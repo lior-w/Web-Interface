@@ -10,7 +10,7 @@ import WaitingRoom from "./WaitingRoom";
 import { RunningGame } from "./RunningGame";
 import { CountriesMapComp } from "../components/countriesMap";
 import { westUsaMap } from "../maps/westUsaMap";
-import { Token, Game, Questionaire, Pages } from "../types";
+import { Token, Game, Questionnaire, Pages } from "../types";
 import { server } from "../main";
 /*
 {
@@ -146,8 +146,8 @@ export const Dashboard = () => {
       {page === "createQuestionaire" && (
         <CreateQuestionaire
           token={token}
-          toMain={toMainPage}
           username={loggedUsername}
+          toMain={toMainPage}
           pages={filterPages([
             "New Game",
             "New Question",
@@ -203,14 +203,3 @@ export const Dashboard = () => {
     </div>
   );
 };
-
-// {
-//   id: 1,
-//   title: "Exciting Adventure",
-//   description:
-//     "Embark on a thrilling journey through uncharted territories.",
-//   questionaire: "Adventure Questions",
-//   map: "Mystery Island",
-//   numGroups: 4,
-//   status: "created",
-// }

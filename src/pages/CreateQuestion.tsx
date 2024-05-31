@@ -10,6 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import {
   Box,
+  Chip,
   Fab,
   FormControl,
   FormControlLabel,
@@ -21,6 +22,7 @@ import {
   TextField,
 } from "@mui/material";
 import { GiSleepingBag } from "react-icons/gi";
+import axios from "axios";
 
 export interface IProps {
   token: Token;
@@ -51,8 +53,35 @@ export const CreateQuestion = ({
   const [currentTag, setCurrentTag] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [deletables, setDeletabels] = useState<boolean[]>([]);
-  const [difficulty, setDifficulty] = useState<number | null>(0);
+  const [difficulty, setDifficulty] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const newQuestionJSON = () => {
+    return {
+      question: question,
+      isMultipleChoice: multipleChoice,
+      correctAnswer: correctAnswer,
+      incorrectAnswers: incorrectAnswers,
+      tags: tags,
+      difficulty: difficulty,
+    };
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (difficulty === null) {
+      setErrorMessage("Please select question difficulty");
+    } else {
+      const url = `${server}/question/add_question`;
+      await axios
+        .post(url, newQuestionJSON())
+        .then((response) => {
+          alert("New question has been created successfuly");
+          toMain();
+        })
+        .catch((error) => alert(error));
+    }
+  };
 
   /*
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -89,15 +118,6 @@ export const CreateQuestion = ({
     setTags(tags.slice(0, index).concat(tags.slice(index + 1)));
     setDeletabels(
       deletables.slice(0, index).concat(deletables.slice(index + 1))
-    );
-  };
-
-  const onTagClick = (index: number) => {
-    setDeletabels(
-      deletables
-        .slice(0, index)
-        .concat(!deletables[index])
-        .concat(deletables.slice(index + 1))
     );
   };
 
@@ -245,10 +265,7 @@ export const CreateQuestion = ({
           <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
             <div className="text-4xl text-brown font-bold">New Question</div>
             <div className="mb-3"></div>
-            <form
-              className="flex flex-col"
-              onSubmit={/*handleSubmit*/ () => {}}
-            >
+            <form className="flex flex-col" onSubmit={handleSubmit}>
               <TextField
                 id="Difficulty filter"
                 sx={{
@@ -370,16 +387,18 @@ export const CreateQuestion = ({
 
                   <div className="w-[100%] flex flex-wrap">
                     {tags.map((tag, index) => (
-                      <div className="flex items-center mt-[10px] mr-[10px]">
-                        <div className="flex w-auto rounded-full bg-gray-300 items-center pr-[10px] pt-[5px] pb-[5px]">
-                          <div className="text-[20px] mr-[10px] ml-[10px]">{`${tag}`}</div>
-                          <div>
-                            <button
-                              className="text-gray-400 hover:text-gray-600"
-                              onClick={() => handleDeleteTag(index)}
-                            >
-                              <CancelTwoToneIcon fontSize="medium"></CancelTwoToneIcon>
-                            </button>
+                      <div>
+                        <div className="flex items-center mt-[10px] mr-[10px]">
+                          <div className="flex w-auto rounded-full border-1 border-gray-500 bg-gray-300 items-center pr-[10px] pt-[5px] pb-[5px]">
+                            <div className="text-[20px] mr-[10px] ml-[10px]">{`${tag}`}</div>
+                            <div>
+                              <button
+                                className="text-gray-400 hover:text-gray-600"
+                                onClick={() => handleDeleteTag(index)}
+                              >
+                                <CancelTwoToneIcon fontSize="medium"></CancelTwoToneIcon>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -392,7 +411,10 @@ export const CreateQuestion = ({
                   Difficulty
                 </div>
                 <NumbersRating
-                  onValueChange={(v) => setDifficulty(v)}
+                  onValueChange={(v) => {
+                    setDifficulty(v);
+                    setErrorMessage("");
+                  }}
                 ></NumbersRating>
               </div>
               <button
@@ -401,6 +423,9 @@ export const CreateQuestion = ({
               >
                 ADD QUESTION
               </button>
+              {errorMessage !== "" && (
+                <div className="text-red-500">{errorMessage}</div>
+              )}
             </form>
           </div>
         </div>

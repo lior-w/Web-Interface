@@ -46,7 +46,7 @@ export interface Answer {
   correct: boolean;
 }
 
-export interface Questionaire {
+export interface Questionnaire {
   id: string;
   name: string;
   questions: Question[];
@@ -70,7 +70,7 @@ export interface Game {
   name: string;
   host: User;
   description: string;
-  questionnaire: Questionaire;
+  questionnaire: Questionnaire;
   map: Map;
   numberOfGroups: number;
   status: string;
