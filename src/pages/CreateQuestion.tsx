@@ -83,27 +83,6 @@ export const CreateQuestion = ({
     }
   };
 
-  /*
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    multipleChoice && incorrectAnswers.every((answer) => answer.length === 0)
-      ? setErrorMessage(
-          "Multiple-choice question has to contain at least 1 incorrect answer"
-        )
-      : setErrorMessage("");
-    const q: Question = {
-      id: "",
-      multipleChoice: multipleChoice,
-      question: question,
-      answer: correctAnswer,
-      incorrectAnswers: incorrectAnswers,
-      difficulty: difficulty === null ? 0 : difficulty,
-      tags: tags,
-    };
-    onSubmit(q);
-  };
-*/
-
   const addTag = (tag: string) => {
     setTags(tags.concat(tag));
     setDeletabels(deletables.concat(false));

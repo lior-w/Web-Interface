@@ -19,6 +19,7 @@ import BasicSelect from "../components/selectTool";
 import Loading from "../components/loading";
 import {
   CircularProgress,
+  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -27,6 +28,7 @@ import {
 import TextField from "@mui/material/TextField";
 import { GrFilter } from "react-icons/gr";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { SelectQuestions } from "../components/questionsTable";
 
 const DEFAULT_PAGE_SIZE = 5;
 const DEFAULT_DIFFICULTY = 0;
@@ -58,12 +60,16 @@ export const CreateQuestionaire = ({
   const [contentFilter, setContentFilter] = useState<string>("");
   const [difficultyFilter, setDifficultyFilter] = useState<
     "" | "1" | "2" | "3" | "4" | "5"
-  >("1");
+  >("");
   const [tagsFilter, setTagsFilter] = useState<string[]>([]);
   const [typeFilter, setTypeFilter] = useState<
     "" | "open question" | "multiple choice"
   >("");
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
+
+  const handleChangeSelectedQuestions = (compSelectedQuestions: string[]) => {
+    setSelectedQuestions(compSelectedQuestions);
+  };
 
   const generateQuestionsJSON = (): { [key: string]: number } => {
     return selectedQuestions.reduce((json, qid) => {
@@ -101,13 +107,19 @@ export const CreateQuestionaire = ({
   const fetchPage = async (
     pageNum: number,
     size: number,
-    content: string,
-    difficulty: string
+    difficulty: string,
+    content: string
   ) => {
     setLoadingPage(true);
-    const url = `${server}/question/filter_questions/page=${pageNum}&size=${size}&content=${content}&difficulty=${difficulty}`;
+    const url = `${server}/question/filter_questions`;
+    const params = {
+      page: pageNum,
+      size: size,
+      difficulty: difficulty,
+      content: content,
+    };
     await axios
-      .get(url)
+      .get(url, { params })
       .then((response) => {
         setQuestions(response.data.value.content);
         setTotalElements(response.data.value.totalElements);
@@ -137,8 +149,9 @@ export const CreateQuestionaire = ({
       fetchPage(
         totalPages - 1,
         pageSizeRequest,
-        contentFilter,
-        difficultyFilter
+
+        difficultyFilter,
+        contentFilter
       );
     }
   };
@@ -148,20 +161,21 @@ export const CreateQuestionaire = ({
       fetchPage(
         pageNumber - 1,
         pageSizeRequest,
-        contentFilter,
-        difficultyFilter
+
+        difficultyFilter,
+        contentFilter
       );
     }
   };
 
   const handleFirst = () => {
     if (!isFirst) {
-      fetchPage(0, pageSizeRequest, contentFilter, difficultyFilter);
+      fetchPage(0, pageSizeRequest, difficultyFilter, contentFilter);
     }
   };
 
   useEffect(() => {
-    fetchPage(0, pageSizeRequest, "", difficultyFilter);
+    fetchPage(0, pageSizeRequest, difficultyFilter, contentFilter);
   }, []);
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,7 +211,7 @@ export const CreateQuestionaire = ({
 
   const handlePageSizeChange = (val: number) => {
     setPageSizeRequest(val);
-    fetchPage(0, val, contentFilter, difficultyFilter);
+    fetchPage(0, val, difficultyFilter, contentFilter);
   };
 
   const onContentFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,229 +265,11 @@ export const CreateQuestionaire = ({
             />
           </div>
         </div>
-        <div id="filters" className="flex items-end">
-          <div className="flex items-end">
-            <TextField
-              id="Content filter"
-              sx={{ width: 300, marginRight: 5 }}
-              className=""
-              label="Question content"
-              variant="standard"
-              onChange={onContentFilterChange}
-              value={contentFilter}
-            />
-            <TextField
-              id="Tags filter"
-              sx={{ width: 300, marginRight: 5 }}
-              className=""
-              label="Tags"
-              variant="standard"
-              onChange={onTagsFilterChange}
-              value={tagsFilter}
-            />
-            <FormControl variant="standard" sx={{ width: 200, marginRight: 5 }}>
-              <InputLabel id="label1">Difficulty</InputLabel>
-              <Select
-                labelId="label1"
-                label="Difficulty"
-                value={difficultyFilter}
-                onChange={onDifficultyFilterChange}
-                variant="standard"
-              >
-                {["any", "1", "2", "3", "4", "5"].map((option) => (
-                  <MenuItem key={option} value={option === "any" ? "" : option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
 
-            <FormControl variant="standard" sx={{ width: 200, marginRight: 1 }}>
-              <InputLabel id="label2">Type</InputLabel>
-              <Select
-                labelId="label2"
-                label="Type"
-                value={typeFilter}
-                onChange={onTypeFilterChange}
-                variant="standard"
-              >
-                {["any", "open question", "multiple choice"].map((option) => (
-                  <MenuItem key={option} value={option === "any" ? "" : option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
-          <Tooltip title={<div className="text-lg">Filter</div>}>
-            <button
-              className="text-[50px] ml-[20px] justify-center flex text-brown hover:text-amber-600 cursor-pointer"
-              type="button"
-              onClick={() =>
-                fetchPage(0, pageSizeRequest, contentFilter, difficultyFilter)
-              }
-            >
-              <GrFilter></GrFilter>
-            </button>
-          </Tooltip>
-        </div>
-        <div className="mb-3"></div>
         {questions.length > 0 && (
-          <div className="max-h-[100%] rounded-md bg-white">
-            <div className="">
-              <table className="w-[100%]">
-                <thead>
-                  <tr className="h-[50px] text-lg">
-                    <th className="w-[3%]">
-                      <div>
-                        <Checkbox
-                          onChange={() =>
-                            questions.map((q) => handleChangeHeadCheckBox())
-                          }
-                          checked={questions.every(
-                            (q) =>
-                              selectedQuestions.find((qid) => qid === q.id) !==
-                              undefined
-                          )}
-                        ></Checkbox>
-                      </div>
-                    </th>
-                    <th className="w-[32%]">Question</th>
-                    <th className="w-[20%]">Answer</th>
-                    <th className="w-[10%]">Type</th>
-                    <th className="w-[10%]">Difficulty</th>
-                    <th className="w-[20%]">Tags</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {questions.map((q, i) => {
-                    return (
-                      <tr className="border-y-2">
-                        <td className="flex items-center text-3xl">
-                          <div>
-                            <Checkbox
-                              onChange={() => handleChangeCheckBox(q.id)}
-                              checked={
-                                selectedQuestions.find(
-                                  (qid) => qid === q.id
-                                ) !== undefined
-                              }
-                            ></Checkbox>
-                          </div>
-                        </td>
-                        <td>
-                          <div className="w-[90%]">{q.question}</div>
-                        </td>
-                        <td className="flex">
-                          <div>
-                            {
-                              q.answers.find(
-                                (answer) => answer.correct === true
-                              )?.answerText
-                            }
-                          </div>
-                        </td>
-                        <td>
-                          {q.multipleChoice
-                            ? "multiple choice"
-                            : "open question"}
-                        </td>
-                        <td>{q.difficulty}</td>
-                        <td>{q.tags}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div
-              id="bottom of the table"
-              className="flex justify-between h-[60px]"
-            >
-              <div
-                id="number of questions"
-                className="flex items-center ml-[20px]"
-              >
-                <div className="mr-[10px]">Number of questions selected:</div>
-                <div>{selectedQuestions.length}</div>
-              </div>
-              <div
-                id="paging"
-                className="mr-[20px] flex justify-end items-center"
-              >
-                <div
-                  id="rows per page"
-                  className="flex items-center text-[18px] mr-[20px]"
-                >
-                  <div className="mr-3">Rows per page:</div>
-                  <BasicSelect
-                    values={[5, 10, 25, 50, 100]}
-                    defaultValue={5}
-                    func={handlePageSizeChange}
-                  ></BasicSelect>
-                </div>
-                <div id="elements out of total and buttons" className="flex">
-                  <div
-                    id="elements out of total"
-                    className="mr-[20px] w-[180px] flex justify-center"
-                  >
-                    {!loadingPage &&
-                      `${pageNumber * pageSizeRequest + 1} - ${
-                        pageNumber * pageSize + pageSizeRequest
-                      } out of ${totalElements}`}
-                    {loadingPage && <CircularProgress color="info" size={30} />}
-                  </div>
-                  <div
-                    id="buttons"
-                    className="text-[24px] w-[140px] flex justify-between text-blue-500"
-                  >
-                    <div id="maybe first and back">
-                      {pageNumber > 0 && (
-                        <div id="first and back" className="flex">
-                          <Tooltip
-                            id="first"
-                            className="mr-[16px]"
-                            title={<div className="text-lg">First</div>}
-                          >
-                            <button className="" onClick={handleFirst}>
-                              <First></First>
-                            </button>
-                          </Tooltip>
-                          <Tooltip
-                            id="back"
-                            title={<div className="text-lg">Back</div>}
-                          >
-                            <button onClick={handleBack}>
-                              <Back></Back>
-                            </button>
-                          </Tooltip>
-                        </div>
-                      )}
-                    </div>
-                    <div id="maybe next and last">
-                      {pageNumber < totalPages - 1 && (
-                        <div id="next and last" className="flex">
-                          <Tooltip
-                            className="mr-[16px]"
-                            title={<div className="text-lg">Next</div>}
-                          >
-                            <button onClick={handleNext}>
-                              <Next></Next>
-                            </button>
-                          </Tooltip>
-                          <Tooltip title={<div className="text-lg">Last</div>}>
-                            <button onClick={handleLast}>
-                              <Last></Last>
-                            </button>
-                          </Tooltip>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <SelectQuestions
+            handleChangeInPage={handleChangeSelectedQuestions}
+          ></SelectQuestions>
         )}
         {questions.length === 0 && loadingPage && (
           <Loading msg={"Loading Questions"} size={60}></Loading>

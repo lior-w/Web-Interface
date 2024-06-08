@@ -49,7 +49,13 @@ export interface Answer {
 export interface Questionnaire {
   id: string;
   name: string;
-  questions: Question[];
+  questions: QuestionnaireQuestion[];
+}
+
+export interface QuestionnaireQuestion {
+  id: string;
+  question: Question;
+  difficultyLevel: number;
 }
 
 export interface User {
@@ -62,7 +68,8 @@ export interface User {
 export interface Map {
   id: string;
   name: string;
-  statringPositions: string[];
+  shared: boolean;
+  tiles: Tile[];
 }
 
 export interface Game {
@@ -84,19 +91,41 @@ export interface Game {
 
 export interface RunningTile {
   id: string;
-  tileType: string;
   tile: Tile;
-  controllingGroup: number;
+  controllingGroup: Group;
 }
 
 export interface Tile {
   id: string;
+  name: string;
   tileType: string;
-  controllingGroup: number;
+  difficultyLevel: number;
+  dimensions: string;
+  neighbors: NeighborTile[];
+}
+
+export interface FlatTile {
+  id: string;
+  name: string;
+  tileType: string;
+  dimensions: string;
+  group: number;
+}
+
+export interface NeighborTile {
+  id: string;
+  name: string;
+  tileType: string;
   difficultyLevel: number;
   dimensions: string;
 }
 
 export interface Pages {
   [key: string]: () => void;
+}
+
+export interface Group {
+  id: string;
+  number: number;
+  score: number;
 }

@@ -8,7 +8,7 @@ import {
   User,
   Map,
   Question,
-  Questionaire,
+  Questionnaire,
   Game,
   Pages,
 } from "../types";
