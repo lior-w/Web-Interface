@@ -15,7 +15,7 @@ const MainPage = ({ token, username, pages }: IProps) => {
         <div className="flex justify-center">
           <div className="text-brown max-w-[1600px]">
             <div className="text-[46px] font-semibold">
-              Welcome to Conquer The Wrold Teacher Portal!
+              Welcome to Conquer The World Teacher Portal!
             </div>
             <div className="text-[36px]">
               Empowering Education Through Engaging Gameplay

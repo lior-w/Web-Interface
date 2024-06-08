@@ -31,7 +31,7 @@ import { server } from "../main";
 }
 */
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("createQuestionaire");
+  const [page, setPage] = useState<string>("main");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");
@@ -86,7 +86,11 @@ export const Dashboard = () => {
   return (
     <div>
       {page === "runningGame" && (
-        <RunningGame runningGameId={runningGameId} token={token}></RunningGame>
+        <RunningGame
+          runningGameId={runningGameId}
+          toMain={toMainPage}
+          token={token}
+        ></RunningGame>
       )}
       {page === "savedGames" && (
         <SavedGames

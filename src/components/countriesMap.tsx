@@ -20,12 +20,14 @@ const GAME_TIME = 1000 * 60 * 45;
 export interface IProps {
   countriesMap: CountriesMap;
   runningGameId: string;
+  toMain: () => void;
   token: Token;
 }
 
 export const CountriesMapComp = ({
   countriesMap,
   runningGameId,
+  toMain,
   token,
 }: IProps) => {
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
@@ -58,6 +60,7 @@ export const CountriesMapComp = ({
 
   const endGame = () => {
     clearInterval(myInterval);
+    toMain();
   };
 
   setTimeout(endGame, GAME_TIME);
@@ -83,7 +86,7 @@ export const CountriesMapComp = ({
   return (
     <div>
       {!mapLoaded && (
-        <Loading msg={`Loading Map: ${countriesMap.name}`}></Loading>
+        <Loading msg={`Loading Map: ${countriesMap.name}`} size={60}></Loading>
       )}
       {mapLoaded && (
         <div className="flex flex-col">
@@ -110,14 +113,8 @@ export const CountriesMapComp = ({
               stroke="#000"
               fill="none"
             >
-              {Object.entries(
-                runningTiles.map((runningTile) => {
-                  const t: Tile = runningTile.tile;
-                  t.controllingGroup = runningTile.controllingGroup;
-                  return t;
-                })
-              ).map(([key, tile]) => (
-                <CountryComp key={key} tile={tile} onClick={() => {}} />
+              {Object.entries(runningTiles).map(([key, runningTile]) => (
+                <CountryComp key={key} tile={runningTile} onClick={() => {}} />
               ))}
             </svg>
           </div>
