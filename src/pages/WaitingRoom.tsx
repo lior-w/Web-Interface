@@ -122,7 +122,7 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
               <IoArrowForwardCircle />
             </button>
           </div>
-          {loading && <Loading msg="Loading Waiting Room"></Loading>}
+          {loading && <Loading size={60} msg="Loading Waiting Room"></Loading>}
           {!loading && (
             <div>
               <div className="flex flex-row">
@@ -146,7 +146,7 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
           )}
         </div>
       )}
-      {startingGame && <Loading msg="Starting Game"></Loading>}
+      {startingGame && <Loading size={60} msg="Starting Game"></Loading>}
     </Container>
   );
 };
