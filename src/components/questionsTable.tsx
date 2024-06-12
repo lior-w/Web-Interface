@@ -23,6 +23,10 @@ import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { EditQuestion } from "./editQuestion";
+import { DeleteQuestion } from "./deleteQuestion";
 
 const DEFAULT_PAGE_SIZE = 5;
 const DEFAULT_DIFFICULTY = 0;
@@ -51,6 +55,8 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
     "" | "open question" | "multiple choice"
   >("");
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
+  const [edited, setEdited] = useState<string[]>([]);
+  const [deleted, setDeleted] = useState<string[]>([]);
 
   const allChecked: boolean = questions.every(
     (q) => selectedQuestions.find((qid) => qid === q.id) !== undefined
@@ -89,6 +95,8 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
         setIsFirst(response.data.value.first);
         setIsLast(response.data.value.last);
         setLoadingPage(false);
+        setEdited([]);
+        setDeleted([]);
       })
       .catch((error) => alert(error));
   };
@@ -198,6 +206,15 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
       setTypeFilter(e.target.value);
     }
   };
+
+  const handleEdit = (id: string) => {
+    console.log(`edit ${id}`);
+  };
+
+  const handleDelete = (id: string) => {
+    console.log(`delete ${id}`);
+  };
+
   return (
     <div>
       <div id="filters" className="flex items-end">
@@ -286,11 +303,17 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
                     ></Checkbox>
                   </div>
                 </th>
-                <th className="w-[32%]">Question</th>
+                <th className="w-[26%]">Question</th>
                 <th className="w-[20%] pl-[17px]">Answer</th>
                 <th className="w-[10%]">Type</th>
                 <th className="w-[10%]">Difficulty</th>
                 <th className="w-[20%]">Tags</th>
+                <th className="w-[3%]">
+                  <div></div>
+                </th>
+                <th className="w-[3%]">
+                  <div></div>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -309,7 +332,21 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
                       </div>
                     </td>
                     <td>
-                      <div className="w-[90%]">{q.question}</div>
+                      <div className="w-[90%]">
+                        {
+                          <div>
+                            <div>{q.question}</div>
+                            {deleted.find((id) => id === q.id) !== undefined ? (
+                              <div>{"(Deleted)"}</div>
+                            ) : edited.find((id) => id === q.id) !==
+                              undefined ? (
+                              <div>{"(Edited)"}</div>
+                            ) : (
+                              <div></div>
+                            )}
+                          </div>
+                        }
+                      </div>
                     </td>
                     <td className="flex">
                       <div>
@@ -354,6 +391,22 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
                     </td>
                     <td>{q.difficulty}</td>
                     <td>{q.tags}</td>
+                    <td className="">
+                      <div>
+                        <EditQuestion
+                          q={q}
+                          onEdit={(id) => setEdited(edited.concat(id))}
+                        ></EditQuestion>
+                      </div>
+                    </td>
+                    <td className="">
+                      <div>
+                        <DeleteQuestion
+                          q={q}
+                          onDelete={(id) => setDeleted(deleted.concat(id))}
+                        ></DeleteQuestion>
+                      </div>
+                    </td>
                   </tr>
                 );
               })}
