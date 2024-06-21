@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Container from "../components/container.tsx";
+import Container from "../components/container_.tsx";
 import { CountriesMapComp } from "../components/countriesMap";
 import { Token, Game, Questionnaire } from "../types";
 import { westUsaMap } from "../maps/westUsaMap";

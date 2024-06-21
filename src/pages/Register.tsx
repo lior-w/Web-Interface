@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Container from "../components/container";
+import Container from "../components/container_";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import { Pages, Token } from "../types";

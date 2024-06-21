@@ -1,17 +1,12 @@
-import Container from "../components/container.tsx";
-import { Pages, Token } from "../types";
-import { server } from "../main";
+import Container from "../components/Container.tsx";
+import { Pages, Token } from "../types.ts";
+import { server } from "../main.tsx";
+import { useParams } from "react-router";
 
-export interface IProps {
-  token: Token;
-  username: string | undefined;
-  pages: Pages;
-}
-
-export const MainPage = ({ token, username, pages }: IProps) => {
+const Main = () => {
   return (
-    <Container page="main" pages={pages} username={username}>
-      {username === undefined ? (
+    <Container page="main" pages={{}} username={"params.username"}>
+      {"params.username" === undefined ? (
         <div className="flex justify-center">
           <div className="text-brown max-w-[1600px]">
             <div className="text-[46px] font-semibold">
@@ -67,9 +62,11 @@ export const MainPage = ({ token, username, pages }: IProps) => {
         </div>
       ) : (
         <div className="flex justify-center text-brown text-[60px] font-semibold mt-4">
-          {`Welcome ${username}!`}
+          {`Welcome ${"params.username"}!`}
         </div>
       )}
     </Container>
   );
 };
+
+export default Main;

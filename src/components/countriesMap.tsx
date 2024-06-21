@@ -9,7 +9,7 @@ import {
   RunningTile,
 } from "../types";
 import { CountryComp } from "./country";
-import Container from "./container";
+import Container from "./container_";
 import axios from "axios";
 import Loading from "./loading";
 import { server } from "../main";

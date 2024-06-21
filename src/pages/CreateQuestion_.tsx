@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import Container from "../components/Container";
+import Container from "../components/container_";
 import NumbersRating from "../components/starRating";
 import { Token, Question, Pages } from "../types";
 import { server } from "../main";
@@ -15,9 +15,22 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import { useParams } from "react-router";
 
-const CreateQuestion = () => {
+export interface IProps {
+  token: Token;
+  toMain: () => void;
+  username: string | undefined;
+  onSubmit: (question: Question) => void;
+  pages: Pages;
+}
+
+export const CreateQuestion = ({
+  token,
+  toMain,
+  username,
+  onSubmit,
+  pages,
+}: IProps) => {
   const [file, setFile] = useState<string>();
   const [image, setImage] = useState<string>();
   const [question, setQuestion] = useState<string>("");
@@ -59,6 +72,7 @@ const CreateQuestion = () => {
         .post(url, newQuestionJSON())
         .then((response) => {
           alert("New question has been created successfuly");
+          toMain();
         })
         .catch((error) => alert(error));
     }
@@ -246,7 +260,7 @@ const CreateQuestion = () => {
   };
 
   return (
-    <Container page="New Question" pages={{}} username={"username"}>
+    <Container page="New Question" pages={pages} username={username}>
       <div className="flex justify-center">
         <div className="flex flex-row w-[700px] border-1 border-brown rounded p-4">
           <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
@@ -425,5 +439,3 @@ const CreateQuestion = () => {
     </Container>
   );
 };
-
-export default CreateQuestion;
