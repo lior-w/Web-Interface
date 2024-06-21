@@ -15,7 +15,7 @@ export interface IProps {
   gameId: string | undefined;
 }
 
-const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
+export const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [startingGame, setStartingGame] = useState<boolean>(false);
   const [gameName, setGameName] = useState<string>("");
@@ -150,14 +150,3 @@ const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
     </Container>
   );
 };
-
-export default WaitingRoom;
-
-/*
-<div className="text-2xl text-brown font-bold">Players:</div>
-                <div className="flex flex-wrap">
-                  {players.map((player) => (
-                    <div className="text-lg text-brown font-semibold m-2">{`${player}`}</div>
-                  ))}
-                </div>
-                <div className="text-xl text-brown font-bold">{`Total Amount: ${players.length}`}</div>*/

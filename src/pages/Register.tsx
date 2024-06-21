@@ -14,13 +14,13 @@ export interface IProps {
   pages: Pages;
 }
 
-function Registration({
+export const Register = ({
   token,
   onRegistrationSuccess,
   onSignIn,
   toMain,
   pages,
-}: IProps) {
+}: IProps) => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -133,32 +133,4 @@ function Registration({
       </div>
     </Container>
   );
-}
-
-export default Registration;
-
-/*
-<div className="w-[40%] bg-brown  rounded-r-md">
-          <div className="p-1 flex justify-end">
-            <button
-              className="text-3xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
-              type="button"
-              onClick={handleBack}
-            >
-              <IoArrowForwardCircle />
-            </button>
-          </div>
-          <div className="pt-28 text-my_orange text-center min-w-[170px]">
-            Already have an account?
-          </div>
-          <div className="flex justify-center ">
-            <button
-              className="text-2xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
-              type="button"
-              onClick={handleSignIn}
-            >
-              SIGN IN
-            </button>
-          </div>
-        </div>
-        */
+};

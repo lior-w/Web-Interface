@@ -12,7 +12,7 @@ export interface IProps {
   pages: Pages;
 }
 
-const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
+export const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -112,31 +112,3 @@ const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
     </Container>
   );
 };
-
-export default Login;
-
-/*
-<div className="w-[40%] bg-brown  rounded-r-md">
-          <div className="p-1 flex justify-end">
-            <button
-              className="text-3xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
-              type="button"
-              onClick={handleBack}
-            >
-              <IoArrowForwardCircle />
-            </button>
-          </div>
-          <div className="pt-20 text-my_orange text-center min-w-[170px]">
-            Don't have account yet?
-          </div>
-          <div className="flex justify-center ">
-            <button
-              className="text-2xl text-orange-100 font-bold cursor-pointer hover:text-orange-200"
-              type="button"
-              onClick={handleSignUp}
-            >
-              SIGN UP
-            </button>
-          </div>
-        </div>
-        */

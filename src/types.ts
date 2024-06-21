@@ -38,6 +38,7 @@ export interface Question {
   incorrectAnswers: string[];
   difficulty: number;
   tags: string[];
+  image: Uint8Array;
 }
 
 export interface Answer {

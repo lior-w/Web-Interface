@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { SavedGames } from "./SavedGames";
-import Login from "./Login";
-import Registration from "./Registration";
-import CreateGame from "./CreateGame";
-import MainPage from "./mainPage";
+import { Login } from "./Login";
+import { Register } from "./Register";
+import { CreateGame } from "./CreateGame";
+import { MainPage } from "./mainPage";
 import { CreateQuestion } from "./CreateQuestion";
 import { CreateQuestionaire } from "./CreateQuestionaire";
-import WaitingRoom from "./WaitingRoom";
+import { WaitingRoom } from "./WaitingRoom";
 import { RunningGame } from "./RunningGame";
 import { CountriesMapComp } from "../components/countriesMap";
 import { westUsaMap } from "../maps/westUsaMap";
@@ -31,7 +31,7 @@ import { server } from "../main";
 }
 */
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("createQuestionaire");
+  const [page, setPage] = useState<string>("main");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");
@@ -124,7 +124,7 @@ export const Dashboard = () => {
         />
       )}
       {page === "registration" && (
-        <Registration
+        <Register
           token={token}
           onRegistrationSuccess={toLogin}
           onSignIn={toLogin}
