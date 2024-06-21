@@ -5,22 +5,37 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Question } from "../types";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Answer,
+  Question,
+  Questionnaire,
+  QuestionnaireQuestion,
+} from "../types";
 import BasicSelect from "./selectTool";
 import { server } from "../main";
 import axios from "axios";
+import { EditQuestion } from "./editQuestion";
 
 export interface IProps {
-  q: Question;
-  onDelete: (id: string) => void;
+  q: Questionnaire;
+  onEdit: (id: string) => void;
 }
 
-export function DeleteQuestion({ q, onDelete }: IProps) {
+export function EditQuestionnaire({ q, onEdit }: IProps) {
   const [open, setOpen] = useState<boolean>(false);
+  const [name, setName] = useState<string>();
+  const [questions, setQuestions] = useState<QuestionnaireQuestion[]>();
+
+  const reset = () => {
+    setName(q.name);
+    setQuestions(q.questions);
+  };
 
   const handleClickOpen = () => {
+    reset();
     setOpen(true);
   };
 
@@ -29,16 +44,27 @@ export function DeleteQuestion({ q, onDelete }: IProps) {
   };
 
   const handleSubmit = async () => {
-    const url = `${server}/question/delete_question`;
+    const url = `${server}/question/update_question`;
+    const data = {
+      id: q.id,
+      name: name,
+      questions: questions,
+    };
     const params = {
       id: q.id,
     };
 
+    const onQuestionChange = (id: string) => {};
+
+    const handleEditQuestion = async (question: Question) => {
+      <EditQuestion q={question} onEdit={(qid: string) => {}}></EditQuestion>;
+    };
+
     await axios
-      .delete(url, { params })
+      .put(url, data, { params })
       .then(() => {
-        alert("Question deleted successfuly");
-        onDelete(q.id);
+        alert("Questionnaire updated successfuly");
+        onEdit(q.id);
       })
       .catch((error) => alert(error));
   };
@@ -46,7 +72,7 @@ export function DeleteQuestion({ q, onDelete }: IProps) {
   return (
     <React.Fragment>
       <Button variant="text" onClick={handleClickOpen}>
-        <DeleteIcon />
+        <EditIcon />
       </Button>
       <Dialog
         open={open}
@@ -63,13 +89,13 @@ export function DeleteQuestion({ q, onDelete }: IProps) {
         }}
       >
         <div className="w-[500px]"></div>
-        <DialogTitle>{`Are you sure you want to delete the following question?`}</DialogTitle>
+        <DialogTitle>Edit Questionnaire</DialogTitle>
         <DialogContent>
-          <div className="italic">{q.question}</div>
+          <div className="flex mt-[16px]"></div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Delete</Button>
+          <Button type="submit">Edit</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

@@ -215,6 +215,15 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
     console.log(`delete ${id}`);
   };
 
+  const uint8ArrayToBase64 = (array: Uint8Array): string => {
+    console.log(array);
+    let binaryString = "";
+    for (let i = 0; i < array.length; i++) {
+      binaryString += String.fromCharCode(array[i]);
+    }
+    return btoa(binaryString);
+  };
+
   return (
     <div>
       <div id="filters" className="flex items-end">
@@ -314,6 +323,9 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
                 <th className="w-[3%]">
                   <div></div>
                 </th>
+                <th className="w-[3%]">
+                  <div></div>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -391,6 +403,11 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
                     </td>
                     <td>{q.difficulty}</td>
                     <td>{q.tags}</td>
+                    <td>
+                      {q.image && (
+                        <img src={`data:image/png;base64,${q.image}`} />
+                      )}
+                    </td>
                     <td className="">
                       <div>
                         <EditQuestion

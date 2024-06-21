@@ -39,6 +39,8 @@ export const CreateQuestion = ({
   onSubmit,
   pages,
 }: IProps) => {
+  const [file, setFile] = useState<string>();
+  const [image, setImage] = useState<string>();
   const [question, setQuestion] = useState<string>("");
   const [multipleChoice, setMultipleChoice] = useState<boolean>(false);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
@@ -64,6 +66,7 @@ export const CreateQuestion = ({
       incorrectAnswers: incorrectAnswers,
       tags: tags,
       difficulty: difficulty,
+      image: image,
     };
   };
 
@@ -237,6 +240,33 @@ export const CreateQuestion = ({
     setIncorrectAnswersNum(Number(e.target.value));
   };
 
+  function uint8ArrayToBase64(array: Uint8Array): string {
+    let binaryString = "";
+    for (let i = 0; i < array.length; i++) {
+      binaryString += String.fromCharCode(array[i]);
+    }
+    return btoa(binaryString);
+  }
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          const arrayBuffer = event.target.result as ArrayBuffer;
+          const uint8Array = new Uint8Array(arrayBuffer);
+          console.log(uint8Array.buffer);
+          setImage(uint8ArrayToBase64(uint8Array));
+        }
+      };
+
+      reader.readAsArrayBuffer(selectedFile);
+      setFile(URL.createObjectURL(selectedFile));
+    }
+  };
+
   return (
     <Container page="New Question" pages={pages} username={username}>
       <div className="flex justify-center">
@@ -245,6 +275,11 @@ export const CreateQuestion = ({
             <div className="text-4xl text-brown font-bold">New Question</div>
             <div className="mb-3"></div>
             <form className="flex flex-col" onSubmit={handleSubmit}>
+              <div>
+                <div>Uplaod Image:</div>
+                <input type="file" onChange={handleFileChange} />
+                <img src={file} />
+              </div>
               <TextField
                 id="Difficulty filter"
                 sx={{

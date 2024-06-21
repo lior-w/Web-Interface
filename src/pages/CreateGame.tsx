@@ -38,7 +38,7 @@ export interface IProps {
   pages: Pages;
 }
 
-const CreateGame = ({ token, toMain, username, pages }: IProps) => {
+export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [title, setTitle] = useState<string>("");
@@ -80,6 +80,7 @@ const CreateGame = ({ token, toMain, username, pages }: IProps) => {
       gameTime: gameTime,
       isShared: isShared,
       questionTimeLimit: questionTimeLimit,
+      startingPositions: startingPositions,
     };
 
     const headers = {
@@ -382,5 +383,3 @@ const CreateGame = ({ token, toMain, username, pages }: IProps) => {
     </Container>
   );
 };
-
-export default CreateGame;

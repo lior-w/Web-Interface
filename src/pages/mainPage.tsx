@@ -8,7 +8,7 @@ export interface IProps {
   pages: Pages;
 }
 
-const MainPage = ({ token, username, pages }: IProps) => {
+export const MainPage = ({ token, username, pages }: IProps) => {
   return (
     <Container page="main" pages={pages} username={username}>
       {username === undefined ? (
@@ -73,8 +73,3 @@ const MainPage = ({ token, username, pages }: IProps) => {
     </Container>
   );
 };
-
-export default MainPage;
-function useState<T>(username: string): [any, any] {
-  throw new Error("Function not implemented.");
-}

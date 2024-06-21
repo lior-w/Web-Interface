@@ -7,13 +7,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Question } from "../types";
+import { Question, Questionnaire } from "../types";
 import BasicSelect from "./selectTool";
 import { server } from "../main";
 import axios from "axios";
 
 export interface IProps {
-  q: Question;
+  q: Questionnaire;
   onDelete: (id: string) => void;
 }
 
@@ -29,7 +29,7 @@ export function DeleteQuestion({ q, onDelete }: IProps) {
   };
 
   const handleSubmit = async () => {
-    const url = `${server}/question/delete_question`;
+    const url = `${server}/question/delete_questionnaire`;
     const params = {
       id: q.id,
     };
@@ -37,7 +37,7 @@ export function DeleteQuestion({ q, onDelete }: IProps) {
     await axios
       .delete(url, { params })
       .then(() => {
-        alert("Question deleted successfuly");
+        alert("Questionnaire deleted successfuly");
         onDelete(q.id);
       })
       .catch((error) => alert(error));
@@ -63,9 +63,9 @@ export function DeleteQuestion({ q, onDelete }: IProps) {
         }}
       >
         <div className="w-[500px]"></div>
-        <DialogTitle>{`Are you sure you want to delete the following question?`}</DialogTitle>
+        <DialogTitle>{`Are you sure you want to delete the following questionnaire?`}</DialogTitle>
         <DialogContent>
-          <div className="italic">{q.question}</div>
+          <div className="italic">{q.name}</div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
