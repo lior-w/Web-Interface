@@ -1,8 +1,6 @@
-import React, { ReactNode, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
-import { ThemeContext } from "@emotion/react";
-import Switch from "@mui/material/Switch";
 import axios from "axios";
 import { Game, Token } from "../types";
 import Loading from "../components/loading";
@@ -21,76 +19,51 @@ export const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
   const [gameName, setGameName] = useState<string>("");
   const [runningId, setRunningId] = useState<string>("");
   const [gameCode, setGameCode] = useState<string>("");
-  const [players, setPlayers] = useState<string[]>([
-    "Emily Johnson",
-    "Michael Smith",
-    "Olivia Brown",
-    "Ethan Martinez",
-    "Ava Anderson",
-    "Noah Taylor",
-    "Isabella Jackson",
-    "Liam Thompson",
-    "Sophia Harris",
-    "Mason Wilson",
-    "Charlotte White",
-    "William Davis",
-    "Amelia Lee",
-    "Benjamin Clark",
-    "Mia Rodriguez",
-  ]);
+  const [players, setPlayers] = useState<string[]>([]);
+  const [playersLoad, setPlayersLoad] = useState<boolean>(false);
 
-  useEffect(() => {
-    // const headers = {
-    //   Authorization: token.AUTHORIZATION,
-    // };
-    const openWaitingRoom = async () => {
-      const data = {
-        gameId: gameId,
-        userId: token.AUTHORIZATION,
-      };
-      const url = `${server}/running_game/open_waiting_room`;
-      await axios
-        .post(url, data)
-        .then((response) => {
-          console.log(response.data);
-          setGameName(response.data.value.name);
-          setGameCode(response.data.value.code);
-          setRunningId(response.data.value.runningId);
-          setLoading(false);
-        })
-        .catch((e) => alert(e));
+  const openWaitingRoom = async () => {
+    const data = {
+      gameId: gameId,
+      userId: token.AUTHORIZATION,
     };
-
-    openWaitingRoom();
-  }, []);
-
-  // Response.data = {
-  //   "players": [
-  //     {"name": player1 name, ...},
-  //     {"name": player2 name, ...},
-  //     .
-  //     .
-  //     .
-  //   ],
-  //   .
-  //   .
-  //   .
-  // }
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
+    const url = `${server}/running_game/open_waiting_room`;
+    await axios
+      .post(url, data, { headers })
+      .then((response) => {
+        console.log(response.data);
+        setGameName(response.data.value.name);
+        setGameCode(response.data.value.code);
+        setRunningId(response.data.value.runningId);
+        setLoading(false);
+        setPlayersLoad(!playersLoad);
+      })
+      .catch((e) => alert(e));
+  };
 
   const getPlayers = async () => {
-    const url = "url";
-    /*
+    console.log(players);
+    const url = `${server}/running_game/get_lean_running_game_instance/${runningId}`;
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
     await axios
-      .get(url)
-      .then((response) => setPlayers(response.data.players))
-      .catch((error) => alert(error));
-      */
+      .get(url, { headers })
+      .then((response) =>
+        setPlayers(
+          response.data.value.mobilePlayers.map((p: { name: string }) => p.name)
+        )
+      )
+      .catch((error) => alert(error))
+      .finally(() => setPlayersLoad(!playersLoad));
   };
 
   useEffect(() => {
-    const interval = setInterval(() => getPlayers(), 1000);
-    return () => clearInterval(interval);
+    openWaitingRoom();
   }, []);
+
+  useEffect(() => {
+    runningId !== "" && !startingGame && setTimeout(getPlayers, 1000);
+  }, [playersLoad]);
 
   const startGame = async () => {
     setStartingGame(true);
@@ -106,7 +79,7 @@ export const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
       .then((response) => console.log(response.data))
       .catch((e) => alert(e));
 
-    toGame(runningId);
+    runningId && toGame(runningId);
   };
 
   return (
@@ -127,21 +100,23 @@ export const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
             <div>
               <div className="flex flex-row">
                 <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-                  <div className="text-4xl text-brown font-bold">{`${gameName} - Waiting Room`}</div>
-                  <div className="mb-3"></div>
+                  <div className="text-4xl text-brown font-bold mb-3">{`${gameName} - Waiting Room`}</div>
                 </div>
               </div>
-              <div className="p-4"></div>
-              <div className="flex p-4 text-brown text-6xl font-bold justify-center">{`Game Code: ${gameCode}`}</div>
-              <div className="p-4">
-                <button
-                  className="p-2.5 w-[100%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
-                  type="button"
-                  onClick={startGame}
-                >
-                  START GAME
-                </button>
+              <div className="flex p-8 text-brown text-6xl font-bold justify-center">{`Game Code: ${gameCode}`}</div>
+              <div className="p-4 text-brown text-4xl">Players:</div>
+              <div className="p-4 text-2xl text-brown flex flex-wrap ">
+                {players.map(
+                  (p) => p && <div className="m-[20px]" key={p}>{`${p}`}</div>
+                )}
               </div>
+              <button
+                className="p-2.5 w-[100%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                type="button"
+                onClick={startGame}
+              >
+                START GAME
+              </button>
             </div>
           )}
         </div>
