@@ -16,145 +16,12 @@ import axios, { AxiosResponse } from "axios";
 import Loading from "../components/loading";
 import { server } from "../main";
 
-/*
-export interface IGame {
-  id: number;
-  title: string;
-  description: string;
-  questionaire: string;
-  map: string;
-  numGroups: number;
-  status: "created" | "ended";
-}
-
-const games: IGame[] = [
-  {
-    id: 1,
-    title: "Exciting Adventure",
-    description: "Embark on a thrilling journey through uncharted territories.",
-    questionaire: "Adventure Questions",
-    map: "Mystery Island",
-    numGroups: 4,
-    status: "created",
-  },
-  {
-    id: 2,
-    title: "Space Odyssey",
-    description:
-      "Explore the vast expanse of space and encounter alien civilizations.",
-    questionaire: "Space Trivia",
-    map: "Galaxy Alpha",
-    numGroups: 5,
-    status: "ended",
-  },
-  {
-    id: 3,
-    title: "Medieval Quest",
-    description:
-      "Step back in time and experience the wonders and perils of the medieval era.",
-    questionaire: "Medieval History",
-    map: "Kingdom of Camelot",
-    numGroups: 3,
-    status: "created",
-  },
-  {
-    id: 4,
-    title: "Underwater Expedition",
-    description:
-      "Dive into the depths of the ocean and discover hidden treasures.",
-    questionaire: "Marine Biology",
-    map: "Coral Reef",
-    numGroups: 6,
-    status: "ended",
-  },
-  {
-    id: 5,
-    title: "Jungle Safari",
-    description:
-      "Embark on an adventure through dense jungles and encounter exotic wildlife.",
-    questionaire: "Jungle Trivia",
-    map: "Amazon Rainforest",
-    numGroups: 2,
-    status: "created",
-  },
-  {
-    id: 6,
-    title: "Arctic Expedition",
-    description:
-      "Brave the icy wilderness of the Arctic and witness breathtaking landscapes.",
-    questionaire: "Arctic Wildlife",
-    map: "Frozen Tundra",
-    numGroups: 4,
-    status: "ended",
-  },
-  {
-    id: 7,
-    title: "Fantasy Quest",
-    description:
-      "Enter a world of magic and mythical creatures on an epic quest.",
-    questionaire: "Fantasy Lore",
-    map: "Realm of Eldoria",
-    numGroups: 3,
-    status: "created",
-  },
-  {
-    id: 8,
-    title: "Ancient Civilization",
-    description:
-      "Unravel the mysteries of ancient civilizations and their lost treasures.",
-    questionaire: "Archaeology",
-    map: "Land of the Pharaohs",
-    numGroups: 5,
-    status: "ended",
-  },
-  {
-    id: 9,
-    title: "Wild West Adventure",
-    description:
-      "Experience the lawless frontier of the Wild West and ride into the sunset.",
-    questionaire: "Western Trivia",
-    map: "Frontier Town",
-    numGroups: 2,
-    status: "created",
-  },
-  {
-    id: 10,
-    title: "Pirate Treasure Hunt",
-    description:
-      "Sail the high seas in search of buried pirate treasure and fend off rival crews.",
-    questionaire: "Pirate Lore",
-    map: "Caribbean Islands",
-    numGroups: 6,
-    status: "ended",
-  },
-];
-*/
-
 export interface IProps {
   token: Token;
   toMain: () => void;
   username: string | undefined;
   toWaitingRoom: (gameId: string) => void;
   pages: Pages;
-}
-
-export interface FlatGame {
-  description: string;
-  gameTime: string;
-  groupAssignmentProtocol: string;
-  host: string;
-  id: string;
-  mapId: string;
-  mapName: string;
-  name: string;
-  numberOfGroups: string;
-  questionTimeLimit: string;
-  questionnaireId: string;
-  questionnaireName: string;
-  shared: string;
-  status: string;
-  timeCreated: string;
-  timeLastUpdated: string;
 }
 
 export const SavedGames = ({
@@ -166,14 +33,15 @@ export const SavedGames = ({
 }: IProps) => {
   // Mock data for saved games
   const [showEndedGames, setShowEndedGames] = useState<boolean>(false);
-  const [games, setGames] = useState<FlatGame[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadAllGames = async () => {
       const url = `${server}/game/get_all_games`;
+      const headers = { AUTHORIZATION: token.AUTHORIZATION };
       try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, { headers });
         setGames(response.data.value);
         setLoading(false);
       } catch (error) {
@@ -192,7 +60,7 @@ export const SavedGames = ({
     toMain();
   };
 
-  const showGame = (game: FlatGame, index: number) => {
+  const showGame = (game: Game, index: number) => {
     let bgColor = index % 2 === 0 ? "#fafafa" : "#e5e5e5";
     return (
       <div
@@ -207,17 +75,17 @@ export const SavedGames = ({
           <div className="p-1 w-[35%] flex flex-col justify-between ml-8 mr-8">
             <div className="flex ">
               <div className="mr-4">Questionaire:</div>
-              <div className="font-bold">{`${game.questionnaireName}`}</div>
+              <div className="font-bold">{`${game.questionnaire.name}`}</div>
             </div>
             <div className="flex">
               <div className="mr-4">Map:</div>
-              <div className="font-bold">{`${game.mapName}`}</div>
+              <div className="font-bold">{`${game.map.name}`}</div>
             </div>
           </div>
           <div className="p-1 w-[35%] flex flex-col justify-between">
             <div className="flex">
               <div className="mr-4">Groups:</div>
-              <div className="font-bold">{`${game.numberOfGroups}`}</div>
+              <div className="font-bold">{`${game.configuration.numberOfGroups}`}</div>
             </div>
             <div className="flex">
               <div className="mr-4">Status:</div>
@@ -243,10 +111,7 @@ export const SavedGames = ({
     );
   };
 
-  const gamesComperator: (a: FlatGame, b: FlatGame) => number = (
-    a: FlatGame,
-    b: FlatGame
-  ) =>
+  const gamesComperator: (a: Game, b: Game) => number = (a: Game, b: Game) =>
     a.status === b.status
       ? a.name.localeCompare(b.name)
       : a.status === "created"

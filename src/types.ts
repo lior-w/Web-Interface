@@ -61,9 +61,8 @@ export interface QuestionnaireQuestion {
 
 export interface User {
   id: string;
-  username: string;
-  email: string;
-  permissions: string;
+  name: string;
+  password: string;
 }
 
 export interface Map {
@@ -77,17 +76,30 @@ export interface Game {
   id: string;
   name: string;
   host: User;
-  description: string;
-  questionnaire: Questionnaire;
-  map: Map;
-  numberOfGroups: number;
   status: string;
-  groupAssignmentProtocol: string;
-  gameTime: number;
-  questionTimeLimit: number;
+  timeCreated: string;
+  timeLastUpdated: string;
+  description: string;
   shared: boolean;
-  runningId: string;
-  tiles: Tile[];
+  configuration: GameConfiguration;
+  map: flatMap;
+  questionnaire: flatQuestionnaire;
+  startingPositions: FlatTile[];
+}
+
+export interface flatMap {
+  id: string;
+  name: string;
+}
+
+export interface flatQuestionnaire {
+  id: string;
+  name: string;
+}
+
+export interface FlatTile {
+  name: string;
+  id: string;
 }
 
 export interface RunningTile {
@@ -105,13 +117,6 @@ export interface Tile {
   neighbors: NeighborTile[];
 }
 
-export interface FlatTile {
-  id: string;
-  name: string;
-  tileType: string;
-  dimensions: string;
-  group: number;
-}
 
 export interface NeighborTile {
   id: string;
@@ -129,4 +134,14 @@ export interface Group {
   id: string;
   number: number;
   score: number;
+}
+
+export interface GameConfiguration {
+  canReconquerTiles: boolean;
+  multipleQuestionsPerTile: boolean;
+  simultaneousConquering: boolean;
+  groupAssignmentProtocol: string;
+  gameTime: number;
+  numberOfGroups: number;
+  questionTimeLimit: number;
 }

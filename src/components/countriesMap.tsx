@@ -34,11 +34,11 @@ export const CountriesMapComp = ({
   const [runningTiles, setRunningTiles] = useState<RunningTile[]>([]);
   const [myInterval, setMyInterval] = useState<any>();
 
-  const url = `${server}/running_game/refresh_map/runningGameId=${runningGameId}&userId=${token.AUTHORIZATION}`;
-
   const getMapChanges = async () => {
+    const url = `${server}/running_game/refresh_map/runningGameId=${runningGameId}&userId=${token.AUTHORIZATION}`;
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
     await axios
-      .get(url)
+      .get(url, { headers })
       .then((response) => {
         setRunningTiles(response.data.value);
         !mapLoaded && setMapLoaded(true);
@@ -106,7 +106,7 @@ export const CountriesMapComp = ({
             <svg
               className="p-8 max-h-[800px]"
               height={"75%"}
-              viewBox={"150 30 490 520"}
+              viewBox={"350 -20 400 600"}
               width={"85%"}
               id="svg"
               strokeLinejoin="round"

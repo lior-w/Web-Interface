@@ -71,10 +71,10 @@ export const SelectStartingPositions = ({
   return (
     <div>
       <svg
-        className="p-8 max-h-[800px]"
-        height={"100%"}
-        viewBox={"180 20 450 570"}
-        width={"80%"}
+        className=" max-h-[800px] border-1 border-brown rounded-lg"
+        height={"auto"}
+        viewBox={"350 -20 400 600"}
+        width={"auto"}
         id="svg"
         strokeLinejoin="round"
         stroke="#000"
@@ -91,6 +91,9 @@ export const SelectStartingPositions = ({
             />
           ))}
       </svg>
+      <div className="flex justify-end text-lg text-brown">{`${
+        selectedTiles.filter((t) => t !== "").length
+      }/${numberOfGroups}`}</div>
     </div>
   );
 };

@@ -25,8 +25,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+
 import { EditQuestion } from "./editQuestion";
 import { DeleteQuestion } from "./deleteQuestion";
+import PopImage from "./popImage";
 
 const DEFAULT_PAGE_SIZE = 5;
 const DEFAULT_DIFFICULTY = 0;
@@ -403,11 +405,7 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
                     </td>
                     <td>{q.difficulty}</td>
                     <td>{q.tags}</td>
-                    <td>
-                      {q.image && (
-                        <img src={`data:image/png;base64,${q.image}`} />
-                      )}
-                    </td>
+                    <td>{q.image && <PopImage img={q.image} />}</td>
                     <td className="">
                       <div>
                         <EditQuestion

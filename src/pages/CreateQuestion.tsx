@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import { GiSleepingBag } from "react-icons/gi";
 import axios from "axios";
+import { isNullOrUndefined } from "util";
 
 export interface IProps {
   token: Token;
@@ -276,26 +277,6 @@ export const CreateQuestion = ({
             <div className="mb-3"></div>
             <form className="flex flex-col" onSubmit={handleSubmit}>
               <div>
-                <div>Uplaod Image:</div>
-                <input type="file" onChange={handleFileChange} />
-                <img src={file} />
-              </div>
-              <TextField
-                id="Difficulty filter"
-                sx={{
-                  background: "#FFFFFF",
-                  width: 600,
-                  marginTop: 2,
-                }}
-                className=""
-                label="Question"
-                variant="filled"
-                onChange={onQuestionChange}
-                value={question}
-                required
-              />
-
-              <div className="flex flex-col">
                 <TextField
                   id="Difficulty filter"
                   sx={{
@@ -304,12 +285,44 @@ export const CreateQuestion = ({
                     marginTop: 2,
                   }}
                   className=""
-                  label="Answer"
+                  label="Question"
                   variant="filled"
-                  onChange={onCorrectAnswerChange}
-                  value={correctAnswer}
+                  onChange={onQuestionChange}
+                  value={question}
                   required
                 />
+
+                <div className="flex flex-col">
+                  <TextField
+                    id="Difficulty filter"
+                    sx={{
+                      background: "#FFFFFF",
+                      width: 600,
+                      marginTop: 2,
+                    }}
+                    className=""
+                    label="Answer"
+                    variant="filled"
+                    onChange={onCorrectAnswerChange}
+                    value={correctAnswer}
+                    required
+                  />
+                  <div className="text-xl text-brown mb-2 mt-2">{`Uplaod Image (optional)`}</div>
+                  <div className="flex">
+                    <input type="file" onChange={handleFileChange} />
+                    {file && (
+                      <button
+                        onClick={() => {
+                          setFile(undefined);
+                          setImage(undefined);
+                        }}
+                      >
+                        {"(reset)"}
+                      </button>
+                    )}
+                  </div>
+                  <img src={file} />
+                </div>
                 <div className="flex ml-[10px] mt-[20px]">
                   <FormControlLabel
                     control={

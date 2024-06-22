@@ -26,8 +26,9 @@ import { SelectStartingPositions } from "../components/startingPositions";
 
 const steps = [
   "Enter Title and Description",
-  "Select Questionnaire and Question Time Limit",
-  "Select Map and Number of Groups",
+  "Select Questionnaire",
+  "Select Map",
+  "Configurations",
   "Select Starting Points",
 ];
 
@@ -49,7 +50,7 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
   const [numberOfGroups, setNumberOfGroups] = useState<number>(2);
   const [gameTime, setGameTime] = useState<number>(60);
   const [isShared, setIsShared] = useState<boolean>(false);
-  const [questionTimeLimit, setQuestionTimeLimit] = useState<number>(0);
+  const [questionTimeLimit, setQuestionTimeLimit] = useState<number>(1);
   const [startingPositions, setStartingPositions] = useState<string[]>([
     "",
     "",
@@ -57,6 +58,8 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
     "",
     "",
   ]);
+  const [multipleQuestionsPerTile, setMultipleQuestionsPerTile] =
+    useState<boolean>(false);
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -81,6 +84,9 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
       isShared: isShared,
       questionTimeLimit: questionTimeLimit,
       startingPositions: startingPositions,
+      canReconquerTiles: false,
+      multipleQuestionsPerTile: multipleQuestionsPerTile,
+      simultaneousConquering: false,
     };
 
     const headers = {
@@ -102,11 +108,18 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
     setDescription(e.target.value);
   };
 
-  const handleSwitchChange = (
+  const handleIsSharedChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
     setIsShared(checked);
+  };
+
+  const handleMultipleQuestionsPerTileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    setMultipleQuestionsPerTile(checked);
   };
 
   const onQuestionTimeLimnitChange = (e: SelectChangeEvent) => {
@@ -139,7 +152,7 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
     setStartingPositions(selected);
   };
 
-  const step3 = () => {
+  const step4 = () => {
     return (
       <SelectStartingPositions
         handleChangeInPage={handleChangeStartingPositions}
@@ -150,32 +163,114 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
       ></SelectStartingPositions>
     );
   };
+
+  const step3 = () => {
+    return (
+      <div className="flex justify-center">
+        <div className="border-1 border-brown p-[20px] rounded-lg w-[auto] flex flex-col">
+          <div className="mb-[20px]">
+            <FormControl variant="standard" sx={{ width: 160 }}>
+              <InputLabel id="label1" sx={{ fontSize: 20, fontWeight: 700 }}>
+                Game time
+              </InputLabel>
+              <Select
+                labelId="label1"
+                label="Game Time"
+                value={gameTime.toString()}
+                onChange={onGameTimeChange}
+                variant="standard"
+              >
+                {["15", "30", "45", "60"].map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {`${option} min`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl
+              variant="standard"
+              sx={{ width: 160, marginRight: 1, marginBottom: 4 }}
+            >
+              <InputLabel id="label1" sx={{ fontSize: 20, fontWeight: 700 }}>
+                Question Time Limit
+              </InputLabel>
+              <Select
+                labelId="label1"
+                label="Question Time Limit"
+                value={questionTimeLimit.toString()}
+                onChange={onQuestionTimeLimnitChange}
+                variant="standard"
+              >
+                {["1", "2", "3", "4", "5"].map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {`${option} min`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl
+              variant="standard"
+              sx={{ width: 160, marginRight: 1, marginBottom: 4 }}
+            >
+              <InputLabel id="label2" sx={{ fontSize: 20, fontWeight: 700 }}>
+                Number of Groups
+              </InputLabel>
+              <Select
+                labelId="label2"
+                label="Number of Groups"
+                value={numberOfGroups.toString()}
+                onChange={handleChangeNumberOfGroups}
+                variant="standard"
+              >
+                {["2", "3", "4", "5"].map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {`${option}`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="flex flex-col justify-center">
+            <div className="">
+              <FormControlLabel
+                control={
+                  <Switch checked={isShared} onChange={handleIsSharedChange} />
+                }
+                label={
+                  <div className="text-xl text-brown font-bold ml-[30px]">
+                    Shared
+                  </div>
+                }
+              />
+            </div>
+            <div className="">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={multipleQuestionsPerTile}
+                    onChange={handleMultipleQuestionsPerTileChange}
+                  />
+                }
+                label={
+                  <div className="text-xl text-brown font-bold ml-[30px]">
+                    Multiple questions per tile
+                  </div>
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const step2 = () => {
     return (
       <div>
-        <div>
-          <FormControl
-            variant="standard"
-            sx={{ width: 160, marginRight: 1, marginBottom: 4 }}
-          >
-            <InputLabel id="label2" sx={{ fontSize: 20, fontWeight: 700 }}>
-              Number of Groups
-            </InputLabel>
-            <Select
-              labelId="label2"
-              label="Number of Groups"
-              value={numberOfGroups.toString()}
-              onChange={handleChangeNumberOfGroups}
-              variant="standard"
-            >
-              {["2", "3", "4", "5"].map((option) => (
-                <MenuItem key={option} value={option}>
-                  {`${option}`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
         <SelectMap
           handleChangeInPage={handleChangeSelectedMap}
           selectedId={mapId}
@@ -188,29 +283,6 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
   const step1 = () => {
     return (
       <div>
-        <div>
-          <FormControl
-            variant="standard"
-            sx={{ width: 160, marginRight: 1, marginBottom: 4 }}
-          >
-            <InputLabel id="label1" sx={{ fontSize: 20, fontWeight: 700 }}>
-              Question Time Limit
-            </InputLabel>
-            <Select
-              labelId="label1"
-              label="Question Time Limit"
-              value={questionTimeLimit.toString()}
-              onChange={onQuestionTimeLimnitChange}
-              variant="standard"
-            >
-              {["1", "2", "3", "4", "5"].map((option) => (
-                <MenuItem key={option} value={option}>
-                  {`${option} min`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
         <SelectQuestionnaire
           handleChangeInPage={handleChangeSelectedQuestionnaires}
           selectedId={questionnaireId}
@@ -222,7 +294,7 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
 
   const step0 = () => {
     return (
-      <div className="flex flex-col w-[600px] mt-[50px] rounded-lg border-brown">
+      <div className="flex flex-col w-[auto] mt-[50px] rounded-lg border-1 p-[20px] border-brown">
         <TextField
           id="Title"
           sx={{
@@ -261,38 +333,6 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
             Description length limit is 250 characters
           </div>
         )}
-        <div className="flex justify-between items-end">
-          <div className="">
-            <FormControlLabel
-              control={
-                <Switch value={isShared} onChange={handleSwitchChange} />
-              }
-              label={
-                <div className="text-xl text-brown font-bold ml-[30px]">
-                  Shared
-                </div>
-              }
-            />
-          </div>
-          <FormControl variant="standard" sx={{ width: 160 }}>
-            <InputLabel id="label1" sx={{ fontSize: 20, fontWeight: 700 }}>
-              Game time
-            </InputLabel>
-            <Select
-              labelId="label1"
-              label="Question Time Limit"
-              value={gameTime.toString()}
-              onChange={onGameTimeChange}
-              variant="standard"
-            >
-              {["15", "30", "45", "60"].map((option) => (
-                <MenuItem key={option} value={option}>
-                  {`${option} min`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
       </div>
     );
   };
@@ -373,7 +413,27 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
                 Back
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleSubmit} disabled={false}>
+              <Button onClick={handleNext} disabled={false}>
+                Next
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
+        {activeStep === 4 && (
+          <React.Fragment>
+            <Typography sx={{ mt: 4 }}>{step4()}</Typography>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button
+                onClick={handleSubmit}
+                disabled={
+                  startingPositions.filter((p) => p !== "").length !==
+                  numberOfGroups
+                }
+              >
                 Finish
               </Button>
             </Box>
