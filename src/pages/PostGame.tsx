@@ -58,3 +58,6 @@ export const PostGame = ({ token, toMain, runningGameId }: IProps) => {
     </Container>
   );
 };
+
+/*
+ */
