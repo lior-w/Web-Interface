@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Question, Questionnaire, Token } from "../types";
+import { Questionnaire, Token } from "../types";
 import { server } from "../main";
 import axios from "axios";
 import Checkbox from "@mui/material/Checkbox";
@@ -9,23 +9,14 @@ import { FaAngleDoubleRight as Last } from "react-icons/fa";
 import { FaAngleDoubleLeft as First } from "react-icons/fa";
 import Tooltip from "@mui/material/Tooltip";
 import BasicSelect from "../components/selectTool";
-import {
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  TextField,
-} from "@mui/material";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { CircularProgress, TextField } from "@mui/material";
 import { GrFilter } from "react-icons/gr";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const DEFAULT_PAGE_SIZE = 5;
-const DEFAULT_DIFFICULTY = 0;
 
 export interface IProps {
   handleChangeInPage: (selectedId: string) => void;
@@ -66,8 +57,9 @@ export const SelectQuestionnaire = ({
       name: name,
       id: id,
     };
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
     await axios
-      .get(url, { params })
+      .get(url, { params: params, headers: headers })
       .then((response) => {
         setQuestionnaires(response.data.value.content);
         setTotalElements(response.data.value.totalElements);

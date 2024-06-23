@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Container from "../components/container";
-import { IoArrowForwardCircle } from "react-icons/io5";
 import axios from "axios";
 import { Pages, Token } from "../types";
 import { server } from "../main";
@@ -86,13 +85,7 @@ export const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
                 required
               />
               <div className="m-2.5"></div>
-              <button
-                className="min-w-[135px] text-brown font-bold cursor-pointer hover:text-amber-700"
-                type="button"
-                onClick={handleForgotPassword}
-              >
-                Forgot Password?
-              </button>
+
               <div className="m-1.5"></div>
               <div className="w-[100%] flex flex-col justify-center items-center">
                 <button
@@ -112,3 +105,13 @@ export const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
     </Container>
   );
 };
+
+/*
+              <button
+                className="min-w-[135px] text-brown font-bold cursor-pointer hover:text-amber-700"
+                type="button"
+                onClick={handleForgotPassword}
+              >
+                Forgot Password?
+              </button>
+*/

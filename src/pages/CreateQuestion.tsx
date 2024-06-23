@@ -1,29 +1,20 @@
 import React, { ChangeEvent, useState } from "react";
 import Container from "../components/container";
-import { IoArrowForwardCircle } from "react-icons/io5";
-import { FaRegTrashCan } from "react-icons/fa6";
 import NumbersRating from "../components/starRating";
 import { Token, Question, Pages } from "../types";
 import { server } from "../main";
-import Navigation from "../components/navigation";
 import AddIcon from "@mui/icons-material/Add";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import {
-  Box,
-  Chip,
   Fab,
-  FormControl,
   FormControlLabel,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
   Switch,
   TextField,
 } from "@mui/material";
-import { GiSleepingBag } from "react-icons/gi";
 import axios from "axios";
-import { isNullOrUndefined } from "util";
 
 export interface IProps {
   token: Token;
@@ -62,7 +53,7 @@ export const CreateQuestion = ({
   const newQuestionJSON = () => {
     return {
       question: question,
-      isMultipleChoice: multipleChoice,
+      multipleChoice: multipleChoice,
       correctAnswer: correctAnswer,
       incorrectAnswers: incorrectAnswers,
       tags: tags,
@@ -77,8 +68,9 @@ export const CreateQuestion = ({
       setErrorMessage("Please select question difficulty");
     } else {
       const url = `${server}/question/add_question`;
+      const headers = { AUTHORIZATION: token.AUTHORIZATION };
       await axios
-        .post(url, newQuestionJSON())
+        .post(url, newQuestionJSON(), { headers })
         .then((response) => {
           alert("New question has been created successfuly");
           toMain();
@@ -88,6 +80,7 @@ export const CreateQuestion = ({
   };
 
   const addTag = (tag: string) => {
+    console.log(multipleChoice);
     setTags(tags.concat(tag));
     setDeletabels(deletables.concat(false));
   };
@@ -327,7 +320,7 @@ export const CreateQuestion = ({
                   <FormControlLabel
                     control={
                       <Switch
-                        value={multipleChoice}
+                        checked={multipleChoice}
                         onChange={handleSwitchChange}
                       />
                     }

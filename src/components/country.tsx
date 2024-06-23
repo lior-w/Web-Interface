@@ -1,4 +1,4 @@
-import { Tile, RunningTile, Group } from "../types";
+import { RunningTile } from "../types";
 
 export interface IProps {
   onClick: () => void;

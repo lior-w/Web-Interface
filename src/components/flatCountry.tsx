@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Tile, RunningTile, Group } from "../types";
+import { Tile } from "../types";
 
 export interface IProps {
   onClick: () => void;

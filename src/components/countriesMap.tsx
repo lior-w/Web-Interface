@@ -1,15 +1,6 @@
-import * as React from "react";
 import { useEffect, useState } from "react";
-import {
-  CountriesMap,
-  Country,
-  CountryStatus,
-  Tile,
-  Token,
-  RunningTile,
-} from "../types";
+import { CountriesMap, Token, RunningTile } from "../types";
 import { CountryComp } from "./country";
-import Container from "./container";
 import axios from "axios";
 import Loading from "./loading";
 import { server } from "../main";

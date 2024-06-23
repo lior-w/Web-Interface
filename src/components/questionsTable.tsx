@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Question } from "../types";
+import { Question, Token } from "../types";
 import { server } from "../main";
 import axios from "axios";
 import Checkbox from "@mui/material/Checkbox";
@@ -19,25 +19,22 @@ import {
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { GrFilter } from "react-icons/gr";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 
 import { EditQuestion } from "./editQuestion";
 import { DeleteQuestion } from "./deleteQuestion";
 import PopImage from "./popImage";
 
 const DEFAULT_PAGE_SIZE = 5;
-const DEFAULT_DIFFICULTY = 0;
 
 export interface IProps {
+  token: Token;
   handleChangeInPage: (selected: string[]) => void;
 }
 
-export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
+export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [totalElements, setTotalElements] = useState<number>(0);
@@ -78,8 +75,12 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
     difficulty: string,
     content: string
   ) => {
+    console.log("fetchPage");
+    console.log(token.AUTHORIZATION);
+    console.log("fetchPage");
     setLoadingPage(true);
     const url = `${server}/question/filter_questions`;
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
     const params = {
       page: pageNum,
       size: size,
@@ -87,7 +88,7 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
       content: content,
     };
     await axios
-      .get(url, { params })
+      .get(url, { params: params, headers: headers })
       .then((response) => {
         setQuestions(response.data.value.content);
         setTotalElements(response.data.value.totalElements);
@@ -331,100 +332,106 @@ export const SelectQuestions = ({ handleChangeInPage }: IProps) => {
               </tr>
             </thead>
             <tbody>
-              {questions.map((q, i) => {
-                return (
-                  <tr className="border-y-2">
-                    <td className="flex items-center text-3xl">
-                      <div>
-                        <Checkbox
-                          onChange={() => handleChangeCheckBox(q.id)}
-                          checked={
-                            selectedQuestions.find((qid) => qid === q.id) !==
-                            undefined
-                          }
-                        ></Checkbox>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="w-[90%]">
-                        {
-                          <div>
-                            <div>{q.question}</div>
-                            {deleted.find((id) => id === q.id) !== undefined ? (
-                              <div>{"(Deleted)"}</div>
-                            ) : edited.find((id) => id === q.id) !==
+              {questions
+                .filter(
+                  (q) => deleted.find((qid) => qid === q.id) === undefined
+                )
+                .map((q, i) => {
+                  return (
+                    <tr className="border-y-2">
+                      <td className="flex items-center text-3xl">
+                        <div>
+                          <Checkbox
+                            onChange={() => handleChangeCheckBox(q.id)}
+                            checked={
+                              selectedQuestions.find((qid) => qid === q.id) !==
+                              undefined
+                            }
+                          ></Checkbox>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="w-[90%]">
+                          {
+                            <div>
+                              <div>{q.question}</div>
+                              {deleted.find((id) => id === q.id) !==
                               undefined ? (
-                              <div>{"(Edited)"}</div>
-                            ) : (
-                              <div></div>
-                            )}
-                          </div>
-                        }
-                      </div>
-                    </td>
-                    <td className="flex">
-                      <div>
-                        {q.multipleChoice === false && (
-                          <div className="pl-[17px]">
-                            {q.answers[0].answerText}
-                          </div>
-                        )}
-                        {q.multipleChoice === true && (
-                          <Accordion square={true} sx={{ boxShadow: "none" }}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              <div className="w-[100%]">
-                                {
-                                  q.answers.find(
-                                    (answer) => answer.correct === true
-                                  )?.answerText
-                                }
-                              </div>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                              <div>
-                                <div className="font-bold">
-                                  Incorrect answers
+                                <div>{"(Deleted)"}</div>
+                              ) : edited.find((id) => id === q.id) !==
+                                undefined ? (
+                                <div>{"(Edited)"}</div>
+                              ) : (
+                                <div></div>
+                              )}
+                            </div>
+                          }
+                        </div>
+                      </td>
+                      <td className="flex">
+                        <div>
+                          {q.multipleChoice === false && (
+                            <div className="pl-[17px]">
+                              {q.answers[0].answerText}
+                            </div>
+                          )}
+                          {q.multipleChoice === true && (
+                            <Accordion square={true} sx={{ boxShadow: "none" }}>
+                              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                <div className="w-[100%]">
+                                  {
+                                    q.answers.find(
+                                      (answer) => answer.correct === true
+                                    )?.answerText
+                                  }
                                 </div>
+                              </AccordionSummary>
+                              <AccordionDetails>
                                 <div>
-                                  {q.answers
-                                    .filter(
-                                      (answer) => answer.correct === false
-                                    )
-                                    .map((ans) => (
-                                      <div>{`${ans.answerText}`}</div>
-                                    ))}
+                                  <div className="font-bold">
+                                    Incorrect answers
+                                  </div>
+                                  <div>
+                                    {q.answers
+                                      .filter(
+                                        (answer) => answer.correct === false
+                                      )
+                                      .map((ans) => (
+                                        <div>{`${ans.answerText}`}</div>
+                                      ))}
+                                  </div>
                                 </div>
-                              </div>
-                            </AccordionDetails>
-                          </Accordion>
-                        )}
-                      </div>
-                    </td>
-                    <td>
-                      {q.multipleChoice ? "multiple choice" : "open question"}
-                    </td>
-                    <td>{q.difficulty}</td>
-                    <td>{q.tags}</td>
-                    <td>{q.image && <PopImage img={q.image} />}</td>
-                    <td className="">
-                      <div>
-                        <EditQuestion
-                          q={q}
-                          onEdit={(id) => setEdited(edited.concat(id))}
-                        ></EditQuestion>
-                      </div>
-                    </td>
-                    <td className="">
-                      <div>
-                        <DeleteQuestion
-                          q={q}
-                          onDelete={(id) => setDeleted(deleted.concat(id))}
-                        ></DeleteQuestion>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                              </AccordionDetails>
+                            </Accordion>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        {q.multipleChoice ? "multiple choice" : "open question"}
+                      </td>
+                      <td>{q.difficulty}</td>
+                      <td>{q.tags}</td>
+                      <td>{q.image && <PopImage img={q.image} />}</td>
+                      <td className="">
+                        <div>
+                          <EditQuestion
+                            q={q}
+                            onEdit={(id) => setEdited(edited.concat(id))}
+                          ></EditQuestion>
+                        </div>
+                      </td>
+                      <td className="">
+                        <div>
+                          <DeleteQuestion
+                            token={token}
+                            q={q}
+                            onDelete={(id) => setDeleted(deleted.concat(id))}
+                          ></DeleteQuestion>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>

@@ -1,18 +1,9 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
-import { ThemeContext } from "@emotion/react";
 import Switch from "@mui/material/Switch";
-import {
-  Token,
-  User,
-  Map,
-  Question,
-  Questionnaire,
-  Game,
-  Pages,
-} from "../types";
-import axios, { AxiosResponse } from "axios";
+import { Token, Game, Pages } from "../types";
+import axios from "axios";
 import Loading from "../components/loading";
 import { server } from "../main";
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import axios from "axios";
-import { Game, Token } from "../types";
+import { Token } from "../types";
 import Loading from "../components/loading";
 import { server } from "../main";
 

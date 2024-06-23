@@ -1,12 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Map,
-  Question,
-  Questionnaire,
-  RunningTile,
-  Tile,
-  Token,
-} from "../types";
+import { useMemo, useState } from "react";
+import { Map, Token } from "../types";
 import { FlatCountry } from "./flatCountry";
 
 export interface IProps {

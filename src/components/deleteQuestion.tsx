@@ -1,23 +1,22 @@
 import * as React from "react";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Question } from "../types";
-import BasicSelect from "./selectTool";
+import { Question, Token } from "../types";
 import { server } from "../main";
 import axios from "axios";
 
 export interface IProps {
+  token: Token;
   q: Question;
   onDelete: (id: string) => void;
 }
 
-export function DeleteQuestion({ q, onDelete }: IProps) {
+export function DeleteQuestion({ token, q, onDelete }: IProps) {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleClickOpen = () => {
@@ -30,12 +29,13 @@ export function DeleteQuestion({ q, onDelete }: IProps) {
 
   const handleSubmit = async () => {
     const url = `${server}/question/delete_question`;
-    const params = {
+    const data = {
       id: q.id,
     };
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
 
     await axios
-      .delete(url, { params })
+      .delete(url, { data: data, headers: headers })
       .then(() => {
         alert("Question deleted successfuly");
         onDelete(q.id);

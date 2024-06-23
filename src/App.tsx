@@ -1,6 +1,7 @@
+import { Dashboard } from "./pages/dashboard";
+/*
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { Dashboard } from "./pages/dashboard";
 import { CreateGame } from "./pages/CreateGame";
 import { CreateQuestion } from "./pages/CreateQuestion";
 import { CreateQuestionaire } from "./pages/CreateQuestionaire";
@@ -12,6 +13,7 @@ import { SavedGames } from "./pages/SavedGames";
 import { WaitingRoom } from "./pages/WaitingRoom";
 import { Page1 } from "./pages/page1";
 import { Page2 } from "./pages/page2";
+*/
 
 export const App = () => {
   return <Dashboard></Dashboard>;

@@ -1,5 +1,3 @@
-import React, { ReactNode } from "react";
-
 export interface IProps {
   date: any[];
   onChange: () => void;

@@ -1,33 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Container from "../components/container";
-import { IoArrowForwardCircle } from "react-icons/io5";
-import Grid from "@mui/material/Grid";
 import { Token, Question, Pages } from "../types";
-import { CiSquareRemove } from "react-icons/ci";
-import { CiSquarePlus } from "react-icons/ci";
 import { server } from "../main";
 import axios from "axios";
-import Checkbox from "@mui/material/Checkbox";
-import { FaAngleRight as Next } from "react-icons/fa";
-import { FaAngleLeft as Back } from "react-icons/fa";
-import { FaAngleDoubleRight as Last } from "react-icons/fa";
-import { FaAngleDoubleLeft as First } from "react-icons/fa";
-import Tooltip from "@mui/material/Tooltip";
-import SelectTool from "../components/selectTool";
-import NativeSelectComp from "../components/selectTool";
-import BasicSelect from "../components/selectTool";
-import Loading from "../components/loading";
-import {
-  CircularProgress,
-  Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { GrFilter } from "react-icons/gr";
-import { SelectChangeEvent } from "@mui/material/Select";
 import { SelectQuestions } from "../components/questionsTable";
 
 const DEFAULT_PAGE_SIZE = 5;
@@ -88,13 +64,18 @@ export const CreateQuestionaire = ({
 
   const handleSubmit = async () => {
     const url = `${server}/question/add_questionnaire`;
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
     await axios
-      .post(url, newQuestionnaireJSON())
+      .post(url, newQuestionnaireJSON(), { headers })
       .then((response) => {
         alert("New questionnaire has been created successfuly");
         toMain();
       })
       .catch((error) => alert(error));
+  };
+
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
 
   const allChecked: boolean = questions.every(
@@ -103,7 +84,7 @@ export const CreateQuestionaire = ({
   const allUnchecked: boolean = questions.every(
     (q) => selectedQuestions.find((qid) => qid === q.id) === undefined
   );
-
+  /*
   const fetchPage = async (
     pageNum: number,
     size: number,
@@ -178,9 +159,6 @@ export const CreateQuestionaire = ({
     fetchPage(0, pageSizeRequest, difficultyFilter, contentFilter);
   }, []);
 
-  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
 
   const handleChangeCheckBox = (questionId: string) => {
     selectedQuestions.find((qid) => qid === questionId) === undefined
@@ -244,7 +222,7 @@ export const CreateQuestionaire = ({
       setTypeFilter(e.target.value);
     }
   };
-
+*/
   return (
     <Container page="New Questionnaire" pages={pages} username={username}>
       <div id="page body" className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
@@ -265,15 +243,15 @@ export const CreateQuestionaire = ({
             />
           </div>
         </div>
-
-        {questions.length > 0 && (
-          <SelectQuestions
-            handleChangeInPage={handleChangeSelectedQuestions}
-          ></SelectQuestions>
-        )}
-        {questions.length === 0 && loadingPage && (
-          <Loading msg={"Loading Questions"} size={60}></Loading>
-        )}
+        <SelectQuestions
+          token={token}
+          handleChangeInPage={handleChangeSelectedQuestions}
+        ></SelectQuestions>
+        {
+          //questions.length === 0 && loadingPage && (
+          //<Loading msg={"Loading Questions"} size={60}></Loading>
+          //)
+        }
 
         <div className="mt-4 flex justify-start">
           <button

@@ -1,20 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  Answer,
-  Question,
-  Questionnaire,
-  QuestionnaireQuestion,
-} from "../types";
-import BasicSelect from "./selectTool";
+import { Question, Questionnaire, QuestionnaireQuestion } from "../types";
 import { server } from "../main";
 import axios from "axios";
 import { EditQuestion } from "./editQuestion";
