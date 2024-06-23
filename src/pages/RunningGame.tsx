@@ -7,9 +7,15 @@ export interface IProps {
   runningGameId: string;
   toMain: () => void;
   token: Token;
+  postGame: () => void;
 }
 
-export const RunningGame = ({ runningGameId, toMain, token }: IProps) => {
+export const RunningGame = ({
+  runningGameId,
+  toMain,
+  token,
+  postGame,
+}: IProps) => {
   return (
     <Container page="" pages={{}} username={undefined}>
       <CountriesMapComp
@@ -17,6 +23,7 @@ export const RunningGame = ({ runningGameId, toMain, token }: IProps) => {
         countriesMap={westUsaMap}
         toMain={toMain}
         token={token}
+        postGame={postGame}
       ></CountriesMapComp>
     </Container>
   );

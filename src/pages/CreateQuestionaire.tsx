@@ -57,7 +57,7 @@ export const CreateQuestionaire = ({
   const newQuestionnaireJSON = () => {
     return {
       title: title,
-      creatorId: token,
+      creatorId: token.AUTHORIZATION,
       questionsIds: generateQuestionsJSON(),
     };
   };

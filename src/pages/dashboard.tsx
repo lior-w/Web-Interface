@@ -12,6 +12,7 @@ import { CountriesMapComp } from "../components/countriesMap";
 import { westUsaMap } from "../maps/westUsaMap";
 import { Token, Game, Questionnaire, Pages } from "../types";
 import { server } from "../main";
+import { PostGame } from "./PostGame";
 /*
 {
   id: "",
@@ -90,6 +91,7 @@ export const Dashboard = () => {
           runningGameId={runningGameId}
           toMain={toMainPage}
           token={token}
+          postGame={() => setPage("postGame")}
         ></RunningGame>
       )}
       {page === "savedGames" && (
@@ -203,6 +205,13 @@ export const Dashboard = () => {
             "Logout",
           ])}
         ></CreateGame>
+      )}
+      {page === "postGame" && (
+        <PostGame
+          token={token}
+          toMain={toMainPage}
+          runningGameId={runningGameId}
+        ></PostGame>
       )}
     </div>
   );
