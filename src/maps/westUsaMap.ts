@@ -146,7 +146,7 @@ const countries = [
 ];
 
 export const westUsaMap: CountriesMap = {
-  name: "West USA",
+  name: "USA",
   countries: countries,
   mapSizes: westUsaSizes,
 };

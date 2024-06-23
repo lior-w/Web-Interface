@@ -95,7 +95,10 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
     const url = `${server}/game/add_game_instance`;
     await axios
       .post(url, params, { headers })
-      .then(() => alert("New game has been created successfuly"))
+      .then(() => {
+        alert("New game has been created successfuly");
+        toMain();
+      })
       .catch((error) => alert(error));
   };
 

@@ -4,6 +4,7 @@ import { CountryComp } from "./country";
 import axios from "axios";
 import Loading from "./loading";
 import { server } from "../main";
+import { PostGame } from "../pages/PostGame";
 
 const REFRESH_TIME = 1000;
 const GAME_TIME = 1000 * 60 * 45;
@@ -13,6 +14,7 @@ export interface IProps {
   runningGameId: string;
   toMain: () => void;
   token: Token;
+  postGame: () => void;
 }
 
 export const CountriesMapComp = ({
@@ -20,6 +22,7 @@ export const CountriesMapComp = ({
   runningGameId,
   toMain,
   token,
+  postGame,
 }: IProps) => {
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [runningTiles, setRunningTiles] = useState<RunningTile[]>([]);
@@ -49,9 +52,18 @@ export const CountriesMapComp = ({
     );
   }, []);
 
-  const endGame = () => {
+  const endGame = async () => {
     clearInterval(myInterval);
-    toMain();
+    const url = `${server}/running_game/end_game`;
+    const params = { gameId: runningGameId };
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
+    await axios
+      .post(url, params, { headers })
+      .then(() => {
+        alert("End of the game");
+        postGame();
+      })
+      .catch((error) => alert(error));
   };
 
   setTimeout(endGame, GAME_TIME);
