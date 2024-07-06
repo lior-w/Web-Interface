@@ -6,12 +6,10 @@ import { server } from "../main";
 
 export interface IProps {
   onLoginSuccess: (token: Token, username: string) => void;
-  onSignUp: () => void;
-  toMain: () => void;
   pages: Pages;
 }
 
-export const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
+export const Login = ({ onLoginSuccess, pages }: IProps) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -36,15 +34,7 @@ export const Login = ({ onLoginSuccess, onSignUp, toMain, pages }: IProps) => {
     console.log("finish");
   };
 
-  const handleSignUp = () => {
-    onSignUp();
-  };
-
-  const handleForgotPassword = () => {};
-
-  const handleBack = () => {
-    toMain();
-  };
+  //const handleForgotPassword = () => {};
 
   const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);

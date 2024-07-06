@@ -15,22 +15,15 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import Tags from "../components/tags";
 
 export interface IProps {
   token: Token;
-  toMain: () => void;
   username: string | undefined;
-  onSubmit: (question: Question) => void;
   pages: Pages;
 }
 
-export const CreateQuestion = ({
-  token,
-  toMain,
-  username,
-  onSubmit,
-  pages,
-}: IProps) => {
+export const CreateQuestion = ({ token, username, pages }: IProps) => {
   const [file, setFile] = useState<string>();
   const [image, setImage] = useState<string>();
   const [question, setQuestion] = useState<string>("");
@@ -44,9 +37,7 @@ export const CreateQuestion = ({
     "",
     "",
   ]);
-  const [currentTag, setCurrentTag] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
-  const [deletables, setDeletabels] = useState<boolean[]>([]);
   const [difficulty, setDifficulty] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -73,28 +64,14 @@ export const CreateQuestion = ({
         .post(url, newQuestionJSON(), { headers })
         .then((response) => {
           alert("New question has been created successfuly");
-          toMain();
+          pages["Main"]();
         })
         .catch((error) => alert(error));
     }
   };
 
-  const addTag = (tag: string) => {
-    console.log(multipleChoice);
-    setTags(tags.concat(tag));
-    setDeletabels(deletables.concat(false));
-  };
-
-  const handleAddTag = () => {
-    currentTag.length > 0 ? addTag(currentTag) : setTags(tags);
-    setCurrentTag("");
-  };
-
-  const handleDeleteTag = (index: number) => {
-    setTags(tags.slice(0, index).concat(tags.slice(index + 1)));
-    setDeletabels(
-      deletables.slice(0, index).concat(deletables.slice(index + 1))
-    );
+  const handleTagsChange = (tags: string[]) => {
+    setTags(tags);
   };
 
   const onQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,110 +94,12 @@ export const CreateQuestion = ({
         .concat(incorrectAnswers.slice(index + 1))
     );
   };
-
-  const onCurrentTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentTag(e.target.value);
-  };
-
   const onOpenClick = () => {
     setMultipleChoice(false);
   };
 
   const onMultiClick = () => {
     setMultipleChoice(true);
-  };
-
-  const twoOptions = () => {
-    return (
-      <div>
-        <button
-          className={`border-2 border-brown rounded-s-lg w-[70px] text-lg  ${
-            multipleChoice
-              ? "text-brown hover:bg-orange-300"
-              : "bg-brown text-orange-100"
-          }`}
-          type="button"
-          onClick={onOpenClick}
-        >
-          OPEN
-        </button>
-        <button
-          className={`border-2 border-brown rounded-e-lg w-[70px] text-lg ${
-            !multipleChoice
-              ? "text-brown hover:bg-orange-300"
-              : "bg-brown text-orange-100 "
-          }`}
-          type="button"
-          onClick={onMultiClick}
-        >
-          MULTI
-        </button>
-      </div>
-    );
-  };
-
-  const openQuestion = () => {
-    return (
-      <div>
-        <div className="text-lg text-brown font-bold">Answer</div>
-        <input
-          className="p-2.5 w-[100%] h-12 border-2 border-gray-300 rounded-md"
-          type="text"
-          placeholder="Enter The Answer"
-          value={correctAnswer}
-          onChange={onCorrectAnswerChange}
-          required
-        />
-        <div className="m-4"></div>
-      </div>
-    );
-  };
-
-  const multipleChoiceQuestion = () => {
-    return (
-      <div>
-        <div className="text-lg text-brown font-bold">Correct Answer</div>
-        <div className="text-sm mb-1 text-brown">
-          Answer order is randomised when presented
-        </div>
-
-        <input
-          className="p-2.5 w-[100%] h-12 border-2 border-gray-300 rounded-md"
-          type="text"
-          placeholder="Enter The Correct Answer"
-          value={correctAnswer}
-          onChange={(e) => onCorrectAnswerChange(e)}
-          required
-        />
-        <div className="m-4"></div>
-        <div className="text-lg text-brown font-bold">Incorrect Answers</div>
-        <div className="text-sm mb-1 text-brown">
-          Provide between 1 and 3 incorrect answers
-        </div>
-        <input
-          className="p-2.5 w-[100%] mb-1 h-12 border-2 border-gray-300 rounded-md"
-          type="text"
-          placeholder="Enter An Incorrect Answer"
-          value={incorrectAnswers[0]}
-          onChange={(e) => onIncorrectAnswerChange(e, 0)}
-        />
-        <input
-          className="p-2.5 w-[100%] mb-1 h-12 border-2 border-gray-300 rounded-md"
-          type="text"
-          placeholder="Enter An Incorrect Answer"
-          value={incorrectAnswers[1]}
-          onChange={(e) => onIncorrectAnswerChange(e, 1)}
-        />
-        <input
-          className="p-2.5 w-[100%] mb-1 h-12 border-2 border-gray-300 rounded-md"
-          type="text"
-          placeholder="Enter An Incorrect Answer"
-          value={incorrectAnswers[2]}
-          onChange={(e) => onIncorrectAnswerChange(e, 2)}
-        />
-        <div className="m-4"></div>
-      </div>
-    );
   };
 
   const handleSwitchChange = (
@@ -377,55 +256,7 @@ export const CreateQuestion = ({
                   </div>
                 </div>
               )}
-
-              <div className="m-2"></div>
-              <div>
-                <div className="mt-[30px]">
-                  <div className="flex">
-                    <TextField
-                      id="tags"
-                      sx={{
-                        background: "#FFFFFF",
-                        width: 520,
-                        marginTop: 2,
-                      }}
-                      className=""
-                      label="Tags"
-                      variant="filled"
-                      onChange={onCurrentTagChange}
-                      value={currentTag}
-                    />
-                    <Fab
-                      sx={{ marginLeft: 3, marginTop: 2 }}
-                      color="primary"
-                      aria-label="add"
-                      onClick={handleAddTag}
-                    >
-                      <AddIcon />
-                    </Fab>
-                  </div>
-
-                  <div className="w-[100%] flex flex-wrap">
-                    {tags.map((tag, index) => (
-                      <div>
-                        <div className="flex items-center mt-[10px] mr-[10px]">
-                          <div className="flex w-auto rounded-full border-1 border-gray-500 bg-gray-300 items-center pr-[10px] pt-[5px] pb-[5px]">
-                            <div className="text-[20px] mr-[10px] ml-[10px]">{`${tag}`}</div>
-                            <div>
-                              <button
-                                className="text-gray-400 hover:text-gray-600"
-                                onClick={() => handleDeleteTag(index)}
-                              >
-                                <CancelTwoToneIcon fontSize="medium"></CancelTwoToneIcon>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <Tags originTags={tags} onChange={handleTagsChange} />
               <div className="">
                 <div className="text-lg text-brown font-bold mt-4">
                   Difficulty

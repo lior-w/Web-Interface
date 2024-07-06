@@ -6,24 +6,16 @@ import { Token, Game, Pages } from "../types";
 import axios from "axios";
 import Loading from "../components/loading";
 import { server } from "../main";
+import { filterPages } from "./dashboard";
 
 export interface IProps {
   token: Token;
-  toMain: () => void;
   username: string | undefined;
-  toWaitingRoom: (gameId: string) => void;
+  setGameId: (id: string) => void;
   pages: Pages;
 }
 
-export const SavedGames = ({
-  token,
-  toMain,
-  username,
-  toWaitingRoom,
-  pages,
-}: IProps) => {
-  // Mock data for saved games
-  const [showEndedGames, setShowEndedGames] = useState<boolean>(false);
+export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -44,11 +36,8 @@ export const SavedGames = ({
   }, []);
 
   const handleStartGame = (gameId: string) => {
-    toWaitingRoom(gameId);
-  };
-
-  const handleBack = () => {
-    toMain();
+    setGameId(gameId);
+    pages["Waiting Room"]();
   };
 
   const showGame = (game: Game, index: number) => {
@@ -110,39 +99,27 @@ export const SavedGames = ({
       : 1;
 
   return (
-    <Container page="My Games" pages={pages} username={username}>
-      <div className="p-1 flex justify-end">
-        <button
-          className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
-          type="button"
-          onClick={handleBack}
-        >
-          <IoArrowForwardCircle />
-        </button>
-      </div>
+    <Container
+      page="Games"
+      pages={filterPages(pages, [
+        "Main",
+        "New Game",
+        "New Question",
+        "New Questionnaire",
+        "Games",
+        "Logout",
+      ])}
+      username={username}
+    >
       <div className="flex flex-row">
         <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-          <div className="text-4xl text-brown font-bold">Saved Games</div>
-          <div className="mb-3"></div>
+          <div className="text-4xl mb-3 text-brown font-bold">Games</div>
         </div>
-      </div>
-      <div className="pl-5 flex items-center">
-        <div className="pr-1 text-brown font-semibold">Show ended games</div>
-        <Switch
-          {...{
-            color: "info",
-            size: "medium",
-            value: { showEndedGames },
-            defaultChecked: false,
-            onChange: (e) => setShowEndedGames(!showEndedGames),
-          }}
-        />
       </div>
       <div>
         {loading && <Loading msg="Loading Games" size={60}></Loading>}
         {games
           .sort(gamesComperator)
-          .filter((game) => showEndedGames || game.status !== "ended")
           .map((game, index) => showGame(game, index))}
       </div>
     </Container>

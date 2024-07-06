@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import axios from "axios";
-import { Token } from "../types";
+import { Pages, Token } from "../types";
 import Loading from "../components/loading";
 import { server } from "../main";
 
 export interface IProps {
   token: Token;
-  toMain: () => void;
   runningGameId: string | undefined;
+  pages: Pages;
 }
 
-export const PostGame = ({ token, toMain, runningGameId }: IProps) => {
+export const PostGame = ({ token, runningGameId, pages }: IProps) => {
   const [timeStarted, setTimeStarted] = useState<string>();
   const [timeEnded, setTimeEnded] = useState<string>();
   const [questionsAnswered, setQuestionsAnswered] = useState<number>();
@@ -49,7 +49,7 @@ export const PostGame = ({ token, toMain, runningGameId }: IProps) => {
           <div className="text-2xl text-brown mt-2">{`Correct Answers: ${correctAnswers}`}</div>
           <button
             className="text-2xl text-brown font-bold mt-6"
-            onClick={() => toMain()}
+            onClick={pages["Main"]}
           >
             To Main
           </button>

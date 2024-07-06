@@ -2,18 +2,23 @@ import { useState, useEffect } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import axios from "axios";
-import { Token } from "../types";
+import { Pages, Token } from "../types";
 import Loading from "../components/loading";
 import { server } from "../main";
 
 export interface IProps {
   token: Token;
-  toMain: () => void;
-  toGame: (runningGameId: string) => void;
+  setRunningGameId: (runningGameId: string) => void;
   gameId: string | undefined;
+  pages: Pages;
 }
 
-export const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
+export const WaitingRoom = ({
+  token,
+  setRunningGameId,
+  gameId,
+  pages,
+}: IProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [startingGame, setStartingGame] = useState<boolean>(false);
   const [gameName, setGameName] = useState<string>("");
@@ -79,7 +84,10 @@ export const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
       .then((response) => console.log(response.data))
       .catch((e) => alert(e));
 
-    runningId && toGame(runningId);
+    if (runningId) {
+      setRunningGameId(runningId);
+      pages["Running Game"]();
+    }
   };
 
   return (
@@ -90,7 +98,7 @@ export const WaitingRoom = ({ token, toMain, toGame, gameId }: IProps) => {
             <button
               className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
               type="button"
-              onClick={toMain}
+              onClick={pages["Main"]}
             >
               <IoArrowForwardCircle />
             </button>

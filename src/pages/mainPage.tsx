@@ -10,7 +10,7 @@ export interface IProps {
 
 export const MainPage = ({ token, username, pages }: IProps) => {
   return (
-    <Container page="main" pages={pages} username={username}>
+    <Container page="Main" pages={pages} username={username}>
       {username === undefined ? (
         <div>
           <div className="flex justify-center">
