@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Questionnaire, Token } from "../types";
+import { Questionnaire, Questionnaire_filter, Token } from "../types";
 import { server } from "../main";
 import axios from "axios";
 import Checkbox from "@mui/material/Checkbox";
@@ -31,7 +31,9 @@ export const SelectQuestionnaire = ({
 }: IProps) => {
   const [selectedQuestionnaire, setSelectedQuestionnaire] =
     useState<string>(selectedId);
-  const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>([]);
+  const [questionnaires, setQuestionnaires] = useState<Questionnaire_filter[]>(
+    []
+  );
   const [totalElements, setTotalElements] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(0);
   const [pageSizeRequest, setPageSizeRequest] =
@@ -193,9 +195,7 @@ export const SelectQuestionnaire = ({
                           <AccordionDetails>
                             <div>
                               {q.questions.map((question, index) => (
-                                <div>{`${index + 1}. ${
-                                  question.question.question
-                                }`}</div>
+                                <div>{`${index + 1}. ${question}`}</div>
                               ))}
                             </div>
                           </AccordionDetails>

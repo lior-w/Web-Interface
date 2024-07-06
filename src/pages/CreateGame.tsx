@@ -22,6 +22,7 @@ import Typography from "@mui/material/Typography";
 import { SelectQuestionnaire } from "../components/questionnairesTable";
 import { SelectMap } from "../components/mapsTable";
 import { SelectStartingPositions } from "../components/startingPositions";
+import Tags from "../components/tags";
 
 const steps = [
   "Enter Title and Description",
@@ -33,16 +34,16 @@ const steps = [
 
 export interface IProps {
   token: Token;
-  toMain: () => void;
   username: string | undefined;
   pages: Pages;
 }
 
-export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
+export const CreateGame = ({ token, username, pages }: IProps) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [tags, setTags] = useState<string[]>([]);
   const [questionnaireId, setQuestionnaireId] = useState<string>("");
   const [mapId, setMapId] = useState<string>("");
   const [mapObject, setMapObject] = useState<Map>();
@@ -75,6 +76,7 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
     const params = {
       title: title,
       description: description,
+      tags: tags,
       questionnaireID: questionnaireId,
       mapId: mapId,
       creatorId: token.AUTHORIZATION,
@@ -97,7 +99,7 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
       .post(url, params, { headers })
       .then(() => {
         alert("New game has been created successfuly");
-        toMain();
+        pages.Main();
       })
       .catch((error) => alert(error));
   };
@@ -108,6 +110,10 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
 
   const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
+  };
+
+  const handleTagsChange = (tags: string[]) => {
+    setTags(tags);
   };
 
   const handleIsSharedChange = (
@@ -296,13 +302,12 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
 
   const step0 = () => {
     return (
-      <div className="flex flex-col w-[auto] mt-[50px] rounded-lg border-1 p-[20px] border-brown">
+      <div className="flex flex-col w-[auto] pt-[50px] pb-[50px] rounded-lg border-1 p-[20px] border-brown">
         <TextField
           id="Title"
           sx={{
             background: "#FFFFFF",
             width: 600,
-            marginTop: 6,
           }}
           label="Title"
           variant="filled"
@@ -321,7 +326,6 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
             background: "#FFFFFF",
             width: 600,
             marginTop: 4,
-            marginBottom: 6,
           }}
           label="Description"
           variant="filled"
@@ -335,6 +339,7 @@ export const CreateGame = ({ token, toMain, username, pages }: IProps) => {
             Description length limit is 250 characters
           </div>
         )}
+        <Tags originTags={tags} onChange={handleTagsChange} />
       </div>
     );
   };

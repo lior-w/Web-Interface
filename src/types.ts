@@ -53,6 +53,17 @@ export interface Questionnaire {
   questions: QuestionnaireQuestion[];
 }
 
+export interface Questionnaire_filter {
+  id: string;
+  name: string;
+  creator: User;
+  timeCreated: string;
+  lastUpdated: string;
+  shared: boolean;
+  tags: string[];
+  questions: string[];
+}
+
 export interface QuestionnaireQuestion {
   id: string;
   question: Question;
@@ -82,6 +93,7 @@ export interface Game {
   description: string;
   shared: boolean;
   configuration: GameConfiguration;
+  tags: string[];
   map: flatMap;
   questionnaire: flatQuestionnaire;
   startingPositions: FlatTile[];

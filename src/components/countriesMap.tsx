@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CountriesMap, Token, RunningTile } from "../types";
+import { CountriesMap, Token, RunningTile, Pages } from "../types";
 import { CountryComp } from "./country";
 import axios from "axios";
 import Loading from "./loading";
@@ -12,17 +12,15 @@ const GAME_TIME = 1000 * 60 * 45;
 export interface IProps {
   countriesMap: CountriesMap;
   runningGameId: string;
-  toMain: () => void;
   token: Token;
-  postGame: () => void;
+  pages: Pages;
 }
 
 export const CountriesMapComp = ({
   countriesMap,
   runningGameId,
-  toMain,
   token,
-  postGame,
+  pages,
 }: IProps) => {
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [runningTiles, setRunningTiles] = useState<RunningTile[]>([]);
@@ -61,7 +59,7 @@ export const CountriesMapComp = ({
       .post(url, params, { headers })
       .then(() => {
         alert("End of the game");
-        postGame();
+        pages["Post Game"]();
       })
       .catch((error) => alert(error));
   };

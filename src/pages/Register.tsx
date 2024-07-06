@@ -6,19 +6,10 @@ import { server } from "../main";
 
 export interface IProps {
   token: Token;
-  onRegistrationSuccess: () => void;
-  onSignIn: () => void;
-  toMain: () => void;
   pages: Pages;
 }
 
-export const Register = ({
-  token,
-  onRegistrationSuccess,
-  onSignIn,
-  toMain,
-  pages,
-}: IProps) => {
+export const Register = ({ token, pages }: IProps) => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -39,16 +30,8 @@ export const Register = ({
         .then((response) => alert(response))
         .catch((err) => alert(err));
       // alert(`Registration successful!\nUsername: ${username}\nEmail: ${email}`);
-      onRegistrationSuccess();
+      pages["Login"]();
     }
-  };
-
-  const handleSignIn = () => {
-    onSignIn();
-  };
-
-  const handleBack = () => {
-    toMain();
   };
 
   const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

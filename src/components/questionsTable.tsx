@@ -227,9 +227,13 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
     return btoa(binaryString);
   };
 
+  //const showTags = (tags: string[]) => {
+  //  return <div>{tags.map((tag, i) => i < tags.length - 1 ? )}</div>
+  //}
+
   return (
     <div>
-      <div id="filters" className="flex items-end">
+      <div id="filters" className="flex items-end mt-[20px]">
         <div className="flex items-end">
           <TextField
             id="Content filter"
