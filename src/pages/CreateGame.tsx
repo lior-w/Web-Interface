@@ -50,7 +50,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
   const [numberOfGroups, setNumberOfGroups] = useState<number>(2);
   const [gameTime, setGameTime] = useState<number>(60);
   const [isShared, setIsShared] = useState<boolean>(false);
-  const [questionTimeLimit, setQuestionTimeLimit] = useState<number>(1);
+  const [questionTimeLimit, setQuestionTimeLimit] = useState<number>(60);
   const [startingPositions, setStartingPositions] = useState<string[]>([
     "",
     "",
@@ -211,11 +211,13 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
                 onChange={onQuestionTimeLimnitChange}
                 variant="standard"
               >
-                {["1", "2", "3", "4", "5"].map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {`${option} min`}
-                  </MenuItem>
-                ))}
+                {["10", "20", "30", "40", "50", "60", "90", "120"].map(
+                  (option) => (
+                    <MenuItem key={option} value={option}>
+                      {`${option} sec`}
+                    </MenuItem>
+                  )
+                )}
               </Select>
             </FormControl>
           </div>
@@ -339,7 +341,9 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
             Description length limit is 250 characters
           </div>
         )}
-        <Tags originTags={tags} onChange={handleTagsChange} />
+        <div className="mt-[14px]">
+          <Tags originTags={tags} onChange={handleTagsChange} />
+        </div>
       </div>
     );
   };

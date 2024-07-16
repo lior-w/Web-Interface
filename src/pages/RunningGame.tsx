@@ -1,6 +1,6 @@
 import Container from "../components/container.tsx";
 import { CountriesMapComp } from "../components/countriesMap";
-import { Pages, Token } from "../types";
+import { Pages, RunningGameInstance, Token } from "../types";
 import { westUsaMap } from "../maps/westUsaMap";
 
 export interface IProps {

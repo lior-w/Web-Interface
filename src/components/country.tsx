@@ -17,17 +17,17 @@ export const CountryComp = ({ onClick, tile }: IProps) => {
           ? "teal"
           : tile.tile.tileType === "NEUTRAL"
           ? "grey"
-          : tile.controllingGroup.number === 0
+          : tile.controllingGroup && tile.controllingGroup.number === 0
           ? "white"
-          : tile.controllingGroup.number === 1
+          : tile.controllingGroup && tile.controllingGroup.number === 1
           ? "#1D24CA"
-          : tile.controllingGroup.number === 2
+          : tile.controllingGroup && tile.controllingGroup.number === 2
           ? "#e63946"
-          : tile.controllingGroup.number === 3
+          : tile.controllingGroup && tile.controllingGroup.number === 3
           ? "#66FF00"
-          : tile.controllingGroup.number === 4
+          : tile.controllingGroup && tile.controllingGroup.number === 4
           ? "#FF00FF"
-          : tile.controllingGroup.number === 5
+          : tile.controllingGroup && tile.controllingGroup.number === 5
           ? "#481E14"
           : "black"
       }
