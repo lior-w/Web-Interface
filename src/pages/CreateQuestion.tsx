@@ -40,6 +40,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
   const [tags, setTags] = useState<string[]>([]);
   const [difficulty, setDifficulty] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isShared, setIsShared] = useState<boolean>(false);
 
   const newQuestionJSON = () => {
     return {
@@ -102,11 +103,18 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
     setMultipleChoice(true);
   };
 
-  const handleSwitchChange = (
+  const handleMultipleChoiceSwitchChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
     setMultipleChoice(checked);
+  };
+
+  const handlePublicSwitchChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    setIsShared(checked);
   };
 
   const handleIncorrectAnswersNumChange = (e: SelectChangeEvent<number>) => {
@@ -150,7 +158,6 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
             <form className="flex flex-col" onSubmit={handleSubmit}>
               <div>
                 <TextField
-                  id="Difficulty filter"
                   sx={{
                     background: "#FFFFFF",
                     width: 600,
@@ -166,7 +173,6 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
 
                 <div className="flex flex-col">
                   <TextField
-                    id="Difficulty filter"
                     sx={{
                       background: "#FFFFFF",
                       width: 600,
@@ -179,6 +185,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                     value={correctAnswer}
                     required
                   />
+
                   <div className="text-xl text-brown mb-2 mt-2">{`Uplaod Image (optional)`}</div>
                   <div className="flex">
                     <input type="file" onChange={handleFileChange} />
@@ -195,12 +202,28 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                   </div>
                   <img src={file} />
                 </div>
-                <div className="flex ml-[10px] mt-[20px]">
+                <FormControlLabel
+                  sx={{
+                    marginTop: 2,
+                  }}
+                  control={
+                    <Switch
+                      checked={isShared}
+                      onChange={handlePublicSwitchChange}
+                    />
+                  }
+                  label={
+                    <div className="text-xl text-brown font-bold ml-[30px]">
+                      Public
+                    </div>
+                  }
+                />
+                <div className="flex">
                   <FormControlLabel
                     control={
                       <Switch
                         checked={multipleChoice}
-                        onChange={handleSwitchChange}
+                        onChange={handleMultipleChoiceSwitchChange}
                       />
                     }
                     label={

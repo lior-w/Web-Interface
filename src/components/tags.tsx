@@ -33,7 +33,7 @@ const Tags = ({ originTags, onChange }: IProps) => {
   };
 
   return (
-    <div className="mt-[20px]">
+    <div className="">
       <div className="flex">
         <TextField
           id="tags"

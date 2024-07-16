@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SavedGames } from "./SavedGames";
 import { Login } from "./Login";
 import { Register } from "./Register";
@@ -10,7 +10,13 @@ import { WaitingRoom } from "./WaitingRoom";
 import { RunningGame } from "./RunningGame";
 import { CountriesMapComp } from "../components/countriesMap";
 import { westUsaMap } from "../maps/westUsaMap";
-import { Token, Game, Questionnaire, Pages } from "../types";
+import {
+  Token,
+  Game,
+  Questionnaire,
+  Pages,
+  RunningGameInstance,
+} from "../types";
 import { server } from "../main";
 import { PostGame } from "./PostGame";
 
@@ -26,7 +32,7 @@ export const filterPages: (pages: Pages, pageNames: string[]) => Pages = (
 };
 
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("main");
+  const [page, setPage] = useState<string>("createQuestion");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");

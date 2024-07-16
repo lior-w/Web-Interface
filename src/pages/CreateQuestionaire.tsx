@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import { SelectQuestions } from "../components/questionsTable";
 import AddIcon from "@mui/icons-material/Add";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
-import { Fab } from "@mui/material";
+import { Fab, FormControlLabel, Switch } from "@mui/material";
 import Tags from "../components/tags";
 
 const DEFAULT_PAGE_SIZE = 5;
@@ -23,12 +23,20 @@ export const CreateQuestionaire = ({ token, username, pages }: IProps) => {
   const [title, setTitle] = useState<string>("");
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [isShared, setIsShared] = useState<boolean>(false);
 
   const handleTagsChange = (tags: string[]) => {
     setTags(tags);
   };
   const handleChangeSelectedQuestions = (compSelectedQuestions: string[]) => {
     setSelectedQuestions(compSelectedQuestions);
+  };
+
+  const handlePublicSwitchChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    setIsShared(checked);
   };
 
   const generateQuestionsJSON = (): { [key: string]: number } => {
@@ -82,7 +90,21 @@ export const CreateQuestionaire = ({ token, username, pages }: IProps) => {
               required
             />
           </div>
+          <FormControlLabel
+            sx={{
+              marginTop: 2,
+            }}
+            control={
+              <Switch checked={isShared} onChange={handlePublicSwitchChange} />
+            }
+            label={
+              <div className="text-xl text-brown font-bold ml-[30px]">
+                Public
+              </div>
+            }
+          />
         </div>
+
         <Tags originTags={tags} onChange={handleTagsChange} />
         <SelectQuestions
           token={token}

@@ -116,8 +116,11 @@ export interface FlatTile {
 
 export interface RunningTile {
   id: string;
+  controllingGroup?: Group;
   tile: Tile;
-  controllingGroup: Group;
+  answeringPlayer?: MobilePlayer;
+  activeQuestion?: Question;
+  answeringGroup?: Group;
 }
 
 export interface Tile {
@@ -144,6 +147,7 @@ export interface Pages {
 
 export interface Group {
   id: string;
+  mobilePlayers: MobilePlayer[];
   number: number;
   score: number;
 }
@@ -156,4 +160,90 @@ export interface GameConfiguration {
   gameTime: number;
   numberOfGroups: number;
   questionTimeLimit: number;
+}
+
+export interface GameEvent {
+  eventType: EventType;
+  message: string;
+  body: any;
+  timestamp: Date;
+  eventIndex: number;
+}
+
+export enum EventType {
+  TILES_UPDATE,
+  SCORE_UPDATE,
+  END_GAME_UPDATE,
+  WAITING_ROOM_UPDATE,
+  CHEATING_PLAYER_UPDATE,
+}
+
+export interface RunningTileResponse {
+  id: string;
+  answeringGroupId: string;
+  answeringPlayerId: string;
+  controllingGroupId: string;
+  activeQuestion: Question;
+  numberOfCorrectAnswers: number;
+}
+
+export interface MapResponse {
+  tiles: RunningTile[];
+  eventIndex: number;
+}
+
+export interface PlayerStatistics {
+  score: number;
+  questionsAnswered: number;
+  correctAnswers: number;
+}
+
+export interface RunningGameInstance {
+  runningId: string;
+  mobilePlayers: MobilePlayer[];
+  groups: Group[];
+  code: string;
+  status: string;
+  tiles: RunningTile[];
+  playerStatistics: PlayerStatistics[];
+  gameInstance: GameInstance;
+}
+
+export interface GameInstance {
+  id: string;
+  name: string;
+  host: {
+    id: string;
+    name: string;
+    password: string;
+    permission: string;
+  };
+  questionnaire: {
+    id: string;
+    name: string;
+    questions: object[][];
+  };
+  gameMap: {
+    id: string;
+    name: string;
+  };
+  description: string;
+  shared: boolean;
+  configuration: GameConfiguration;
+}
+
+export interface MobilePlayer {
+  group: Group;
+  id: string;
+  name: string;
+  ready: boolean;
+  uuid: string;
+}
+
+export interface ServerResponse<T> {
+  error: boolean;
+  message: string;
+  status: number;
+  successful: boolean;
+  value: T;
 }
