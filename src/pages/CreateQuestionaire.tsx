@@ -74,7 +74,7 @@ export const CreateQuestionaire = ({ token, username, pages }: IProps) => {
   return (
     <Container page="New Questionnaire" pages={pages} username={username}>
       <div id="page body" className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-        <div id="page title" className="text-4xl text-brown font-bold">
+        <div id="page title" className="text-4xl text-black font-bold">
           New Questionnaire
         </div>
         <div id="questionnaire title and filters" className="w-[500px]">
@@ -98,7 +98,7 @@ export const CreateQuestionaire = ({ token, username, pages }: IProps) => {
               <Switch checked={isShared} onChange={handlePublicSwitchChange} />
             }
             label={
-              <div className="text-xl text-brown font-bold ml-[30px]">
+              <div className="text-xl text-black font-bold ml-[30px]">
                 Public
               </div>
             }
@@ -112,7 +112,7 @@ export const CreateQuestionaire = ({ token, username, pages }: IProps) => {
         ></SelectQuestions>
         <div className="mt-4 flex justify-start">
           <button
-            className="p-2 w-[300px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+            className="p-2 w-[300px] bg-blue-600 text-xl text-white hover:bg-blue-800 rounded-lg cursor-pointer"
             type="button"
             onClick={handleSubmit}
           >

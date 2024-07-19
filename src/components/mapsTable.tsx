@@ -125,7 +125,7 @@ export const SelectMap = ({
         </div>
         <Tooltip title={<div className="text-lg">Filter</div>}>
           <button
-            className="text-[50px] ml-[20px] justify-center flex text-brown hover:text-amber-600 cursor-pointer"
+            className="text-[50px] ml-[20px] justify-center flex text-blue-600 hover:text-blue-800 cursor-pointer"
             type="button"
             onClick={() => fetchPage(0, pageSizeRequest, nameFilter)}
           >

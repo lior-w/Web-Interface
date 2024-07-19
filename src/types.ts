@@ -99,6 +99,16 @@ export interface Game {
   startingPositions: FlatTile[];
 }
 
+export interface GameLean {
+  id: string;
+  name: string;
+  description: string;
+  questionnaireName: string;
+  mapName: string;
+  numberOfGroups: number;
+  status: string;
+}
+
 export interface flatMap {
   id: string;
   name: string;

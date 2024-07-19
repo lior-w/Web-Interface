@@ -93,10 +93,10 @@ export const WaitingRoom = ({
   return (
     <Container page="" pages={{}} username={undefined}>
       {!startingGame && (
-        <div>
+        <div className="border-1 rounded-md border-blue-400">
           <div className="p-1 flex justify-end">
             <button
-              className="text-3xl text-brown font-bold cursor-pointer hover:text-amber-700"
+              className="text-3xl text-blue-600 font-bold cursor-pointer hover:text-blue-800"
               type="button"
               onClick={pages["Main"]}
             >
@@ -108,23 +108,25 @@ export const WaitingRoom = ({
             <div>
               <div className="flex flex-row">
                 <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-                  <div className="text-4xl text-brown font-bold mb-3">{`${gameName} - Waiting Room`}</div>
+                  <div className="text-4xl text-black font-bold mb-3">{`${gameName} - Waiting Room`}</div>
                 </div>
               </div>
-              <div className="flex p-8 text-brown text-6xl font-bold justify-center">{`Game Code: ${gameCode}`}</div>
-              <div className="p-4 text-brown text-4xl">Players:</div>
-              <div className="p-4 text-2xl text-brown flex flex-wrap ">
+              <div className="flex p-8 text-black text-6xl font-bold justify-center">{`Game Code: ${gameCode}`}</div>
+              <div className="p-4 text-black text-4xl">Players:</div>
+              <div className="p-4 text-2xl text-black flex flex-wrap ">
                 {players.map(
                   (p) => p && <div className="m-[20px]" key={p}>{`${p}`}</div>
                 )}
               </div>
-              <button
-                className="p-2.5 w-[100%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
-                type="button"
-                onClick={startGame}
-              >
-                START GAME
-              </button>
+              <div className="flex p-2 justify-center items-center">
+                <button
+                  className="p-2.5 w-[300px] bg-blue-600 text-xl text-white hover:bg-blue-800 rounded-lg cursor-pointer"
+                  type="button"
+                  onClick={startGame}
+                >
+                  START GAME
+                </button>
+              </div>
             </div>
           )}
         </div>

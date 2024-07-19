@@ -14,7 +14,7 @@ export const MainPage = ({ token, username, pages }: IProps) => {
       {username === undefined ? (
         <div>
           <div className="flex justify-center">
-            <div className="text-brown max-w-[1600px]">
+            <div className="text-black max-w-[1600px]">
               <div className="text-[46px] font-semibold">
                 Welcome to Conquer The World Teacher Portal!
               </div>
@@ -69,7 +69,7 @@ export const MainPage = ({ token, username, pages }: IProps) => {
           </div>
         </div>
       ) : (
-        <div className="flex justify-center text-brown text-[60px] font-semibold mt-4">
+        <div className="flex justify-center text-black text-[60px] font-semibold mt-4">
           {`Welcome ${username}!`}
         </div>
       )}
