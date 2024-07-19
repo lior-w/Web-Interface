@@ -73,7 +73,8 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
     pageNum: number,
     size: number,
     difficulty: string,
-    content: string
+    content: string,
+    tags: string[]
   ) => {
     console.log("fetchPage");
     console.log(token.AUTHORIZATION);
@@ -110,7 +111,8 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
         pageNumber + 1,
         pageSizeRequest,
         difficultyFilter,
-        contentFilter
+        contentFilter,
+        tagsFilter
       );
     }
   };
@@ -121,7 +123,8 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
         totalPages - 1,
         pageSizeRequest,
         difficultyFilter,
-        contentFilter
+        contentFilter,
+        tagsFilter
       );
     }
   };
@@ -132,19 +135,26 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
         pageNumber - 1,
         pageSizeRequest,
         difficultyFilter,
-        contentFilter
+        contentFilter,
+        tagsFilter
       );
     }
   };
 
   const handleFirst = () => {
     if (!isFirst) {
-      fetchPage(0, pageSizeRequest, difficultyFilter, contentFilter);
+      fetchPage(
+        0,
+        pageSizeRequest,
+        difficultyFilter,
+        contentFilter,
+        tagsFilter
+      );
     }
   };
 
   useEffect(() => {
-    fetchPage(0, pageSizeRequest, difficultyFilter, contentFilter);
+    fetchPage(0, pageSizeRequest, difficultyFilter, contentFilter, tagsFilter);
   }, []);
 
   const handleChangeCheckBox = (questionId: string) => {
@@ -176,7 +186,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
 
   const handlePageSizeChange = (val: number) => {
     setPageSizeRequest(val);
-    fetchPage(0, val, difficultyFilter, contentFilter);
+    fetchPage(0, val, difficultyFilter, contentFilter, tagsFilter);
   };
 
   const onContentFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -289,10 +299,16 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
         </div>
         <Tooltip title={<div className="text-lg">Filter</div>}>
           <button
-            className="text-[50px] ml-[20px] justify-center flex text-brown hover:text-amber-600 cursor-pointer"
+            className="text-[50px] ml-[20px] justify-center flex text-blue-600 hover:text-blue-800 cursor-pointer"
             type="button"
             onClick={() =>
-              fetchPage(0, pageSizeRequest, difficultyFilter, contentFilter)
+              fetchPage(
+                0,
+                pageSizeRequest,
+                difficultyFilter,
+                contentFilter,
+                tagsFilter
+              )
             }
           >
             <GrFilter></GrFilter>
@@ -300,7 +316,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
         </Tooltip>
       </div>
       <div className="mb-3"></div>
-      <div className="max-h-[100%] rounded-md bg-white">
+      <div className="max-h-[100%] rounded-md bg-white border-1 border-blue-400">
         <div className="">
           <table className="w-[100%]">
             <thead>

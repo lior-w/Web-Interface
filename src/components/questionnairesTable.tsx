@@ -152,7 +152,7 @@ export const SelectQuestionnaire = ({
         </div>
         <Tooltip title={<div className="text-lg">Filter</div>}>
           <button
-            className="text-[50px] ml-[20px] justify-center flex text-brown hover:text-amber-600 cursor-pointer"
+            className="text-[50px] ml-[20px] justify-center flex text-blue-600 hover:text-blue-800 cursor-pointer"
             type="button"
             onClick={() =>
               fetchPage(0, pageSizeRequest, nameFilter, token.AUTHORIZATION)
@@ -163,7 +163,7 @@ export const SelectQuestionnaire = ({
         </Tooltip>
       </div>
       <div className="mb-3"></div>
-      <div className="max-h-[100%] rounded-md bg-white">
+      <div className="max-h-[100%] rounded-md bg-white border-1 border-blue-400">
         <div className="">
           <table className="w-[100%]">
             <thead>

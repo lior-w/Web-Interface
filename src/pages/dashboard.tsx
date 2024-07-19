@@ -32,7 +32,7 @@ export const filterPages: (pages: Pages, pageNames: string[]) => Pages = (
 };
 
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("createQuestion");
+  const [page, setPage] = useState<string>("login");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");

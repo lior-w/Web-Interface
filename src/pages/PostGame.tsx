@@ -41,16 +41,13 @@ export const PostGame = ({ token, runningGameId, pages }: IProps) => {
   return (
     <Container page="" pages={{}} username={undefined}>
       <div className="flex flex-col items-center justify-center">
-        <div className="border-2 border-brown rounded-lg p-2">
-          <div className="text-4xl text-brown mt-2">Game Statistics:</div>
-          <div className="text-2xl text-brown mt-2">{`Time started: ${timeStarted}`}</div>
-          <div className="text-2xl text-brown mt-2">{`Time Ended: ${timeEnded}`}</div>
-          <div className="text-2xl text-brown mt-2">{`Questions answered: ${questionsAnswered}`}</div>
-          <div className="text-2xl text-brown mt-2">{`Correct Answers: ${correctAnswers}`}</div>
-          <button
-            className="text-2xl text-brown font-bold mt-6"
-            onClick={pages["Main"]}
-          >
+        <div className="border-2 border-blue-400 text-black rounded-lg p-2">
+          <div className="text-4xl mt-2">Game Statistics:</div>
+          <div className="text-2xl mt-2">{`Time started: ${timeStarted}`}</div>
+          <div className="text-2xl mt-2">{`Time Ended: ${timeEnded}`}</div>
+          <div className="text-2xl mt-2">{`Questions answered: ${questionsAnswered}`}</div>
+          <div className="text-2xl mt-2">{`Correct Answers: ${correctAnswers}`}</div>
+          <button className="text-2xl font-bold mt-6" onClick={pages["Main"]}>
             To Main
           </button>
         </div>

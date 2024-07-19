@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import Container from "../components/container";
 import axios from "axios";
 import { Pages, Token } from "../types";
 import { server } from "../main";
+import {
+  Box,
+  FilledInput,
+  FormControl,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export interface IProps {
   onLoginSuccess: (token: Token, username: string) => void;
@@ -13,15 +26,23 @@ export const Login = ({ onLoginSuccess, pages }: IProps) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
   const loginJSON = () => {
     return { username: username, password: password };
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async () => {
     console.log("try to login");
     const url = `${server}/user/login`;
-    e.preventDefault();
     await axios
       .post(url, loginJSON())
       .then((response) => {
@@ -49,47 +70,61 @@ export const Login = ({ onLoginSuccess, pages }: IProps) => {
   return (
     <Container page="Login" pages={pages} username={undefined}>
       <div className="flex flex-row justify-center">
-        <div className="p-8 flex flex-col border-3 border-brown rounded-lg items-center justify-center">
-          <div className="text-4xl text-brown font-bold">Login</div>
+        <div className="p-8 flex flex-col border-1 border-blue-400 rounded-lg items-center justify-center">
+          <div className="text-4xl text-black font-bold">Login</div>
           <div className="mb-3"></div>
-          <form
-            className="flex flex-col justify-center items-center"
-            onSubmit={handleSubmit}
-          >
-            <div className="w-[400px]">
-              <input
-                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={onUsernameChange}
-                required
-              />
-              <div className="m-1"></div>
-              <input
-                className="p-2.5 w-[100%] border-2 border-gray-300 rounded-md"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={onPasswordChange}
-                required
-              />
-              <div className="m-2.5"></div>
-
-              <div className="m-1.5"></div>
-              <div className="w-[100%] flex flex-col justify-center items-center">
-                <button
-                  className="p-2 w-[100%] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
-                  type="submit"
-                >
-                  LOGIN
-                </button>
-                <div className=""></div>
-              </div>
+          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+            <div className="flex flex-col">
+              <FormControl sx={{ m: 1, width: "300px" }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-username">
+                  Username
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-username"
+                  type="text"
+                  label="Username"
+                  value={username}
+                  onChange={onUsernameChange}
+                />
+              </FormControl>
+              <FormControl sx={{ m: 1, width: "300px" }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={onPasswordChange}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
             </div>
+          </Box>
 
-            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-          </form>
+          <div className="w-[100%] flex flex-col justify-center items-center">
+            <button
+              className="p-2 w-[300px] mt-[10px] bg-blue-500 text-xl text-white hover:bg-blue-700 rounded-lg cursor-pointer"
+              type="button"
+              onClick={handleSubmit}
+            >
+              LOGIN
+            </button>
+          </div>
+
+          {errorMessage && <div className="text-red-500">{errorMessage}</div>}
         </div>
       </div>
     </Container>

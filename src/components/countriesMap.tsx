@@ -39,6 +39,7 @@ export const CountriesMapComp = ({
   const [mapRunningTiles, setMapRunningTiles] = useState<{
     [key: string]: RunningTile;
   }>({});
+  const [groups, setGroups] = useState<Group[]>();
   const indexRef = useRef(0); // Use ref to keep track of the latest index value
   const eventHandler = EventHandler.getInstance();
   const mapRef = useRef(mapRunningTiles);
@@ -59,6 +60,10 @@ export const CountriesMapComp = ({
     }
   };
 
+  const handleScoreUpdate = (groups: Group[]) => {
+    setGroups(groups);
+  };
+
   useEffect(() => {
     mapRef.current = mapRunningTiles;
   }, [mapRunningTiles]);
@@ -76,6 +81,10 @@ export const CountriesMapComp = ({
           EventType[EventType.TILES_UPDATE],
           (updatedTile: any) =>
             handleRunningTileUpdate(updatedTile, setMapRunningTiles)
+        );
+        eventHandler.subscribe(
+          EventType[EventType.SCORE_UPDATE],
+          (updatedGroups: Group[]) => handleScoreUpdate(updatedGroups)
         );
         getMapChanges();
       })
@@ -248,16 +257,20 @@ export const CountriesMapComp = ({
     startInterval();
   }, []);
 */
+  const showScoreBoard = () => {
+    return <div></div>;
+  };
+
   return (
     <div>
       {!mapLoaded && (
         <Loading msg={`Loading Map: ${countriesMap.name}`} size={60}></Loading>
       )}
       {mapLoaded && (
-        <div className="flex flex-col">
+        <div className="flex flex-col border-1 border-blue-400 rounded-md">
           <div className="p-2 flex justify-start">
             <button
-              className="text-xl text-brown font-bold cursor-pointer hover:text-amber-700"
+              className="text-xl text-blue-600 font-bold cursor-pointer hover:text-blue-800"
               type="button"
               onClick={endGame}
             >
@@ -265,11 +278,11 @@ export const CountriesMapComp = ({
             </button>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-brown text-6xl text-center font-bold p-8">
+            <div className="text-blue-600 text-6xl text-center font-bold p-8">
               {countriesMap.name}
             </div>
             <svg
-              className="p-8 max-h-[800px]"
+              className="p-8 max-h-[800px] w-[1200px] bg-blue-400 border-1 border-blue-600 rounded-md mb-4"
               height={"75%"}
               viewBox={"350 -20 400 600"}
               width={"85%"}

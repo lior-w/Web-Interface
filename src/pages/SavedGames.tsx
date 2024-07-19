@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Container from "../components/container";
 import { IoArrowForwardCircle } from "react-icons/io5";
 import Switch from "@mui/material/Switch";
-import { Token, Game, Pages } from "../types";
+import { Token, Game, Pages, GameLean } from "../types";
 import axios from "axios";
 import Loading from "../components/loading";
 import { server } from "../main";
@@ -16,12 +16,12 @@ export interface IProps {
 }
 
 export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<GameLean[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadAllGames = async () => {
-      const url = `${server}/game/get_all_games`;
+      const url = `${server}/game/get_all_games_lean`;
       const headers = { AUTHORIZATION: token.AUTHORIZATION };
       try {
         const response = await axios.get(url, { headers });
@@ -40,7 +40,7 @@ export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
     pages["Waiting Room"]();
   };
 
-  const showGame = (game: Game, index: number) => {
+  const showGame = (game: GameLean, index: number) => {
     let bgColor = index % 2 === 0 ? "#fafafa" : "#e5e5e5";
     return (
       <div
@@ -55,17 +55,17 @@ export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
           <div className="p-1 w-[35%] flex flex-col justify-between ml-8 mr-8">
             <div className="flex ">
               <div className="mr-4">Questionaire:</div>
-              <div className="font-bold">{`${game.questionnaire.name}`}</div>
+              <div className="font-bold">{`${game.questionnaireName}`}</div>
             </div>
             <div className="flex">
               <div className="mr-4">Map:</div>
-              <div className="font-bold">{`${game.map.name}`}</div>
+              <div className="font-bold">{`${game.mapName}`}</div>
             </div>
           </div>
           <div className="p-1 w-[35%] flex flex-col justify-between">
             <div className="flex">
               <div className="mr-4">Groups:</div>
-              <div className="font-bold">{`${game.configuration.numberOfGroups}`}</div>
+              <div className="font-bold">{`${game.numberOfGroups}`}</div>
             </div>
             <div className="flex">
               <div className="mr-4">Status:</div>
@@ -91,7 +91,10 @@ export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
     );
   };
 
-  const gamesComperator: (a: Game, b: Game) => number = (a: Game, b: Game) =>
+  const gamesComperator: (a: GameLean, b: GameLean) => number = (
+    a: GameLean,
+    b: GameLean
+  ) =>
     a.status === b.status
       ? a.name.localeCompare(b.name)
       : a.status === "created"
@@ -113,7 +116,7 @@ export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
     >
       <div className="flex flex-row">
         <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-          <div className="text-4xl mb-3 text-brown font-bold">Games</div>
+          <div className="text-4xl mb-3 text-black font-bold">Games</div>
         </div>
       </div>
       <div>

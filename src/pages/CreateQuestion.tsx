@@ -151,9 +151,9 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
   return (
     <Container page="New Question" pages={pages} username={username}>
       <div className="flex justify-center">
-        <div className="flex flex-row w-[700px] border-1 border-brown rounded p-4">
+        <div className="flex flex-row w-[700px] border-1 border-blue-400 rounded p-4">
           <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-            <div className="text-4xl text-brown font-bold">New Question</div>
+            <div className="text-4xl text-black font-bold">New Question</div>
             <div className="mb-3"></div>
             <form className="flex flex-col" onSubmit={handleSubmit}>
               <div>
@@ -186,7 +186,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                     required
                   />
 
-                  <div className="text-xl text-brown mb-2 mt-2">{`Uplaod Image (optional)`}</div>
+                  <div className="text-xl text-black mb-2 mt-2">{`Uplaod Image (optional)`}</div>
                   <div className="flex">
                     <input type="file" onChange={handleFileChange} />
                     {file && (
@@ -213,7 +213,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                     />
                   }
                   label={
-                    <div className="text-xl text-brown font-bold ml-[30px]">
+                    <div className="text-xl text-black font-bold ml-[30px]">
                       Public
                     </div>
                   }
@@ -227,7 +227,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                       />
                     }
                     label={
-                      <div className="text-xl text-brown font-bold ml-[30px]">
+                      <div className="text-xl text-black font-bold ml-[30px]">
                         Multiple-choice
                       </div>
                     }
@@ -254,7 +254,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                       <MenuItem value={4}>4</MenuItem>
                       <MenuItem value={5}>5</MenuItem>
                     </Select>
-                    <div className="text-xl bg-gray-1 text-brown font-bold mt-[30px] ml-[25px]">
+                    <div className="text-xl bg-gray-1 text-black font-bold mt-[30px] ml-[25px]">
                       Incorrect answers
                     </div>
                   </div>
@@ -281,7 +281,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
               )}
               <Tags originTags={tags} onChange={handleTagsChange} />
               <div className="">
-                <div className="text-lg text-brown font-bold mt-4">
+                <div className="text-lg text-black font-bold mt-4">
                   Difficulty
                 </div>
                 <NumbersRating
@@ -292,7 +292,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                 ></NumbersRating>
               </div>
               <button
-                className="p-2.5 mt-[20px] w-[300px] bg-brown text-xl text-orange-100 hover:bg-amber-700 rounded-lg cursor-pointer"
+                className="p-2.5 mt-[20px] w-[300px] bg-blue-600 text-xl text-white hover:bg-blue-800 rounded-lg cursor-pointer"
                 type="submit"
               >
                 ADD QUESTION

@@ -175,7 +175,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
   const step3 = () => {
     return (
       <div className="flex justify-center">
-        <div className="border-1 border-brown p-[20px] rounded-lg w-[auto] flex flex-col">
+        <div className="border-1 border-blue-400 p-[20px] rounded-lg w-[auto] flex flex-col">
           <div className="mb-[20px]">
             <FormControl variant="standard" sx={{ width: 160 }}>
               <InputLabel id="label1" sx={{ fontSize: 20, fontWeight: 700 }}>
@@ -251,7 +251,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
                   <Switch checked={isShared} onChange={handleIsSharedChange} />
                 }
                 label={
-                  <div className="text-xl text-brown font-bold ml-[30px]">
+                  <div className="text-xl text-black font-bold ml-[30px]">
                     Shared
                   </div>
                 }
@@ -266,7 +266,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
                   />
                 }
                 label={
-                  <div className="text-xl text-brown font-bold ml-[30px]">
+                  <div className="text-xl text-black font-bold ml-[30px]">
                     Multiple questions per tile
                   </div>
                 }
@@ -304,7 +304,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
 
   const step0 = () => {
     return (
-      <div className="flex flex-col w-[auto] pt-[50px] pb-[50px] rounded-lg border-1 p-[20px] border-brown">
+      <div className="flex flex-col w-[auto] pt-[50px] pb-[50px] rounded-lg border-1 p-[20px] border-blue-400">
         <TextField
           id="Title"
           sx={{
@@ -349,7 +349,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
   };
   return (
     <Container page="New Game" pages={pages} username={username}>
-      <div className="text-4xl text-brown font-bold ml-[40px]">New Game</div>
+      <div className="text-4xl text-black font-bold ml-[40px]">New Game</div>
       <Box sx={{ width: "100%", padding: 4 }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
