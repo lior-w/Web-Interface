@@ -134,7 +134,7 @@ export const SelectMap = ({
         </Tooltip>
       </div>
       <div className="mb-3"></div>
-      <div className="max-h-[100%] rounded-md bg-white">
+      <div className="max-h-[100%] rounded-md bg-white border-1 border-blue-400">
         <div className="">
           <table className="w-[100%]">
             <thead>

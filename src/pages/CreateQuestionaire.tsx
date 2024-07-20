@@ -73,51 +73,56 @@ export const CreateQuestionaire = ({ token, username, pages }: IProps) => {
 
   return (
     <Container page="New Questionnaire" pages={pages} username={username}>
-      <div id="page body" className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-        <div id="page title" className="text-4xl text-black font-bold">
-          New Questionnaire
-        </div>
-        <div id="questionnaire title and filters" className="w-[500px]">
-          <div id="questionnaire title" className="mt-5">
-            <TextField
-              id="title input"
-              sx={{ background: "#FFFFFF" }}
-              className="w-[100%]"
-              label="Title"
-              variant="filled"
-              onChange={onTitleChange}
-              value={title}
-              required
+      <div id="page body" className=" p-4 w-[100%] flex flex-col">
+        <div className="border-1 border-blue-400 rounded-md backdrop-blur-xl brightness-110 p-4">
+          <div id="page title" className="text-4xl text-black font-bold">
+            New Questionnaire
+          </div>
+          <div id="questionnaire title and filters" className="w-[500px]">
+            <div id="questionnaire title" className="mt-5">
+              <TextField
+                id="title input"
+                sx={{ background: "#FFFFFF" }}
+                className="w-[100%]"
+                label="Title"
+                variant="filled"
+                onChange={onTitleChange}
+                value={title}
+                required
+              />
+            </div>
+            <FormControlLabel
+              sx={{
+                marginTop: 2,
+              }}
+              control={
+                <Switch
+                  checked={isShared}
+                  onChange={handlePublicSwitchChange}
+                />
+              }
+              label={
+                <div className="text-xl text-black font-bold ml-[30px]">
+                  Public
+                </div>
+              }
             />
           </div>
-          <FormControlLabel
-            sx={{
-              marginTop: 2,
-            }}
-            control={
-              <Switch checked={isShared} onChange={handlePublicSwitchChange} />
-            }
-            label={
-              <div className="text-xl text-black font-bold ml-[30px]">
-                Public
-              </div>
-            }
-          />
-        </div>
 
-        <Tags originTags={tags} onChange={handleTagsChange} />
-        <SelectQuestions
-          token={token}
-          handleChangeInPage={handleChangeSelectedQuestions}
-        ></SelectQuestions>
-        <div className="mt-4 flex justify-start">
-          <button
-            className="p-2 w-[300px] bg-blue-600 text-xl text-white hover:bg-blue-800 rounded-lg cursor-pointer"
-            type="button"
-            onClick={handleSubmit}
-          >
-            Create Questionnaire
-          </button>
+          <Tags originTags={tags} onChange={handleTagsChange} />
+          <SelectQuestions
+            token={token}
+            handleChangeInPage={handleChangeSelectedQuestions}
+          ></SelectQuestions>
+          <div className="mt-4 flex justify-start">
+            <button
+              className="p-2 w-[300px] bg-blue-600 text-xl text-white hover:bg-blue-800 rounded-lg cursor-pointer"
+              type="button"
+              onClick={handleSubmit}
+            >
+              Create Questionnaire
+            </button>
+          </div>
         </div>
       </div>
     </Container>

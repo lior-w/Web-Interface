@@ -72,8 +72,8 @@ export const Register = ({ token, pages }: IProps) => {
 
   return (
     <Container page="Register" pages={pages} username={undefined}>
-      <div className="flex flex-row justify-center">
-        <div className="p-8 flex flex-col border-1 border-blue-400 rounded-lg items-center justify-center">
+      <div className="flex flex-row justify-center h-[80vh] items-center">
+        <div className="p-8 flex flex-col backdrop-blur-xl brightness-110 border-1 border-blue-400 rounded-lg items-center justify-center">
           <div className="text-4xl text-black font-bold">Register</div>
           <div className="flex flex-col mt-[20px] justify-center items-center">
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>

@@ -32,7 +32,7 @@ export const filterPages: (pages: Pages, pageNames: string[]) => Pages = (
 };
 
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("main");
+  const [page, setPage] = useState<string>("createQuestionaire");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");
@@ -68,12 +68,12 @@ export const Dashboard = () => {
   };
 
   const pages: Pages = {
+    Main: toMainPage,
     Login: toLogin,
     Register: toRegistration,
-    Main: toMainPage,
-    "New Game": toCreateGame,
     "New Question": toCreateQuestion,
     "New Questionnaire": toCreateQuestionaire,
+    "New Game": toCreateGame,
     Games: toSavedGames,
     "Post Game": toPostGame,
     "Waiting Room": toWaitingRoom,
@@ -87,6 +87,7 @@ export const Dashboard = () => {
         <RunningGame
           runningGameId={runningGameId}
           token={token}
+          username={loggedUsername}
           pages={filterPages(pages, ["Main", "Post Game"])}
         ></RunningGame>
       )}
@@ -106,13 +107,13 @@ export const Dashboard = () => {
             setLoggedUsername(username);
             toMainPage();
           }}
-          pages={filterPages(pages, ["Login", "Register"])}
+          pages={filterPages(pages, ["Main", "Login", "Register"])}
         />
       )}
       {page === "registration" && (
         <Register
           token={token}
-          pages={filterPages(pages, ["Login", "Register"])}
+          pages={filterPages(pages, ["Main", "Login", "Register"])}
         />
       )}
       {page === "createQuestion" && (
@@ -146,6 +147,7 @@ export const Dashboard = () => {
       {page === "waitingRoom" && (
         <WaitingRoom
           token={token}
+          username={loggedUsername}
           setRunningGameId={(runningGameId) => {
             setRunningGameId(runningGameId);
           }}
@@ -168,7 +170,7 @@ export const Dashboard = () => {
                   "Games",
                   "Logout",
                 ])
-              : filterPages(pages, ["Login", "Register"])
+              : filterPages(pages, ["Main", "Login", "Register"])
           }
         />
       )}
@@ -189,6 +191,7 @@ export const Dashboard = () => {
       {page === "postGame" && (
         <PostGame
           token={token}
+          username={loggedUsername}
           runningGameId={runningGameId}
           pages={filterPages(pages, ["Main"])}
         ></PostGame>

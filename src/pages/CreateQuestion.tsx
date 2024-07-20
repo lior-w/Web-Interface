@@ -150,8 +150,8 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
 
   return (
     <Container page="New Question" pages={pages} username={username}>
-      <div className="flex justify-center">
-        <div className="flex flex-row w-[700px] border-1 border-blue-400 rounded p-4">
+      <div className="flex justify-center p-[30px]">
+        <div className="flex flex-row w-[700px] backdrop-blur-xl brightness-110 border-1 border-blue-400 rounded p-4">
           <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
             <div className="text-4xl text-black font-bold">New Question</div>
             <div className="mb-3"></div>

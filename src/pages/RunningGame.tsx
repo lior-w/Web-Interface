@@ -6,12 +6,18 @@ import { westUsaMap } from "../maps/westUsaMap";
 export interface IProps {
   runningGameId: string;
   token: Token;
+  username: string | undefined;
   pages: Pages;
 }
 
-export const RunningGame = ({ runningGameId, token, pages }: IProps) => {
+export const RunningGame = ({
+  runningGameId,
+  token,
+  username,
+  pages,
+}: IProps) => {
   return (
-    <Container page="" pages={{}} username={undefined}>
+    <Container page={""} pages={pages} username={username}>
       <CountriesMapComp
         runningGameId={runningGameId}
         countriesMap={westUsaMap}

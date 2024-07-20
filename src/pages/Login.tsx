@@ -69,8 +69,8 @@ export const Login = ({ onLoginSuccess, pages }: IProps) => {
 
   return (
     <Container page="Login" pages={pages} username={undefined}>
-      <div className="flex flex-row justify-center">
-        <div className="p-8 flex flex-col border-1 border-blue-400 rounded-lg items-center justify-center">
+      <div className="flex flex-row justify-center h-[80vh] items-center">
+        <div className="p-8 flex flex-col border-1 border-blue-400 rounded-lg items-center justify-center backdrop-blur-xl brightness-110">
           <div className="text-4xl text-black font-bold">Login</div>
           <div className="mb-3"></div>
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>

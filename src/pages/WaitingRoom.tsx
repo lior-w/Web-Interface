@@ -8,6 +8,7 @@ import { server } from "../main";
 
 export interface IProps {
   token: Token;
+  username: string | undefined;
   setRunningGameId: (runningGameId: string) => void;
   gameId: string | undefined;
   pages: Pages;
@@ -15,6 +16,7 @@ export interface IProps {
 
 export const WaitingRoom = ({
   token,
+  username,
   setRunningGameId,
   gameId,
   pages,
@@ -91,7 +93,7 @@ export const WaitingRoom = ({
   };
 
   return (
-    <Container page="" pages={{}} username={undefined}>
+    <Container page="" pages={{}} username={username}>
       {!startingGame && (
         <div className="border-1 rounded-md border-blue-400">
           <div className="p-1 flex justify-end">

@@ -292,19 +292,28 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
 
   const step1 = () => {
     return (
-      <div>
+      <div className="p-[20px] border-1 rounded-md border-blue-400 backdrop-blur-xl brightness-110">
         <SelectQuestionnaire
           handleChangeInPage={handleChangeSelectedQuestionnaires}
           selectedId={questionnaireId}
           token={token}
         ></SelectQuestionnaire>
+        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
+            Back
+          </Button>
+          <Box sx={{ flex: "1 1 auto" }} />
+          <Button onClick={handleNext} disabled={mapId === ""}>
+            Next
+          </Button>
+        </Box>
       </div>
     );
   };
 
   const step0 = () => {
     return (
-      <div className="flex flex-col w-[auto] pt-[50px] pb-[50px] rounded-lg border-1 p-[20px] border-blue-400">
+      <div className="flex flex-col w-[auto] pt-[50px] rounded-lg border-1 p-[20px] border-blue-400 backdrop-blur-xl brightness-110">
         <TextField
           id="Title"
           sx={{
@@ -344,12 +353,26 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
         <div className="mt-[14px]">
           <Tags originTags={tags} onChange={handleTagsChange} />
         </div>
+        <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            sx={{ mr: 1 }}
+          >
+            Back
+          </Button>
+          <Box sx={{ flex: "1 1 auto" }} />
+          <Button onClick={handleNext}>Next</Button>
+        </Box>
       </div>
     );
   };
   return (
     <Container page="New Game" pages={pages} username={username}>
-      <div className="text-4xl text-black font-bold ml-[40px]">New Game</div>
+      {false && (
+        <div className="text-4xl text-black font-bold ml-[40px]">New Game</div>
+      )}
       <Box sx={{ width: "100%", padding: 4 }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
@@ -371,49 +394,16 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
             >
               {step0()}
             </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleNext}>Next</Button>
-            </Box>
           </React.Fragment>
         )}
         {activeStep === 1 && (
           <React.Fragment>
             <Typography sx={{ mt: 4 }}>{step1()}</Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button
-                onClick={handleNext}
-                disabled={questionnaireId === "" || questionTimeLimit === 0}
-              >
-                Next
-              </Button>
-            </Box>
           </React.Fragment>
         )}
         {activeStep === 2 && (
           <React.Fragment>
             <Typography sx={{ mt: 4 }}>{step2()}</Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleNext} disabled={mapId === ""}>
-                Next
-              </Button>
-            </Box>
           </React.Fragment>
         )}
         {activeStep === 3 && (

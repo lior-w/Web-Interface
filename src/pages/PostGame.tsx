@@ -8,11 +8,12 @@ import { server } from "../main";
 
 export interface IProps {
   token: Token;
+  username: string | undefined;
   runningGameId: string | undefined;
   pages: Pages;
 }
 
-export const PostGame = ({ token, runningGameId, pages }: IProps) => {
+export const PostGame = ({ token, username, runningGameId, pages }: IProps) => {
   const [timeStarted, setTimeStarted] = useState<string>();
   const [timeEnded, setTimeEnded] = useState<string>();
   const [questionsAnswered, setQuestionsAnswered] = useState<number>();
@@ -39,7 +40,7 @@ export const PostGame = ({ token, runningGameId, pages }: IProps) => {
   }, []);
 
   return (
-    <Container page="" pages={{}} username={undefined}>
+    <Container page="" pages={{}} username={username}>
       <div className="flex flex-col items-center justify-center">
         <div className="border-2 border-blue-400 text-black rounded-lg p-2">
           <div className="text-4xl mt-2">Game Statistics:</div>
