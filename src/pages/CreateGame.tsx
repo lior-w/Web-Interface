@@ -162,13 +162,30 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
 
   const step4 = () => {
     return (
-      <SelectStartingPositions
-        handleChangeInPage={handleChangeStartingPositions}
-        selectedMap={mapObject}
-        selectedTiles_={startingPositions}
-        numberOfGroups={numberOfGroups}
-        token={token}
-      ></SelectStartingPositions>
+      <div>
+        <SelectStartingPositions
+          handleChangeInPage={handleChangeStartingPositions}
+          selectedMap={mapObject}
+          selectedTiles_={startingPositions}
+          numberOfGroups={numberOfGroups}
+          token={token}
+        ></SelectStartingPositions>
+        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
+            Back
+          </Button>
+          <Box sx={{ flex: "1 1 auto" }} />
+          <Button
+            onClick={handleSubmit}
+            disabled={
+              startingPositions.filter((p) => p !== "").length !==
+              numberOfGroups
+            }
+          >
+            Finish
+          </Button>
+        </Box>
+      </div>
     );
   };
 
@@ -273,6 +290,15 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
               />
             </div>
           </div>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
+              Back
+            </Button>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button onClick={handleNext} disabled={false}>
+              Next
+            </Button>
+          </Box>
         </div>
       </div>
     );
@@ -286,6 +312,15 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
           selectedId={mapId}
           token={token}
         ></SelectMap>
+        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
+            Back
+          </Button>
+          <Box sx={{ flex: "1 1 auto" }} />
+          <Button onClick={handleNext} disabled={mapId === ""}>
+            Next
+          </Button>
+        </Box>
       </div>
     );
   };
@@ -299,11 +334,18 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
           token={token}
         ></SelectQuestionnaire>
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-          <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
+          <Button
+            color="inherit"
+            onClick={handleBack}
+            sx={{ mr: 1, fontWeight: "bold" }}
+          >
             Back
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
-          <Button onClick={handleNext} disabled={mapId === ""}>
+          <Button
+            onClick={handleNext}
+            disabled={questionnaireId === "" || questionTimeLimit === 0}
+          >
             Next
           </Button>
         </Box>
@@ -409,35 +451,11 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
         {activeStep === 3 && (
           <React.Fragment>
             <Typography sx={{ mt: 4 }}>{step3()}</Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleNext} disabled={false}>
-                Next
-              </Button>
-            </Box>
           </React.Fragment>
         )}
         {activeStep === 4 && (
           <React.Fragment>
             <Typography sx={{ mt: 4 }}>{step4()}</Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button
-                onClick={handleSubmit}
-                disabled={
-                  startingPositions.filter((p) => p !== "").length !==
-                  numberOfGroups
-                }
-              >
-                Finish
-              </Button>
-            </Box>
           </React.Fragment>
         )}
       </Box>
