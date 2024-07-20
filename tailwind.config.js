@@ -9,6 +9,9 @@ export default {
       colors: {
         'my_orange': '#FFC47E',
         'brown': '#8B4513'
+      },
+      backgroundImage: {
+        'napoleon': "url('/napoleon.jpg')"
       }
     },
 

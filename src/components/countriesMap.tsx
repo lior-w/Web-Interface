@@ -258,7 +258,7 @@ export const CountriesMapComp = ({
   }, []);
 */
   const showScoreBoard = () => {
-    return <div></div>;
+    return <div className=""></div>;
   };
 
   return (
@@ -282,7 +282,7 @@ export const CountriesMapComp = ({
               {countriesMap.name}
             </div>
             <svg
-              className="p-8 max-h-[800px] w-[1200px] bg-blue-400 border-1 border-blue-600 rounded-md mb-4"
+              className="p-8 max-h-[800px] w-[1200px] bg-blue-400 border-2 border-blue-600 rounded-md mb-4"
               height={"75%"}
               viewBox={"350 -20 400 600"}
               width={"85%"}

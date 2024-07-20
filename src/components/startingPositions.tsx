@@ -64,7 +64,7 @@ export const SelectStartingPositions = ({
   return (
     <div>
       <svg
-        className=" max-h-[800px] border-1 border-blue-400 rounded-lg"
+        className=" max-h-[800px] border-1 border-blue-600 rounded-lg bg-blue-400"
         height={"auto"}
         viewBox={"350 -20 400 600"}
         width={"auto"}

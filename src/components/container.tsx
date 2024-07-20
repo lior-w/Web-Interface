@@ -8,20 +8,22 @@ export interface IProps {
   pages: Pages;
   username: string | undefined;
 }
-//style={{ width: w, height: h }}
+
 const Container = ({ children, page, pages, username }: IProps) => {
   return (
-    <div>
-      <div className="bg-white m-auto w-[100%] min-h-[100vh] border-solid  hover:cursor-default">
-        {page !== "" && (
-          <Navigation
-            pages={pages}
-            current={page}
-            username={username}
-          ></Navigation>
-        )}
+    <div className="relative min-h-screen overflow-hidden">
+      <div className="absolute inset-0 bg-cover bg-napoleon">
+        <div className="absolute inset-0 bg-gray-200 opacity-75"></div>
+      </div>
 
-        <div className="p-4">{children}</div>
+      {/* Main content */}
+      <div className="relative z-10">
+        <Navigation
+          pages={pages}
+          current={page}
+          username={username}
+        ></Navigation>
+        <div>{children}</div>
       </div>
     </div>
   );
