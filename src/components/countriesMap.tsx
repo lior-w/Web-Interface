@@ -10,6 +10,7 @@ import {
   GameEvent,
   Group,
   MobilePlayer,
+  CheatingPlayer,
 } from "../types";
 import { CountryComp } from "./country";
 import axios from "axios";
@@ -24,6 +25,8 @@ const GAME_TIME = 1000 * 60 * 45;
 export interface IProps {
   countriesMap: CountriesMap;
   runningGameId: string;
+  groups: Group[];
+  setGroups: (groups: Group[]) => void;
   token: Token;
   pages: Pages;
 }
@@ -31,6 +34,8 @@ export interface IProps {
 export const CountriesMapComp = ({
   countriesMap,
   runningGameId,
+  groups,
+  setGroups,
   token,
   pages,
 }: IProps) => {
@@ -39,7 +44,8 @@ export const CountriesMapComp = ({
   const [mapRunningTiles, setMapRunningTiles] = useState<{
     [key: string]: RunningTile;
   }>({});
-  const [groups, setGroups] = useState<Group[]>();
+  const [gameGroups, setGameGroups] = useState<Group[]>(groups);
+  const [cheatingPlayers, setCheatingPlayers] = useState<CheatingPlayer[]>([]);
   const indexRef = useRef(0); // Use ref to keep track of the latest index value
   const eventHandler = EventHandler.getInstance();
   const mapRef = useRef(mapRunningTiles);
@@ -49,7 +55,7 @@ export const CountriesMapComp = ({
 
   const startInterval = (initialIndex: number) => {
     indexRef.current = initialIndex; // Ensure the ref is updated with the initial index
-    const id = setInterval(() => getEvents(indexRef.current), 500);
+    const id = setInterval(() => getEvents(indexRef.current), 1000);
     setIntervalId(id);
   };
 
@@ -60,8 +66,22 @@ export const CountriesMapComp = ({
     }
   };
 
-  const handleScoreUpdate = (groups: Group[]) => {
-    setGroups(groups);
+  const handleScoreUpdate = (group: Group) => {
+    const updatedGroups = gameGroups
+      .filter((g) => g.id != group.id)
+      .concat(group);
+    setGameGroups(updatedGroups);
+  };
+
+  const handleCheatPlayer = (cheatPlayer: CheatingPlayer) => {
+    setCheatingPlayers(cheatingPlayers.concat(cheatPlayer));
+    setTimeout(
+      () =>
+        setCheatingPlayers(
+          cheatingPlayers.filter((p) => p.id !== cheatPlayer.id)
+        ),
+      10000
+    );
   };
 
   useEffect(() => {
@@ -84,14 +104,30 @@ export const CountriesMapComp = ({
         );
         eventHandler.subscribe(
           EventType[EventType.SCORE_UPDATE],
-          (updatedGroups: Group[]) => handleScoreUpdate(updatedGroups)
+          (updatedGroup: Group) => handleScoreUpdate(updatedGroup)
         );
+        eventHandler.subscribe(
+          EventType[EventType.CHEATING_PLAYER_UPDATE],
+          (cheatPlayer: any) => handleCheatPlayer(cheatPlayer)
+        );
+
         getMapChanges();
       })
       .catch((err) => console.log(err));
   };
 
+  const fetchGroups = async () => {
+    const url = `${server}/running_game/get_lean_running_game_instance/${runningGameId}`;
+    const headers = { AUTHORIZATION: token.AUTHORIZATION };
+    await axios
+      .get(url, { headers })
+      .then((response) => setGameGroups(response.data.value.groups))
+      .catch((error) => alert(error));
+  };
+
   useEffect(() => {
+    console.log(`game started groups: ${gameGroups}`);
+    // fetchGroups();
     fetchGameInstance();
     // Cleanup subscription on unmount
     return () => {
@@ -118,9 +154,9 @@ export const CountriesMapComp = ({
     console.log(Object.keys(mapRef.current));
     const findRunningTile = mapRef.current[updatedRunningTile.id];
     console.log("find running tile:", findRunningTile);
-    console.log(
-      `matching ids:  ${updatedRunningTile.id === findRunningTile.id}`
-    );
+    // console.log(
+    //   `matching ids:  ${updatedRunningTile.id === findRunningTile.id}`
+    // );
     const newRunningTile: RunningTile = {
       id: updatedRunningTile.id,
       controllingGroup:
@@ -231,6 +267,8 @@ export const CountriesMapComp = ({
     await axios
       .post(url, params, { headers })
       .then(() => {
+        gameGroups.forEach((g) => `group ${g.number} score: ${g.score}`);
+        setGroups(gameGroups);
         alert("End of the game");
         pages["Post Game"]();
       })
@@ -267,7 +305,7 @@ export const CountriesMapComp = ({
         <Loading msg={`Loading Map: ${countriesMap.name}`} size={60}></Loading>
       )}
       {mapLoaded && (
-        <div className="flex flex-col border-1 border-blue-400 rounded-md">
+        <div className="flex flex-col border-1 border-black rounded-lg items-center justify-center backdrop-blur-xl brightness-110">
           <div className="p-2 flex justify-start">
             <button
               className="text-xl text-blue-600 font-bold cursor-pointer hover:text-blue-800"
@@ -277,12 +315,18 @@ export const CountriesMapComp = ({
               End Game
             </button>
           </div>
+
           <div className="flex flex-col items-center">
             <div className="text-blue-600 text-6xl text-center font-bold p-8">
               {countriesMap.name}
             </div>
+            <div>
+              {cheatingPlayers.map((p) => (
+                <div className="text-[30px] text-red-600">{`${p.name} has left the application!`}</div>
+              ))}
+            </div>
             <svg
-              className="p-8 max-h-[800px] w-[1200px] bg-blue-400 border-2 border-blue-600 rounded-md mb-4"
+              className="p-8 max-h-[800px] min-w-[1200px] bg-blue-400 border-2 border-blue-600 rounded-md mb-4"
               height={"75%"}
               viewBox={"350 -20 400 600"}
               width={"85%"}
