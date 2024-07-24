@@ -67,10 +67,6 @@ export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
               <div className="mr-4">Groups:</div>
               <div className="font-bold">{`${game.numberOfGroups}`}</div>
             </div>
-            <div className="flex">
-              <div className="mr-4">Status:</div>
-              <div className="font-bold">{`${game.status}`}</div>
-            </div>
           </div>
 
           <div className="w-[10%] flex items-center justify-center">
@@ -115,8 +111,10 @@ export const SavedGames = ({ token, username, setGameId, pages }: IProps) => {
       username={username}
     >
       <div className="flex flex-row">
-        <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
-          <div className="text-4xl mb-3 text-black font-bold">Games</div>
+        <div className="p-4 w-[100%] flex flex-col">
+          <div className="text-4xl mt-3 mb-3 text-black font-bold flex justify-center">
+            Games
+          </div>
         </div>
       </div>
       <div>

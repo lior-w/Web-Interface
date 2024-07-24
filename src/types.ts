@@ -242,12 +242,50 @@ export interface GameInstance {
   configuration: GameConfiguration;
 }
 
+// export interface MobilePlayer {
+//   group: Group;
+//   id: string;
+//   name: string;
+//   ready: boolean;
+//   uuid: string;
+// }
+
 export interface MobilePlayer {
-  group: Group;
   id: string;
   name: string;
+  group: {
+    id: string;
+    number: number;
+    score: number;
+  };
   ready: boolean;
-  uuid: string;
+  mobileUser: {
+    id: string;
+    userName: string;
+    password: string;
+  }
+}
+
+export interface CheatingPlayer {
+  id: string;
+  name: string;
+  group: {
+    id: string;
+    number: number;
+    score: number;
+  }
+  ready: boolean;
+  mobileUser: {
+    id: string;
+    userName: string;
+    password: string;
+  }
+}
+
+export interface PostGameGroup {
+  group: Group;
+  place: number;
+  color: string;
 }
 
 export interface ServerResponse<T> {
@@ -256,4 +294,13 @@ export interface ServerResponse<T> {
   status: number;
   successful: boolean;
   value: T;
+}
+
+export interface RunningGameLean {
+  timePlayed: null | string,
+  gameStatus: string,
+  name: string,
+  id: string,
+  mapName: string,
+  questionnaireName: string
 }

@@ -50,6 +50,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
       incorrectAnswers: incorrectAnswers,
       tags: tags,
       difficulty: difficulty,
+      creatorId: token.AUTHORIZATION,
       image: image,
     };
   };
@@ -151,7 +152,7 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
   return (
     <Container page="New Question" pages={pages} username={username}>
       <div className="flex justify-center p-[30px]">
-        <div className="flex flex-row w-[700px] backdrop-blur-xl brightness-110 border-1 border-blue-400 rounded p-4">
+        <div className="flex flex-row w-[700px] backdrop-blur-xl brightness-110 border-black border-1 border-blac rounded p-4">
           <div className="pl-4 pr-4 pb-4 w-[100%] flex flex-col">
             <div className="text-4xl text-black font-bold">New Question</div>
             <div className="mb-3"></div>
@@ -170,6 +171,21 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                   value={question}
                   required
                 />
+                <div className="flex mt-[20px]">
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={multipleChoice}
+                        onChange={handleMultipleChoiceSwitchChange}
+                      />
+                    }
+                    label={
+                      <div className="text-xl text-black font-bold ml-[30px]">
+                        Multiple-choice
+                      </div>
+                    }
+                  />
+                </div>
 
                 <div className="flex flex-col">
                   <TextField
@@ -185,22 +201,71 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                     value={correctAnswer}
                     required
                   />
-
-                  <div className="text-xl text-black mb-2 mt-2">{`Uplaod Image (optional)`}</div>
-                  <div className="flex">
-                    <input type="file" onChange={handleFileChange} />
-                    {file && (
-                      <button
-                        onClick={() => {
-                          setFile(undefined);
-                          setImage(undefined);
-                        }}
-                      >
-                        {"(reset)"}
-                      </button>
-                    )}
+                  {multipleChoice && (
+                    <div>
+                      <div className="flex ml-[0px]">
+                        <Select
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            marginTop: 2,
+                            background: "#f3f4f6",
+                          }}
+                          id="demo-simple-select"
+                          value={incorrectAnswersNum}
+                          onChange={handleIncorrectAnswersNumChange}
+                        >
+                          <MenuItem value={1}>1</MenuItem>
+                          <MenuItem value={2}>2</MenuItem>
+                          <MenuItem value={3}>3</MenuItem>
+                          <MenuItem value={4}>4</MenuItem>
+                          <MenuItem value={5}>5</MenuItem>
+                        </Select>
+                        <div className="text-xl bg-gray-1 text-black font-bold mt-[30px] ml-[25px]">
+                          Incorrect answers
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="mt-[10px]">
+                          No worries, the answers will appear in a random order
+                        </div>
+                        {incorrectAnswers
+                          .filter((ans, i) => incorrectAnswersNum > i)
+                          .map((ans, i) => (
+                            <TextField
+                              id={`incorrect answer ${i}`}
+                              sx={{
+                                background: "#FFFFFF",
+                                width: 600,
+                                marginTop: 2,
+                              }}
+                              className=""
+                              label={`Incorrect answer ${i + 1}`}
+                              variant="filled"
+                              onChange={(e) => onIncorrectAnswerChange(e, i)}
+                              value={incorrectAnswers[i]}
+                            />
+                          ))}
+                      </div>
+                    </div>
+                  )}
+                  <div className="mb-2 mt-[20px]">
+                    <div className="text-xl text-black ">{`Uplaod Image (optional)`}</div>
+                    <div className="flex mt-[10px]">
+                      <input type="file" onChange={handleFileChange} />
+                      {file && (
+                        <button
+                          onClick={() => {
+                            setFile(undefined);
+                            setImage(undefined);
+                          }}
+                        >
+                          {"(reset)"}
+                        </button>
+                      )}
+                    </div>
+                    <img src={file} />
                   </div>
-                  <img src={file} />
                 </div>
                 <FormControlLabel
                   sx={{
@@ -218,67 +283,8 @@ export const CreateQuestion = ({ token, username, pages }: IProps) => {
                     </div>
                   }
                 />
-                <div className="flex">
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={multipleChoice}
-                        onChange={handleMultipleChoiceSwitchChange}
-                      />
-                    }
-                    label={
-                      <div className="text-xl text-black font-bold ml-[30px]">
-                        Multiple-choice
-                      </div>
-                    }
-                  />
-                </div>
               </div>
-              {multipleChoice && (
-                <div>
-                  <div className="flex ml-[0px]">
-                    <Select
-                      sx={{
-                        width: 60,
-                        height: 60,
-                        marginTop: 2,
-                        background: "#f3f4f6",
-                      }}
-                      id="demo-simple-select"
-                      value={incorrectAnswersNum}
-                      onChange={handleIncorrectAnswersNumChange}
-                    >
-                      <MenuItem value={1}>1</MenuItem>
-                      <MenuItem value={2}>2</MenuItem>
-                      <MenuItem value={3}>3</MenuItem>
-                      <MenuItem value={4}>4</MenuItem>
-                      <MenuItem value={5}>5</MenuItem>
-                    </Select>
-                    <div className="text-xl bg-gray-1 text-black font-bold mt-[30px] ml-[25px]">
-                      Incorrect answers
-                    </div>
-                  </div>
-                  <div className="flex flex-col">
-                    {incorrectAnswers
-                      .filter((ans, i) => incorrectAnswersNum > i)
-                      .map((ans, i) => (
-                        <TextField
-                          id={`incorrect answer ${i}`}
-                          sx={{
-                            background: "#FFFFFF",
-                            width: 600,
-                            marginTop: 2,
-                          }}
-                          className=""
-                          label={`Incorrect answer ${i + 1}`}
-                          variant="filled"
-                          onChange={(e) => onIncorrectAnswerChange(e, i)}
-                          value={incorrectAnswers[i]}
-                        />
-                      ))}
-                  </div>
-                </div>
-              )}
+
               <Tags originTags={tags} onChange={handleTagsChange} />
               <div className="">
                 <div className="text-lg text-black font-bold mt-4">

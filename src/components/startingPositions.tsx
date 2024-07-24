@@ -62,9 +62,9 @@ export const SelectStartingPositions = ({
   };
 
   return (
-    <div>
+    <div className="p-4">
       <svg
-        className=" max-h-[800px] border-1 border-blue-600 rounded-lg bg-blue-400"
+        className=" max-h-[800px] border-1 border-black rounded-lg items-center justify-center backdrop-blur-xl bg-blue-400"
         height={"auto"}
         viewBox={"350 -20 400 600"}
         width={"auto"}
@@ -84,7 +84,7 @@ export const SelectStartingPositions = ({
             />
           ))}
       </svg>
-      <div className="flex justify-end text-lg text-black">{`${
+      <div className="mt-2 flex justify-end text-xl font-bold text-black">{`${
         selectedTiles.filter((t) => t !== "").length
       }/${numberOfGroups}`}</div>
     </div>

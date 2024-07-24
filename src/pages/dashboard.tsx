@@ -16,9 +16,11 @@ import {
   Questionnaire,
   Pages,
   RunningGameInstance,
+  Group,
 } from "../types";
 import { server } from "../main";
 import { PostGame } from "./PostGame";
+import { Stats } from "./Stats";
 
 export const filterPages: (pages: Pages, pageNames: string[]) => Pages = (
   pages: Pages,
@@ -32,10 +34,11 @@ export const filterPages: (pages: Pages, pageNames: string[]) => Pages = (
 };
 
 export const Dashboard = () => {
-  const [page, setPage] = useState<string>("createQuestionaire");
+  const [page, setPage] = useState<string>("main");
   const [token, setToken] = useState<Token>({ AUTHORIZATION: "" });
   const [gameId, setGameId] = useState<string>("");
   const [runningGameId, setRunningGameId] = useState<string>("");
+  const [runningGameGroups, setRunningGameGroups] = useState<Group[]>([]);
   const [logged, setLogged] = useState(false);
   const [loggedUsername, setLoggedUsername] = useState<string | undefined>(
     undefined
@@ -61,6 +64,8 @@ export const Dashboard = () => {
 
   const toMainPage = () => setPage("main");
 
+  const toStats = () => setPage("stats");
+
   const toLogout = () => {
     setLogged(false);
     setLoggedUsername(undefined);
@@ -75,6 +80,7 @@ export const Dashboard = () => {
     "New Questionnaire": toCreateQuestionaire,
     "New Game": toCreateGame,
     Games: toSavedGames,
+    // Stats: toStats,
     "Post Game": toPostGame,
     "Waiting Room": toWaitingRoom,
     "Running Game": toRunningGame,
@@ -86,6 +92,8 @@ export const Dashboard = () => {
       {page === "runningGame" && (
         <RunningGame
           runningGameId={runningGameId}
+          groups={runningGameGroups}
+          setGroups={(groups: Group[]) => setRunningGameGroups(groups)}
           token={token}
           username={loggedUsername}
           pages={filterPages(pages, ["Main", "Post Game"])}
@@ -126,6 +134,7 @@ export const Dashboard = () => {
             "New Question",
             "New Questionnaire",
             "Games",
+            // "Stats",
             "Logout",
           ])}
         />
@@ -140,6 +149,7 @@ export const Dashboard = () => {
             "New Question",
             "New Questionnaire",
             "Games",
+            // "Stats",
             "Logout",
           ])}
         />
@@ -148,9 +158,8 @@ export const Dashboard = () => {
         <WaitingRoom
           token={token}
           username={loggedUsername}
-          setRunningGameId={(runningGameId) => {
-            setRunningGameId(runningGameId);
-          }}
+          setRunningGameId={setRunningGameId}
+          setGroups={(groups: Group[]) => setRunningGameGroups(groups)}
           gameId={gameId}
           pages={filterPages(pages, ["Main", "Running Game"])}
         />
@@ -168,6 +177,7 @@ export const Dashboard = () => {
                   "New Question",
                   "New Questionnaire",
                   "Games",
+                  // "Stats",
                   "Logout",
                 ])
               : filterPages(pages, ["Main", "Login", "Register"])
@@ -184,6 +194,7 @@ export const Dashboard = () => {
             "New Question",
             "New Questionnaire",
             "Games",
+            // "Stats",
             "Logout",
           ])}
         ></CreateGame>
@@ -193,9 +204,17 @@ export const Dashboard = () => {
           token={token}
           username={loggedUsername}
           runningGameId={runningGameId}
+          groups={runningGameGroups}
           pages={filterPages(pages, ["Main"])}
         ></PostGame>
       )}
+      {/* {page === "stats" && (
+        <Stats
+          token={token}
+          username={loggedUsername}
+          pages={filterPages(pages, ["Main"])}
+        ></Stats>
+      )} */}
     </div>
   );
 };

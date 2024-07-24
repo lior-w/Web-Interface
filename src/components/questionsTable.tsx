@@ -45,11 +45,11 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [isFirst, setIsFirst] = useState<boolean>(true);
   const [isLast, setIsLast] = useState<boolean>(false);
-  const [contentFilter, setContentFilter] = useState<string>("");
+  const [contentFilter, setContentFilter] = useState<string>();
   const [difficultyFilter, setDifficultyFilter] = useState<
     "" | "1" | "2" | "3" | "4" | "5"
   >("");
-  const [tagsFilter, setTagsFilter] = useState<string[]>([]);
+  const [tagsFilter, setTagsFilter] = useState<string>();
   const [typeFilter, setTypeFilter] = useState<
     "" | "open question" | "multiple choice"
   >("");
@@ -73,8 +73,8 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
     pageNum: number,
     size: number,
     difficulty: string,
-    content: string,
-    tags: string[]
+    content: string | undefined,
+    tags: string | undefined
   ) => {
     console.log("fetchPage");
     console.log(token.AUTHORIZATION);
@@ -87,6 +87,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
       size: size,
       difficulty: difficulty,
       content: content,
+      tags: tags,
     };
     await axios
       .get(url, { params: params, headers: headers })
@@ -207,7 +208,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
   };
 
   const onTagsFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagsFilter(e.target.value.split(","));
+    setTagsFilter(e.target.value);
   };
 
   const onTypeFilterChange = (e: SelectChangeEvent) => {
@@ -280,7 +281,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
             </Select>
           </FormControl>
 
-          <FormControl variant="standard" sx={{ width: 200, marginRight: 1 }}>
+          {/* <FormControl variant="standard" sx={{ width: 200, marginRight: 1 }}>
             <InputLabel id="label2">Type</InputLabel>
             <Select
               labelId="label2"
@@ -295,7 +296,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
         </div>
         <Tooltip title={<div className="text-lg">Filter</div>}>
           <button
@@ -316,11 +317,11 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
         </Tooltip>
       </div>
       <div className="mb-3"></div>
-      <div className="max-h-[100%] rounded-md bg-white border-1 border-blue-400">
+      <div className="max-h-[100%] rounded-md bg-white border-1 border-black">
         <div className="">
           <table className="w-[100%]">
             <thead>
-              <tr className="h-[50px] text-lg">
+              <tr className="h-[50px] text-lg border-b border-gray-300">
                 <th className="w-[3%]">
                   <div>
                     <Checkbox
@@ -358,7 +359,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
                 )
                 .map((q, i) => {
                   return (
-                    <tr className="border-y-2">
+                    <tr className="border-y-2 border-b border-gray-300">
                       <td className="flex items-center text-3xl">
                         <div>
                           <Checkbox
@@ -433,7 +434,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
                       <td>{q.tags}</td>
                       <td>{q.image && <PopImage img={q.image} />}</td>
                       <td className="">
-                        <div>
+                        {/* <div>
                           <EditQuestion
                             q={q}
                             onEdit={(id) => setEdited(edited.concat(id))}
@@ -447,7 +448,7 @@ export const SelectQuestions = ({ token, handleChangeInPage }: IProps) => {
                             q={q}
                             onDelete={(id) => setDeleted(deleted.concat(id))}
                           ></DeleteQuestion>
-                        </div>
+                        </div> */}
                       </td>
                     </tr>
                   );

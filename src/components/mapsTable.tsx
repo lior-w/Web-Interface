@@ -134,11 +134,11 @@ export const SelectMap = ({
         </Tooltip>
       </div>
       <div className="mb-3"></div>
-      <div className="max-h-[100%] rounded-md bg-white border-1 border-blue-400">
+      <div className="max-h-[100%] rounded-md bg-white border-1 border-black">
         <div className="">
           <table className="w-[100%]">
             <thead>
-              <tr className="h-[50px] text-lg">
+              <tr className="h-[50px] text-lg border-b border-gray-300">
                 <th className="w-[3%]"></th>
                 <th className="w-[97%] pl-[15px]">Map</th>
               </tr>
@@ -146,7 +146,7 @@ export const SelectMap = ({
             <tbody>
               {maps.map((m, i) => {
                 return (
-                  <tr className="border-y-2">
+                  <tr className="border-y-2 border-b border-gray-300">
                     <td>
                       <div>
                         <Checkbox

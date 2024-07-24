@@ -74,7 +74,7 @@ export const CreateQuestionaire = ({ token, username, pages }: IProps) => {
   return (
     <Container page="New Questionnaire" pages={pages} username={username}>
       <div id="page body" className=" p-4 w-[100%] flex flex-col">
-        <div className="border-1 border-blue-400 rounded-md backdrop-blur-xl brightness-110 p-4">
+        <div className="border-1 border-black rounded-md backdrop-blur-xl brightness-110 p-4">
           <div id="page title" className="text-4xl text-black font-bold">
             New Questionnaire
           </div>

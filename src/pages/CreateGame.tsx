@@ -162,7 +162,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
 
   const step4 = () => {
     return (
-      <div>
+      <div className="p-4 border-1 border-black rounded-lg items-center backdrop-blur-xl brightness-110">
         <SelectStartingPositions
           handleChangeInPage={handleChangeStartingPositions}
           selectedMap={mapObject}
@@ -192,7 +192,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
   const step3 = () => {
     return (
       <div className="flex justify-center">
-        <div className="border-1 border-blue-400 p-[20px] rounded-lg w-[auto] flex flex-col">
+        <div className="border-1 border-black rounded-lg items-center backdrop-blur-xl brightness-110 p-[20px] w-[auto] flex flex-col">
           <div className="mb-[20px]">
             <FormControl variant="standard" sx={{ width: 160 }}>
               <InputLabel id="label1" sx={{ fontSize: 20, fontWeight: 700 }}>
@@ -280,6 +280,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
                   <Switch
                     checked={multipleQuestionsPerTile}
                     onChange={handleMultipleQuestionsPerTileChange}
+                    disabled={true}
                   />
                 }
                 label={
@@ -290,15 +291,17 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
               />
             </div>
           </div>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-              Back
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleNext} disabled={false}>
-              Next
-            </Button>
-          </Box>
+          <div>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button color="inherit" onClick={handleBack} sx={{ mr: 30 }}>
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button onClick={handleNext} disabled={false}>
+                Next
+              </Button>
+            </Box>
+          </div>
         </div>
       </div>
     );
@@ -306,7 +309,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
 
   const step2 = () => {
     return (
-      <div>
+      <div className="p-4 border-1 border-black rounded-lg items-center justify-center backdrop-blur-xl brightness-110">
         <SelectMap
           handleChangeInPage={handleChangeSelectedMap}
           selectedId={mapId}
@@ -327,7 +330,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
 
   const step1 = () => {
     return (
-      <div className="p-[20px] border-1 rounded-md border-blue-400 backdrop-blur-xl brightness-110">
+      <div className="p-[20px] border-1 rounded-md border-black backdrop-blur-xl brightness-110">
         <SelectQuestionnaire
           handleChangeInPage={handleChangeSelectedQuestionnaires}
           selectedId={questionnaireId}
@@ -355,7 +358,7 @@ export const CreateGame = ({ token, username, pages }: IProps) => {
 
   const step0 = () => {
     return (
-      <div className="flex flex-col w-[auto] pt-[50px] rounded-lg border-1 p-[20px] border-blue-400 backdrop-blur-xl brightness-110">
+      <div className="flex flex-col w-[auto] pt-[50px] rounded-lg border-1 p-[20px] border-black backdrop-blur-xl brightness-110">
         <TextField
           id="Title"
           sx={{

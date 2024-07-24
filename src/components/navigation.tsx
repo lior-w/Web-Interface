@@ -8,6 +8,7 @@ import { MdLogout } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { Pages } from "../types";
+import { Button } from "@mui/material";
 
 export interface IProps {
   pages: Pages;
@@ -58,19 +59,33 @@ const Navigation = ({ pages, current, username }: IProps) => {
         id="20"
         className="bg-blue-600 w-[100%] h-[100px] m-auto border-solid border-3 border-blue-400 hover:cursor-default flex justify-between"
       >
-        <div id="30" className="flex">
-          <div id="40" className="flex items-start text-white mr-[80px]">
-            <div id="50" className="text-[80px]">
-              <GiPlanetConquest />
+        <div id="30" className="flex items-end">
+          <button onClick={pages["Main"]}>
+            <div
+              id="40"
+              className="flex items-end text-white h-[60px] mr-[120px] mb-[3px]"
+            >
+              <div id="50" className="text-[56px]">
+                <GiPlanetConquest />
+              </div>
+              <div className="text-[24px] h-[50px] flex items-end italic">
+                Conquer The World
+              </div>
             </div>
+          </button>
+
+          {false && (
             <div id="60" className="text-[20px]">
               <div id="Conquer">Conquer</div> <div id="The">The</div>{" "}
               <div id="World">World</div>
             </div>
-          </div>
+          )}
           <div id="70" className="flex items-end">
             {Object.keys(pages).map(
-              (key) => key !== "Logout" && showButton(key)
+              (key) =>
+                !["Logout", "Main", "Post Game", "Running Game"].includes(
+                  key
+                ) && showButton(key)
             )}
           </div>
         </div>
